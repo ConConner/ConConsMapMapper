@@ -9,8 +9,9 @@ if (!surface_exists(map_surface)) {
 	
 	surface_set_target(map_surface);
 	draw_clear_alpha(c_black,0);
+	
 	load_grid();
-	load_marker_grid(global.MarkerGrid);
+	
 	surface_reset_target();
 }
 
