@@ -84,10 +84,10 @@ if (!placed_tile && mLeftTimer == 15 && storeX == global.xx && storeY == global.
 
 
 //spawning Cursor
-if (cUp || cDown || cLeft || cRight || cPlace || cRemove) && (!cursor_spawned) {
-	instance_create_layer(global.cX*32,global.cY*32,"Cursor",obj_cursor);
-	cursor_spawned = true;
-}
+//if (cUp || cDown || cLeft || cRight || cPlace || cRemove) && (!cursor_spawned) {
+//	instance_create_layer(global.cX*32,global.cY*32,"Cursor",obj_cursor);
+//	cursor_spawned = true;
+//}
 
 //Building with Cursor
 //add_tiles(true,false);
