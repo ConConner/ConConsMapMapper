@@ -14,18 +14,22 @@ if (timer >= 5 && mLeft && mouse_hovering_over_object()) {
 	//checking tile position
 	if (mouseTileX >= 0 && mouseTileX <= 7) {
 		ds_grid_set(global.DoorGrid, gridX * 2, gridY * 2, 5);
+		if (room_left) ds_grid_set(global.DoorGrid, gridX * 2 - 1, gridY * 2, 10);
 	}
+	
 	else if (mouseTileX >= 25 && mouseTileX <= 32) {
 		ds_grid_set(global.DoorGrid, gridX * 2 + 1, gridY * 2, 10);
+		if (room_right) ds_grid_set(global.DoorGrid, gridX * 2 + 2, gridY * 2, 5);
 	}
+	
 	else if (mouseTileY >= 0 && mouseTileY <= 7) {
 		ds_grid_set(global.DoorGrid, gridX * 2, gridY * 2 + 1, 15);
+		if (room_up) ds_grid_set(global.DoorGrid, gridX * 2 + 1, gridY * 2 - 1, 20);
 	}
+	
 	else if (mouseTileY >= 25 && mouseTileY <= 32) {
 		ds_grid_set(global.DoorGrid, gridX * 2 + 1, gridY * 2 + 1, 20);
-	}
-	else {
-		instance_destroy();
+		if (room_down) ds_grid_set(global.DoorGrid, gridX * 2, gridY * 2 + 3, 15);
 	}
 
 	instance_destroy();

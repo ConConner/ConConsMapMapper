@@ -101,6 +101,7 @@ if (mRight && canBuild && ds_grid_get(global.mainGrid, xx, yy) = ID.filled) {
 	ds_grid_set(global.mainGrid, xx,yy,ID.empty);
 	ds_grid_set(global.RoomGrid, xx,yy, 0);
 	ds_grid_set(global.MarkerGrid, xx,yy, 0);
+	ds_grid_set_region(global.DoorGrid,xx*2,yy*2,xx*2+1,yy*2+1,0);
 	ds_grid_set(global.SubimgGrid, xx,yy - 1,autotile(xx,yy - 1));
 	ds_grid_set(global.SubimgGrid, xx,yy + 1,autotile(xx,yy + 1));
 	ds_grid_set(global.SubimgGrid, xx - 1,yy,autotile(xx - 1,yy));

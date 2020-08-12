@@ -31,7 +31,7 @@ if (ds_grid_get(global.mainGrid,xx,yy) == ID.filled) {
 	if (xx !=0) left = ds_grid_get(global.mainGrid,xx - 1,yy) * mrLeft;
 	if (xx !=global.grid_size-1) right = ds_grid_get(global.mainGrid,xx + 1,yy) * mrRight;
  
-	return myColor * 16 + (8*right + 4*left + 2*down + up) + 1;
+	return myColor * 16 + (8*right + 4*left + 2*down + up);
 	
 }
 else return 0;
