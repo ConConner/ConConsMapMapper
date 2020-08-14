@@ -33,6 +33,9 @@ if (timer >= 5 && mLeft && mouse_hovering_over_object()) {
 	}
 
 	instance_destroy();
+	with (obj_gameController) {
+		surface_free(door_surface);
+	}
 }
 
 timer ++;

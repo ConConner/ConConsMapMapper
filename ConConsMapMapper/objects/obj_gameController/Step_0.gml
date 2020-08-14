@@ -2,6 +2,9 @@
 global.xx = floor(mouse_x/32);
 global.yy = floor(mouse_y/32);
 
+//view coordinates
+viewX = camera_get_view_x(view_camera[0]);
+viewY = camera_get_view_y(view_camera[0]);
 
 //getting key input
 cUp = keyboard_check_direct(vk_up);

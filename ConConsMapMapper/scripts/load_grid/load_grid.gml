@@ -1,7 +1,8 @@
 //looping through the grids
-
+var g = argument[0];
 
 //main grid
+if (g = "main") {
 for (var i = 0; i < ds_grid_width(global.mainGrid); i++) {
 	
 	for (var j = 0; j< ds_grid_height(global.mainGrid); j++){
@@ -30,10 +31,11 @@ for (var i = 0; i < ds_grid_width(global.MarkerGrid); i++) {
 				
 			
 	}
-}
+}}
 
 
 //door grid
+if (g = "door") {
 for (var i = 0; i < ds_grid_width(global.DoorGrid); i++) {
 	
 	for (var j = 0; j< ds_grid_height(global.DoorGrid); j++){
@@ -64,4 +66,4 @@ for (var i = 0; i < ds_grid_width(global.DoorGrid); i++) {
 			draw_sprite_part(spr_doorTiles,subimg,2,28,28,4,i*16-14,j*16+12);
 		}
 	}
-}
+}}

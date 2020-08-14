@@ -83,12 +83,14 @@ if (mLeft && ds_grid_get(global.mainGrid, xx, yy) = ID.empty && canBuild) {
 	ds_grid_set(global.mainGrid, xx,yy,ID.filled);
 	ds_grid_set(global.RoomGrid, xx,yy,global.roomCount);
 	ds_grid_set(global.ColorGrid, xx,yy,global.currentColor);
+	
 	ds_grid_set(global.SubimgGrid, xx,yy,autotile(xx,yy));
 	ds_grid_set(global.SubimgGrid, xx,yy - 1,autotile(xx,yy - 1));
 	ds_grid_set(global.SubimgGrid, xx,yy + 1,autotile(xx,yy + 1));
 	ds_grid_set(global.SubimgGrid, xx - 1,yy,autotile(xx - 1,yy));
 	ds_grid_set(global.SubimgGrid, xx + 1,yy,autotile(xx + 1,yy));
-	cursor_spawned = false;
+	
+	//cursor_spawned = false;
 	instance_destroy(obj_cursor);
 	placed_tile = true;
 }
@@ -101,12 +103,17 @@ if (mRight && canBuild && ds_grid_get(global.mainGrid, xx, yy) = ID.filled) {
 	ds_grid_set(global.mainGrid, xx,yy,ID.empty);
 	ds_grid_set(global.RoomGrid, xx,yy, 0);
 	ds_grid_set(global.MarkerGrid, xx,yy, 0);
-	ds_grid_set_region(global.DoorGrid,xx*2,yy*2,xx*2+1,yy*2+1,0);
+	if (ds_grid_get_max(global.DoorGrid,xx*2,yy*2,xx*2+1,yy*2+1) > 0) {
+		ds_grid_set_region(global.DoorGrid,xx*2,yy*2,xx*2+1,yy*2+1,0);
+		surface_free(door_surface);
+	}
+	
 	ds_grid_set(global.SubimgGrid, xx,yy - 1,autotile(xx,yy - 1));
 	ds_grid_set(global.SubimgGrid, xx,yy + 1,autotile(xx,yy + 1));
 	ds_grid_set(global.SubimgGrid, xx - 1,yy,autotile(xx - 1,yy));
 	ds_grid_set(global.SubimgGrid, xx + 1,yy,autotile(xx + 1,yy));
-	cursor_spawned = false;
+	
+	//cursor_spawned = false
 	instance_destroy(obj_cursor);
 	global.roomCount ++;
 }
@@ -128,4 +135,6 @@ if (mRight && canBuild && ds_grid_get(global.mainGrid, xx, yy) = ID.filled) {
 //	ds_grid_set(global.ColorGrid, global.cX,global.cY,1);
 //}
 
-surface_free(map_surface);
+
+//freeing surface
+if (mLeft || mRight) surface_free(main_surface);
