@@ -1,11 +1,23 @@
 //looping through the grids
 var g = argument[0];
 
+//getting view size
+var tile_size = 32;
+var cam_x = camera_get_view_x( view_camera[0] );
+var cam_y = camera_get_view_y( view_camera[0] );
+var cam_w = camera_get_view_width( view_camera[0] );
+var cam_h = camera_get_view_height( view_camera[0] );
+var min_x = floor( cam_x / tile_size );
+var min_y = floor( cam_y / tile_size );
+var max_x = floor( min_x + ( cam_w / tile_size ) );
+var max_y = floor( min_y + ( cam_h / tile_size ) );
+
+
 //main grid
 if (g = "main") {
-for (var i = 0; i < ds_grid_width(global.mainGrid); i++) {
+for (var i = min_x; i < max_x+1; i++) {
 	
-	for (var j = 0; j< ds_grid_height(global.mainGrid); j++){
+	for (var j = min_y; j < max_y+1; j++) {
 		
 		
 		var m = ds_grid_get(global.mainGrid,i,j)
@@ -19,9 +31,9 @@ for (var i = 0; i < ds_grid_width(global.mainGrid); i++) {
 
 
 //marker grid
-for (var i = 0; i < ds_grid_width(global.MarkerGrid); i++) {
+for (var i = min_x; i < max_x; i++) {
 	
-	for (var j = 0; j< ds_grid_height(global.MarkerGrid); j++){
+	for (var j = min_y; j < max_y; j++) {
 		
 		var m = ds_grid_get(global.MarkerGrid,i,j)
 		
@@ -36,9 +48,9 @@ for (var i = 0; i < ds_grid_width(global.MarkerGrid); i++) {
 
 //door grid
 if (g = "door") {
-for (var i = 0; i < ds_grid_width(global.DoorGrid); i++) {
+for (var i = min_x; i < max_x * 2; i++) {
 	
-	for (var j = 0; j< ds_grid_height(global.DoorGrid); j++){
+	for (var j = min_y; j< max_y * 2; j++) {
 		
 		
 		var m = ds_grid_get(global.DoorGrid,i,j);

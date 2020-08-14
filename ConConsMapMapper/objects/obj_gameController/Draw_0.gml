@@ -5,7 +5,7 @@ draw_grid(1,32);
 draw_set_alpha(1);
 
 if (!surface_exists(main_surface)) {
-	main_surface = surface_create(view_width,view_height);
+	main_surface = surface_create(1600,1600);
 	
 	surface_set_target(main_surface);
 	draw_clear_alpha(c_black,0);
@@ -15,10 +15,10 @@ if (!surface_exists(main_surface)) {
 	surface_reset_target();
 }
 
-draw_surface(main_surface,viewX,viewY);
+draw_surface(main_surface,0,0);
 
 if (!surface_exists(door_surface)) {
-	door_surface = surface_create(view_width,view_height);
+	door_surface = surface_create(1600,1600);
 		
 	surface_set_target(door_surface);
 	draw_clear_alpha(c_black,0);
@@ -28,4 +28,4 @@ if (!surface_exists(door_surface)) {
 	surface_reset_target();
 }
 	
-draw_surface(door_surface,viewX,viewY);
+draw_surface(door_surface,0,0);
