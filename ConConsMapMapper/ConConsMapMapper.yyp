@@ -194,7 +194,7 @@
             "Key": "3526a65d-ae32-4fe9-9f91-e1bde3702e75",
             "Value": {
                 "id": "cd998c9d-29f1-4460-be5c-a667d5d479f5",
-                "resourcePath": "objects\\obJ_cam\\obJ_cam.yy",
+                "resourcePath": "objects\\obj_cam\\obj_cam.yy",
                 "resourceType": "GMObject"
             }
         },

@@ -94,3 +94,7 @@ if (!placed_tile && mLeftTimer == 15 && storeX == global.xx && storeY == global.
 
 //Building with Cursor
 //add_tiles(true,false);
+
+
+cwidth = camera_get_view_width(view_camera[0]);
+cheight = camera_get_view_height(view_camera[0]);
