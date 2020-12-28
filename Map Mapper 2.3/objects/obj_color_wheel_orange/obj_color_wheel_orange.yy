@@ -27,8 +27,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "ColorButtons",
-    "path": "folders/Objects/ColorButtons.yy",
+    "name": "Color Buttons",
+    "path": "folders/Objects/Color Buttons.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_color_wheel_orange",

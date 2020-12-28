@@ -28,8 +28,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "DoorButtons",
-    "path": "folders/Objects/DoorButtons.yy",
+    "name": "Door Buttons",
+    "path": "folders/Objects/Door Buttons.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_doorButton_blue",
