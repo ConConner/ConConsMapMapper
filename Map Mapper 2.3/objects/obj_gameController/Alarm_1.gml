@@ -1,0 +1,1 @@
+global.currentColor = ds_grid_get(global.ColorGrid,global.xx,global.yy);
