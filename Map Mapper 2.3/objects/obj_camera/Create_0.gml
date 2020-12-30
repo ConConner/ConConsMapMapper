@@ -1,5 +1,6 @@
 view_width = 800;
 view_height = 800;
+cam_zoom = 1;
 
 window_scale = 1;
 

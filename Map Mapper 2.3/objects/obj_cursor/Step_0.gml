@@ -15,7 +15,9 @@ var m = ds_grid_get(global.mainGrid,global.xx,global.yy);
 
 if (m == 1) {
 	image_blend = c_lime;
+	image_speed = 1.5;
 }
 else {
 	image_blend = c_white;
+	image_speed = 0.5;
 }

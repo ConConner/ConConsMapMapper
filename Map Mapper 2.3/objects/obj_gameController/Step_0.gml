@@ -20,9 +20,6 @@ kUp = keyboard_check_direct(vk_up);
 kDown = keyboard_check_direct(vk_down);
 kLeft = keyboard_check_direct(vk_left);
 kRight = keyboard_check_direct(vk_right);
-kPlace = keyboard_check_direct(vk_space);
-kRemove = keyboard_check_direct(vk_control);
-kNextRoom = keyboard_check_direct(vk_shift);
 kF12 = keyboard_check_pressed(vk_f12);
 	//mouse input
 mScrollDown = mouse_wheel_down()

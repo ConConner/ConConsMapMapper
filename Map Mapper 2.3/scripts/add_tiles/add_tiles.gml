@@ -30,29 +30,29 @@ function add_tiles() {
 	}
 	
 	//adding doors
-	if (canBuild && !did_hold && mLeftReleased && !placed_tile && !choosingDoor && ds_grid_get(global.mainGrid, xx, yy) = ID.filled) {
-		var mouseTileX = mouse_x - xx * 32;
-		var mouseTileY = mouse_y - yy * 32;
-		if !(mouseTileX > 7 && mouseTileX < 25 && mouseTileY > 7 && mouseTileY < 25) {
+	//if (canBuild && !did_hold && mLeftReleased && !placed_tile && !choosingDoor && ds_grid_get(global.mainGrid, xx, yy) = ID.filled) {
+	//	var mouseTileX = mouse_x - xx * 32;
+	//	var mouseTileY = mouse_y - yy * 32;
+	//	if !(mouseTileX > 7 && mouseTileX < 25 && mouseTileY > 7 && mouseTileY < 25) {
 		
-			canBuild = false;
-			choosingDoor = true;
+	//		canBuild = false;
+	//		choosingDoor = true;
 	
-			var button1 = instance_create_layer(xx * 32 - 32, yy * 32 + 16, "Markers", obj_doorButton_blue);
-			var button2 = instance_create_layer(xx * 32 - 32, yy * 32 - 16, "Markers", obj_doorButton_red);
-			var button3 = instance_create_layer(xx * 32, yy * 32 - 32, "Markers", obj_doorButton_green);
-			var button5 = instance_create_layer(xx * 32 + 32, yy * 32 + 16, "Markers", obj_doorButton_yellow);
-			var button4 = instance_create_layer(xx * 32 + 32, yy * 32 - 16, "Markers", obj_doorButton_empty);
-			var button6 = instance_create_layer(xx * 32, yy * 32 + 32, "Markers", obj_doorButton_destroy);	
-		#region //giving values to the buttons
+	//		var button1 = instance_create_layer(xx * 32 - 32, yy * 32 + 16, "Markers", obj_doorButton_blue);
+	//		var button2 = instance_create_layer(xx * 32 - 32, yy * 32 - 16, "Markers", obj_doorButton_red);
+	//		var button3 = instance_create_layer(xx * 32, yy * 32 - 32, "Markers", obj_doorButton_green);
+	//		var button5 = instance_create_layer(xx * 32 + 32, yy * 32 + 16, "Markers", obj_doorButton_yellow);
+	//		var button4 = instance_create_layer(xx * 32 + 32, yy * 32 - 16, "Markers", obj_doorButton_empty);
+	//		var button6 = instance_create_layer(xx * 32, yy * 32 + 32, "Markers", obj_doorButton_destroy);	
+	//	#region //giving values to the buttons
 	
-			button1.mouseTileX = mouseTileX; button1.mouseTileY = mouseTileY;	button2.mouseTileX = mouseTileX; button2.mouseTileY = mouseTileY;
-			button3.mouseTileX = mouseTileX; button3.mouseTileY = mouseTileY;	button4.mouseTileX = mouseTileX; button4.mouseTileY = mouseTileY;
-			button5.mouseTileX = mouseTileX; button5.mouseTileY = mouseTileY;	button6.mouseTileX = mouseTileX; button6.mouseTileY = mouseTileY;
+	//		button1.mouseTileX = mouseTileX; button1.mouseTileY = mouseTileY;	button2.mouseTileX = mouseTileX; button2.mouseTileY = mouseTileY;
+	//		button3.mouseTileX = mouseTileX; button3.mouseTileY = mouseTileY;	button4.mouseTileX = mouseTileX; button4.mouseTileY = mouseTileY;
+	//		button5.mouseTileX = mouseTileX; button5.mouseTileY = mouseTileY;	button6.mouseTileX = mouseTileX; button6.mouseTileY = mouseTileY;
 	
-		#endregion
-		}
-	}
+	//	#endregion
+	//	}
+	//}
 	
 	//editing rooms
 	if (!did_hold && ds_grid_get(global.mainGrid, xx, yy) = ID.filled && canBuild) {

@@ -50,12 +50,8 @@ function load_grid(g) {
 			if (n == undefined) n = 0;
 		
 			if (m = ID.filled) {
-				//if (global.xx = draw_x && global.yy = draw_y) {
-					//final_tile = n;
-				//}
-				//else {
-					draw_sprite(spr_mapTiles,n,draw_x*32,draw_y*32);
-				//}
+				draw_sprite(spr_mapTiles,n,draw_x*32,draw_y*32);
+				final_tile = n;
 			}
 		}
 	}
@@ -117,7 +113,7 @@ function load_grid(g) {
 	
 	if (final_tile != -1) {
 		draw_sprite_ext(spr_mapTiles,final_tile,global.xx*32 - tile_size/4,global.yy*32 - tile_size/4,1.5,1.5,0,c_white,1)
-		draw_set_color(c_aqua);
+		draw_set_color(c_lime);
 		draw_rectangle(corner_x - 1,corner_y - 1,corner_x + tile_size * 1.5 + 1,corner_y + tile_size * 1.5 + 1,true)
 		draw_rectangle(corner_x - 2,corner_y - 2,corner_x + tile_size * 1.5 + 2,corner_y + tile_size * 1.5 + 2,true)
 		draw_rectangle(corner_x - 3,corner_y - 3,corner_x + tile_size * 1.5 + 3,corner_y + tile_size * 1.5 + 3,true)

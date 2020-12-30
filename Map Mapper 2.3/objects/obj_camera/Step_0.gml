@@ -5,6 +5,9 @@ kLeft = keyboard_check(vk_left);
 kRight = keyboard_check(vk_right);
 kCtrl = keyboard_check(vk_control);
 
+mScrlUp = mouse_wheel_up();
+mScrlDown = mouse_wheel_down();
+
 //movement
 xx = device_mouse_x_to_gui(0);
 yy = device_mouse_y_to_gui(0);
@@ -45,3 +48,12 @@ if (window_has_focus() && obj_gameController.choosingColor != true) {
 
 x = clamp(x,0+view_width/2,room_width-view_width/2);
 y = clamp(y,0+view_height/2,room_width-view_height/2);
+
+
+//zooming
+//if (mScrlUp) cam_zoom ++;
+//if (mScrlDown) cam_zoom --;
+
+//if (mScrlDown || mScrlUp) {
+//	camera_set_view_size(view,view_width*cam_zoom,view_height*cam_zoom);
+//}

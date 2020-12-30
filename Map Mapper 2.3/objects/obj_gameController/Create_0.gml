@@ -2,8 +2,6 @@
 global.grid_size = room_width / tile_size;
 global.roomCount = 0;
 global.currentColor = c.blue;
-global.cX = 12;
-global.cY = 12;
 global.xx = floor(mouse_x/32);
 global.yy = floor(mouse_y/32);
 	
@@ -16,7 +14,6 @@ global.yy = floor(mouse_y/32);
 	  global.color_wheel_alpha = 0.8
 
 //boolean
-cursor_spawned = false;
 canBuild = true;
 choosingMarker = false;
 choosingColor = false;
@@ -31,10 +28,14 @@ mLeftTimer = 0;
 old_roomCount = 0;
 storeX = 0;
 storeY = 0;
-subimg = 0;
 colorSelecting = 0;
 storeMouseX = 0;
 storeMouseY = 0;
+
+tile_xscale = 0;
+tile_xscale_goal = 0;
+tile_yscale = 0;
+tile_yscale_goal = 0;
 
 //buttons
 buttonBlue = 0
