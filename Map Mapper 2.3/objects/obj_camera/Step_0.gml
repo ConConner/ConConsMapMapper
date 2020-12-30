@@ -9,7 +9,7 @@ kCtrl = keyboard_check(vk_control);
 xx = device_mouse_x_to_gui(0);
 yy = device_mouse_y_to_gui(0);
 
-var _maxspd = spd * tile_size / 3;
+var _maxspd = spd * border_margin / 5;
 var _minspd = 0;
 var _storespd = 0;
 
@@ -17,29 +17,29 @@ if (window_has_focus() && obj_gameController.choosingColor != true) {
 	
 	//mouse movement
 	if (kCtrl) {
-		if (xx >= view_width - tile_size) {
-			_storespd = clamp(spd * (xx - (view_width - tile_size)) / 3,_minspd,_maxspd);
+		if (xx >= view_width - border_margin) {
+			_storespd = clamp(spd * (xx - (view_width - border_margin)) / 5,_minspd,_maxspd);
 			x += _storespd
 		}
-		if (xx <= 32) {
-			_storespd = clamp(spd * (xx*-1 + tile_size) / 3,_minspd,_maxspd);
+		if (xx <= border_margin) {
+			_storespd = clamp(spd * (xx*-1 + border_margin) / 5,_minspd,_maxspd);
 			x -= _storespd
 		}
-		if (yy >= 768) {
-			_storespd = clamp(spd * (yy - (view_height - tile_size)) / 3,_minspd,_maxspd);
+		if (yy >= view_height - border_margin) {
+			_storespd = clamp(spd * (yy - (view_height - border_margin)) / 5,_minspd,_maxspd);
 			y += _storespd
 		}
-		if (yy <= 32) {
-			_storespd = clamp(spd * (yy*-1 + tile_size) / 3,_minspd,_maxspd);
+		if (yy <= border_margin) {
+			_storespd = clamp(spd * (yy*-1 + border_margin) / 5,_minspd,_maxspd);
 			y -= _storespd
 		}
 	}
 	
 	//arrow keys
-	if (kUp) y -= spd *16 / 3;
-	if (kDown) y += spd *16 / 3;
-	if (kLeft) x -= spd *16 / 3;
-	if (kRight) x += spd *16 / 3;
+	if (kUp) y -= spd * border_margin / 2 / 5;
+	if (kDown) y += spd * border_margin / 2 / 5;
+	if (kLeft) x -= spd * border_margin / 2 / 5;
+	if (kRight) x += spd * border_margin / 2 / 5;
 }
 
 

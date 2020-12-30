@@ -4,6 +4,8 @@ global.roomCount = 0;
 global.currentColor = c.blue;
 global.cX = 12;
 global.cY = 12;
+global.xx = floor(mouse_x/32);
+global.yy = floor(mouse_y/32);
 	
 	//wheel variables
 	  //color wheel
@@ -21,6 +23,8 @@ choosingColor = false;
 choosingDoor = false;
 did_hold = false;
 placed_tile = false;
+
+debug_on = false;
 
 //XX = 0
 mLeftTimer = 0;
@@ -66,4 +70,4 @@ ds_grid_set_region(global.ColorGrid, 0, 0, global.grid_size - 1, global.grid_siz
 ds_grid_set_region(global.MarkerGrid, 0, 0, global.grid_size - 1, global.grid_size - 1, 0);
 ds_grid_set_region(global.DoorGrid, 0, 0, global.grid_size * 2 - 1, global.grid_size * 2 - 1, 0);
 
-instance_create_layer(0,0,"Cursor",obj_cursor);
+instance_create_layer(mouse_x,mouse_y,"Cursor",obj_cursor);

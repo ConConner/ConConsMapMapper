@@ -23,6 +23,7 @@ kRight = keyboard_check_direct(vk_right);
 kPlace = keyboard_check_direct(vk_space);
 kRemove = keyboard_check_direct(vk_control);
 kNextRoom = keyboard_check_direct(vk_shift);
+kF12 = keyboard_check_pressed(vk_f12);
 	//mouse input
 mScrollDown = mouse_wheel_down()
 mScrollUp = mouse_wheel_up()
@@ -103,3 +104,7 @@ if (mLeftReleased) {
 if (!placed_tile && mLeftTimer == 15 && storeX == global.xx && storeY == global.yy) instance_create_layer(global.xx*32,global.yy*32,"Cursor",obj_hold_animation)
 
 surface_free(main_surface);
+
+
+//debug
+if (kF12) debug_on = !debug_on;

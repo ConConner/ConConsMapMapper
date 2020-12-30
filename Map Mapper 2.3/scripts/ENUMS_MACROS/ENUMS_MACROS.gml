@@ -31,5 +31,6 @@ function __Enums__() {
 }
 
 #macro tile_size 32 
+#macro border_margin 64
 #macro extension ".cmf"
 #macro map_filename "conners map file"

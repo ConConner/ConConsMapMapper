@@ -31,6 +31,10 @@ function load_grid(g) {
 	var min_y = max(0,floor( cam_y / tile_size ) -1);
 	var max_x = min(global.grid_size,floor( min_x + ( cam_w / tile_size ) ) +2);
 	var max_y = min(global.grid_size,floor( min_y + ( cam_h / tile_size ) ) +2);
+	
+	var final_marker = -1;
+	var final_tile = -1;
+	var final_door = -1;
 
 
 	//main grid
@@ -46,7 +50,12 @@ function load_grid(g) {
 			if (n == undefined) n = 0;
 		
 			if (m = ID.filled) {
-				draw_sprite(spr_mapTiles,n,draw_x*32,draw_y*32);
+				//if (global.xx = draw_x && global.yy = draw_y) {
+					//final_tile = n;
+				//}
+				//else {
+					draw_sprite(spr_mapTiles,n,draw_x*32,draw_y*32);
+				//}
 			}
 		}
 	}
@@ -102,6 +111,17 @@ function load_grid(g) {
 			}
 		}
 	}}
+	
+	var corner_x = global.xx*32 - tile_size/4;
+	var corner_y = global.yy*32 - tile_size/4;
+	
+	if (final_tile != -1) {
+		draw_sprite_ext(spr_mapTiles,final_tile,global.xx*32 - tile_size/4,global.yy*32 - tile_size/4,1.5,1.5,0,c_white,1)
+		draw_set_color(c_aqua);
+		draw_rectangle(corner_x - 1,corner_y - 1,corner_x + tile_size * 1.5 + 1,corner_y + tile_size * 1.5 + 1,true)
+		draw_rectangle(corner_x - 2,corner_y - 2,corner_x + tile_size * 1.5 + 2,corner_y + tile_size * 1.5 + 2,true)
+		draw_rectangle(corner_x - 3,corner_y - 3,corner_x + tile_size * 1.5 + 3,corner_y + tile_size * 1.5 + 3,true)
+	}
 
 
 }
