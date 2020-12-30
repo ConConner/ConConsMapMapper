@@ -19,4 +19,8 @@ if (debug_on) {
 	draw_text(global.view_width - string_width(_fps),0,_fps);
 	draw_set_colour(c_white);
 	
+	//showing debug vars
+	draw_text(0,28,"Tile xscale: " + string(tile_xscale));
+	draw_text(0,42,"Tile yscale: " + string(tile_yscale));
+	
 }

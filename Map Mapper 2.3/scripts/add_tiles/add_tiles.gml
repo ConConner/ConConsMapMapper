@@ -6,28 +6,28 @@ function add_tiles() {
 	//adding with mouse
 
 	//adding markers
-	if (did_hold && !choosingMarker && ds_grid_get(global.mainGrid, xx, yy) = ID.filled) {
+	//if (did_hold && !choosingMarker && ds_grid_get(global.mainGrid, xx, yy) = ID.filled) {
 		
-		did_hold = false;
+	//	did_hold = false;
 		
-		canBuild = false;
-		choosingMarker = true;
-		var storeX = xx
-		var storeY = yy
+	//	canBuild = false;
+	//	choosingMarker = true;
+	//	var storeX = xx
+	//	var storeY = yy
 		
-		var button1 = instance_create_layer(storeX * 32 - 32, storeY * 32 + 16, "Markers", obj_marker_button1);
-		var button2 = instance_create_layer(storeX * 32 - 32, storeY * 32 - 16, "Markers", obj_marker_button2);
-		var button3 = instance_create_layer(storeX * 32, storeY * 32 - 32, "Markers", obj_marker_button3);
-		var button5 = instance_create_layer(storeX * 32 + 32, storeY * 32 + 16, "Markers", obj_marker_button5);
-		var button4 = instance_create_layer(storeX * 32 + 32, storeY * 32 - 16, "Markers", obj_marker_button4);
-		var button6 = instance_create_layer(storeX * 32, storeY * 32 + 32, "Markers", obj_marker_button6);
-	#region //setting x/y coordinates for buttons
+	//	var button1 = instance_create_layer(storeX * 32 - 32, storeY * 32 + 16, "Markers", obj_marker_button1);
+	//	var button2 = instance_create_layer(storeX * 32 - 32, storeY * 32 - 16, "Markers", obj_marker_button2);
+	//	var button3 = instance_create_layer(storeX * 32, storeY * 32 - 32, "Markers", obj_marker_button3);
+	//	var button5 = instance_create_layer(storeX * 32 + 32, storeY * 32 + 16, "Markers", obj_marker_button5);
+	//	var button4 = instance_create_layer(storeX * 32 + 32, storeY * 32 - 16, "Markers", obj_marker_button4);
+	//	var button6 = instance_create_layer(storeX * 32, storeY * 32 + 32, "Markers", obj_marker_button6);
+	//#region //setting x/y coordinates for buttons
 	
-		button1.gridX = xx; button1.gridY = yy;		button2.gridX = xx; button2.gridY = yy;
-		button3.gridX = xx; button3.gridY = yy;		button4.gridX = xx; button4.gridY = yy;
-		button5.gridX = xx; button5.gridY = yy;		button6.gridX = xx; button6.gridY = yy;
-	#endregion
-	}
+	//	button1.gridX = xx; button1.gridY = yy;		button2.gridX = xx; button2.gridY = yy;
+	//	button3.gridX = xx; button3.gridY = yy;		button4.gridX = xx; button4.gridY = yy;
+	//	button5.gridX = xx; button5.gridY = yy;		button6.gridX = xx; button6.gridY = yy;
+	//#endregion
+	//}
 	
 	//adding doors
 	//if (canBuild && !did_hold && mLeftReleased && !placed_tile && !choosingDoor && ds_grid_get(global.mainGrid, xx, yy) = ID.filled) {
@@ -54,8 +54,24 @@ function add_tiles() {
 	//	}
 	//}
 	
+	
+	//selecting a tile
+	if (canBuild && mLeftReleased && !placed_tile && !selecting_tile) {
+		
+		var m = ds_grid_get(global.mainGrid, xx, yy);
+		
+		if (m == 1) {
+			//setting up selection
+			canBuild = false;
+			selecting_tile = true;
+			tile_xscale_goal = 1.5;
+			tile_yscale_goal = 1.5;
+		}
+	}
+	
+	
 	//editing rooms
-	if (!did_hold && ds_grid_get(global.mainGrid, xx, yy) = ID.filled && canBuild) {
+	if (ds_grid_get(global.mainGrid, xx, yy) = ID.filled && canBuild) {
 		global.roomCount = ds_grid_get(global.RoomGrid,xx,yy);
 	}
 	
@@ -72,7 +88,6 @@ function add_tiles() {
 		ds_grid_set(global.SubimgGrid, xx - 1,yy,autotile(xx - 1,yy));
 		ds_grid_set(global.SubimgGrid, xx + 1,yy,autotile(xx + 1,yy));
 	
-		//cursor_spawned = false;
 		placed_tile = true;
 	}
 
@@ -94,7 +109,6 @@ function add_tiles() {
 		ds_grid_set(global.SubimgGrid, xx - 1,yy,autotile(xx - 1,yy));
 		ds_grid_set(global.SubimgGrid, xx + 1,yy,autotile(xx + 1,yy));
 	
-		//cursor_spawned = false
 		global.roomCount ++;
 	}
 }

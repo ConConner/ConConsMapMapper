@@ -16,7 +16,7 @@ var _maxspd = spd * border_margin / 5;
 var _minspd = 0;
 var _storespd = 0;
 
-if (window_has_focus() && obj_gameController.choosingColor != true) {
+if (window_has_focus() && obj_gameController.cam_lock != true) {
 	
 	//mouse movement
 	if (kCtrl) {

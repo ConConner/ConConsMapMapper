@@ -50,8 +50,12 @@ function load_grid(g) {
 			if (n == undefined) n = 0;
 		
 			if (m = ID.filled) {
-				draw_sprite(spr_mapTiles,n,draw_x*32,draw_y*32);
-				final_tile = n;
+				if (draw_x == global.xx && draw_y == global.yy && selecting_tile) {
+					final_tile = n;
+				}
+				else {
+					draw_sprite(spr_mapTiles,n,draw_x*32,draw_y*32);
+				}
 			}
 		}
 	}
@@ -108,15 +112,23 @@ function load_grid(g) {
 		}
 	}}
 	
-	var corner_x = global.xx*32 - tile_size/4;
-	var corner_y = global.yy*32 - tile_size/4;
+	var corner_x = (global.xx)*32 + tile_size/2 - (tile_size*tile_xscale) / 2;
+	var corner_y = (global.yy)*32 + tile_size/2 - (tile_size*tile_yscale) / 2;
 	
-	if (final_tile != -1) {
-		draw_sprite_ext(spr_mapTiles,final_tile,global.xx*32 - tile_size/4,global.yy*32 - tile_size/4,1.5,1.5,0,c_white,1)
+	if (final_tile != -1 && selecting_tile) {
+		draw_set_color(c_black);
+		draw_set_alpha(0.1);
+		
+		draw_rectangle(min_x*32,min_y*32,max_x*32,max_y*32,false);
+		
+		draw_set_alpha(1);
+		draw_set_color(c_white);
+		
+		draw_sprite_ext(spr_mapTiles,final_tile,corner_x,corner_y,tile_xscale,tile_yscale,0,c_white,1)
 		draw_set_color(c_lime);
-		draw_rectangle(corner_x - 1,corner_y - 1,corner_x + tile_size * 1.5 + 1,corner_y + tile_size * 1.5 + 1,true)
-		draw_rectangle(corner_x - 2,corner_y - 2,corner_x + tile_size * 1.5 + 2,corner_y + tile_size * 1.5 + 2,true)
-		draw_rectangle(corner_x - 3,corner_y - 3,corner_x + tile_size * 1.5 + 3,corner_y + tile_size * 1.5 + 3,true)
+		draw_rectangle(corner_x - 1,corner_y - 1,corner_x + tile_size * tile_xscale + 1,corner_y + tile_size * tile_yscale + 1,true)
+		draw_rectangle(corner_x - 2,corner_y - 2,corner_x + tile_size * tile_xscale + 2,corner_y + tile_size * tile_yscale + 2,true)
+		draw_rectangle(corner_x - 3,corner_y - 3,corner_x + tile_size * tile_xscale + 3,corner_y + tile_size * tile_yscale + 3,true)
 	}
 
 

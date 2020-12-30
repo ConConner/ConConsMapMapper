@@ -18,8 +18,9 @@ canBuild = true;
 choosingMarker = false;
 choosingColor = false;
 choosingDoor = false;
-did_hold = false;
 placed_tile = false;
+selecting_tile = false;
+cam_lock = false;
 
 debug_on = false;
 
@@ -32,10 +33,11 @@ colorSelecting = 0;
 storeMouseX = 0;
 storeMouseY = 0;
 
-tile_xscale = 0;
-tile_xscale_goal = 0;
-tile_yscale = 0;
-tile_yscale_goal = 0;
+	//selecting tiles
+tile_xscale = 1;
+tile_xscale_goal = 1;
+tile_yscale = 1;
+tile_yscale_goal = 1;
 
 //buttons
 buttonBlue = 0

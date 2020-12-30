@@ -32,19 +32,12 @@ mMiddlePressed = mouse_check_button_pressed(mb_middle);
 mMiddle = mouse_check_button(mb_middle);
 
 
-//timing clicks
-if (mLeftPressed) {
-	mLeftTimer = 0;
-	storeX = global.xx;
-	storeY = global.yy;
-}
-if (mLeft) mLeftTimer ++;
-
-
 //colors
 if (mMiddle && !choosingColor) {
 	canBuild = false;
 	choosingColor = true;
+	cam_lock = true;
+	
 	storeWindowMouseX = window_mouse_get_x();
 	storeWindowMouseY = window_mouse_get_y();
 	storeMouseX = mouse_x;
@@ -63,6 +56,7 @@ if (mMiddle && !choosingColor) {
 
 if (!mMiddle && choosingColor) {
 	choosingColor = false;
+	cam_lock = false;
 	canBuild = true;
 	
 	var _xx = global.half_width +global.viewX;
@@ -87,6 +81,12 @@ if (!mMiddle && choosingColor) {
 }
 
 
+//selecting colors
+	//reaching scale
+tile_xscale = lerp(tile_xscale,tile_xscale_goal,0.33)
+tile_yscale = lerp(tile_yscale,tile_yscale_goal,0.33)
+
+
 	//Building with mouse
 if (mLeft) add_tiles();
 if (mRight) add_tiles();
@@ -97,8 +97,6 @@ if (mLeftReleased) {
 	old_roomCount = global.roomCount;
 	placed_tile = false;
 }
-
-if (!placed_tile && mLeftTimer == 15 && storeX == global.xx && storeY == global.yy) instance_create_layer(global.xx*32,global.yy*32,"Cursor",obj_hold_animation)
 
 surface_free(main_surface);
 
