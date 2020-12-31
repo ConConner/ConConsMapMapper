@@ -35,6 +35,7 @@ function load_grid(g) {
 	var final_marker = -1;
 	var final_tile = -1;
 	var final_door = -1;
+	
 
 
 	//main grid
@@ -50,8 +51,9 @@ function load_grid(g) {
 			if (n == undefined) n = 0;
 		
 			if (m = ID.filled) {
-				if (draw_x == global.xx && draw_y == global.yy && selecting_tile) {
+				if (draw_x == tile_xx && draw_y == tile_yy && selecting_tile) {
 					final_tile = n;
+					draw_sprite(spr_mapTiles,n,draw_x*32,draw_y*32);
 				}
 				else {
 					draw_sprite(spr_mapTiles,n,draw_x*32,draw_y*32);
@@ -112,12 +114,12 @@ function load_grid(g) {
 		}
 	}}
 	
-	var corner_x = (global.xx)*32 + tile_size/2 - (tile_size*tile_xscale) / 2;
-	var corner_y = (global.yy)*32 + tile_size/2 - (tile_size*tile_yscale) / 2;
+	var corner_x = (tile_xx)*32 + tile_size/2 - (tile_size*tile_xscale) / 2;
+	var corner_y = (tile_yy)*32 + tile_size/2 - (tile_size*tile_yscale) / 2;
 	
 	if (final_tile != -1 && selecting_tile) {
 		draw_set_color(c_black);
-		draw_set_alpha(0.1);
+		draw_set_alpha(0.2);
 		
 		draw_rectangle(min_x*32,min_y*32,max_x*32,max_y*32,false);
 		

@@ -1,3 +1,5 @@
+#macro view view_camera[0]
+
 //keyboard input
 kUp = keyboard_check(vk_up);
 kDown = keyboard_check(vk_down);
@@ -49,11 +51,36 @@ if (window_has_focus() && obj_gameController.cam_lock != true) {
 x = clamp(x,0+view_width/2,room_width-view_width/2);
 y = clamp(y,0+view_height/2,room_width-view_height/2);
 
+xx = x;
+yy = y;
 
-//zooming
-//if (mScrlUp) cam_zoom ++;
-//if (mScrlDown) cam_zoom --;
 
-//if (mScrlDown || mScrlUp) {
-//	camera_set_view_size(view,view_width*cam_zoom,view_height*cam_zoom);
-//}
+//zoom
+if (mScrlUp) cam_zoom_goal -= 0.2;
+if (mScrlDown) cam_zoom_goal += 0.2;
+
+cam_zoom_goal = clamp(cam_zoom_goal,0.40,1.20);
+
+if (cam_zoom != cam_zoom_goal) {	
+	cam_zoom = lerp(cam_zoom,cam_zoom_goal,0.4);	
+}
+
+
+//camlock
+if (obj_gameController.cam_lock && cam_x_goal != -1) {
+	x = lerp(x,cam_x_goal,0.2);
+	y = lerp(y,cam_y_goal,0.2);
+	
+	if (abs(cam_x_goal - x) < 0.5) x = cam_x_goal;
+	if (abs(cam_y_goal - y) < 0.5) y = cam_y_goal;
+}
+
+
+if (!obj_gameController.cam_lock) {
+	cam_x_goal = -1;
+	cam_y_goal = -1;
+}
+
+
+camera_set_view_size(view,view_width*cam_zoom,view_height*cam_zoom);
+camera_set_view_pos(view,x-view_width/2,y-view_width/2);

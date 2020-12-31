@@ -1,6 +1,13 @@
 view_width = 800;
 view_height = 800;
 cam_zoom = 1;
+cam_zoom_goal = 1;
+
+cam_x_goal = -1;
+cam_y_goal = -1;
+
+xx = 0;
+yy = 0;
 
 window_scale = 1;
 

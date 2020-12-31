@@ -39,6 +39,9 @@ tile_xscale_goal = 1;
 tile_yscale = 1;
 tile_yscale_goal = 1;
 
+tile_xx = -1;
+tile_yy = -1;
+
 //buttons
 buttonBlue = 0
 buttonAqua = 0

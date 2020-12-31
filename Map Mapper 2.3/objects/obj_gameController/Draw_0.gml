@@ -4,18 +4,7 @@ draw_set_alpha(0.40);
 draw_grid(1,tile_size);
 draw_set_alpha(1);
 
-if (!surface_exists(main_surface)) {
-	main_surface = surface_create(room_width,room_height);
-	
-	surface_set_target(main_surface);
-	draw_clear_alpha(c_black,0);
-	
-	load_grid("main");
-	
-	surface_reset_target();
-}
-
-draw_surface(main_surface,0,0);
+load_grid("main");
 
 if (!surface_exists(door_surface)) {
 	door_surface = surface_create(room_width,room_height);

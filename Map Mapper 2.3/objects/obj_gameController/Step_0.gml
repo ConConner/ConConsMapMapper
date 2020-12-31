@@ -32,8 +32,8 @@ mMiddlePressed = mouse_check_button_pressed(mb_middle);
 mMiddle = mouse_check_button(mb_middle);
 
 
-//colors
-if (mMiddle && !choosingColor) {
+#region colors
+if (mMiddle && !choosingColor && canBuild) {
 	canBuild = false;
 	choosingColor = true;
 	cam_lock = true;
@@ -79,12 +79,44 @@ if (!mMiddle && choosingColor) {
 	instance_destroy(buttonOrange); instance_destroy(buttonRed); instance_destroy(buttonGray); instance_destroy(buttonPurple);
 	instance_destroy(buttonColorPicker);
 }
+#endregion
 
 
-//selecting colors
+#region selecting tile
+if (!selecting_tile) {
+	tile_xx = global.xx;
+	tile_yy = global.yy;
+}
+
 	//reaching scale
 tile_xscale = lerp(tile_xscale,tile_xscale_goal,0.33)
 tile_yscale = lerp(tile_yscale,tile_yscale_goal,0.33)
+
+	//locking mouse
+if (selecting_tile && obj_camera.x != obj_camera.cam_x_goal && obj_camera.y != obj_camera.cam_y_goal) {
+	
+	var mouse_xx = obj_camera.cam_x_goal - camera_get_view_x(view);
+	var mouse_yy = obj_camera.cam_y_goal - camera_get_view_y(view);
+	
+	window_mouse_set(mouse_xx,mouse_yy);
+}
+
+	//checking mouse on tile
+var _top = tile_yy * tile_size - tile_size/4;
+var _left = tile_xx * tile_size - tile_size/4;
+var _w = _left + tile_size * 1.5;
+var _h = _top + tile_size * 1.5;
+var _extra_space = 12;
+
+if (obj_camera.x = obj_camera.cam_x_goal && obj_camera.y = obj_camera.cam_y_goal) {
+	if (!point_in_rectangle(mouse_x,mouse_y,_left - _extra_space,_top - _extra_space,_w + _extra_space,_h + _extra_space)) {
+		//unlocking mouse
+		cam_lock = false;
+		canBuild = true;
+		selecting_tile = false;
+	}
+}
+#endregion
 
 
 	//Building with mouse
@@ -97,8 +129,6 @@ if (mLeftReleased) {
 	old_roomCount = global.roomCount;
 	placed_tile = false;
 }
-
-surface_free(main_surface);
 
 
 //debug

@@ -62,10 +62,17 @@ function add_tiles() {
 		
 		if (m == 1) {
 			//setting up selection
+			cam_lock = true;
 			canBuild = false;
 			selecting_tile = true;
 			tile_xscale_goal = 1.5;
 			tile_yscale_goal = 1.5;
+			
+			obj_camera.cam_x_goal = global.xx*tile_size + tile_size/2;
+			obj_camera.cam_y_goal = global.yy*tile_size + tile_size/2;
+			
+			tile_xx = global.xx;
+			tile_yy = global.yy;
 		}
 	}
 	
