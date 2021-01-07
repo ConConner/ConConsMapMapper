@@ -68,11 +68,14 @@ if (cam_zoom != cam_zoom_goal) {
 
 //camlock
 if (obj_gameController.cam_lock && cam_x_goal != -1) {
+	cam_x_goal = clamp(cam_x_goal,0+view_width/2,room_width-view_width/2);
+	cam_y_goal = clamp(cam_y_goal,0+view_height/2,room_width-view_height/2);
+	
 	x = lerp(x,cam_x_goal,0.2);
 	y = lerp(y,cam_y_goal,0.2);
 	
-	if (abs(cam_x_goal - x) < 0.5) x = cam_x_goal;
-	if (abs(cam_y_goal - y) < 0.5) y = cam_y_goal;
+	if (abs(cam_x_goal - x) < 2) x = cam_x_goal;
+	if (abs(cam_y_goal - y) < 2) y = cam_y_goal;
 }
 
 

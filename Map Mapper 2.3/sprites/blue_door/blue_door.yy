@@ -72,8 +72,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"cd6a8f5d-788d-4e08-a362-6113a74a0e9d","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "doors",
-    "path": "folders/Sprites/buttons/doors.yy",
+    "name": "old",
+    "path": "folders/Sprites/buttons/doors/old.yy",
   },
   "resourceVersion": "1.0",
   "name": "blue_door",

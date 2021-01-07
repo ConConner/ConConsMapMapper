@@ -72,8 +72,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"1fec815d-923f-494e-8527-959d96380f31","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "doors",
-    "path": "folders/Sprites/buttons/doors.yy",
+    "name": "old",
+    "path": "folders/Sprites/buttons/doors/old.yy",
   },
   "resourceVersion": "1.0",
   "name": "no_door",

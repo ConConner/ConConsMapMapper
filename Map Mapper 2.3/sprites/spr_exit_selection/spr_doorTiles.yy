@@ -76,7 +76,7 @@
     "eventStubScript": null,
     "parent": {"name":"spr_doorTiles","path":"sprites/spr_doorTiles/spr_doorTiles.yy",},
     "resourceVersion": "1.3",
-    "name": "spr_doorTiles",
+    "name": "",
     "tags": [],
     "resourceType": "GMSequence",
   },

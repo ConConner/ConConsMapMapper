@@ -1,3 +1,4 @@
+#region setting up
 //getting mouse coordinates on grid
 global.xx = floor(mouse_x/32);
 global.yy = floor(mouse_y/32);
@@ -30,6 +31,7 @@ mLeftReleased = mouse_check_button_released(mb_left);
 mLeftPressed = mouse_check_button_pressed(mb_left);
 mMiddlePressed = mouse_check_button_pressed(mb_middle);
 mMiddle = mouse_check_button(mb_middle);
+#endregion
 
 
 #region colors
@@ -86,19 +88,24 @@ if (!mMiddle && choosingColor) {
 if (!selecting_tile) {
 	tile_xx = global.xx;
 	tile_yy = global.yy;
+	
+	tile_xscale_goal = 1;
+	tile_yscale_goal = 1;
 }
 
 	//reaching scale
-tile_xscale = lerp(tile_xscale,tile_xscale_goal,0.33)
-tile_yscale = lerp(tile_yscale,tile_yscale_goal,0.33)
+tile_xscale = lerp(tile_xscale,tile_xscale_goal,0.22)
+tile_yscale = lerp(tile_yscale,tile_yscale_goal,0.22)
 
 	//locking mouse
-if (selecting_tile && obj_camera.x != obj_camera.cam_x_goal && obj_camera.y != obj_camera.cam_y_goal) {
+if (selecting_tile) {
+	if (obj_camera.x != obj_camera.cam_x_goal || obj_camera.y != obj_camera.cam_y_goal) {
 	
-	var mouse_xx = obj_camera.cam_x_goal - camera_get_view_x(view);
-	var mouse_yy = obj_camera.cam_y_goal - camera_get_view_y(view);
+		var mouse_xx = obj_camera.cam_x_goal - camera_get_view_x(view);
+		var mouse_yy = obj_camera.cam_y_goal - camera_get_view_y(view);
 	
-	window_mouse_set(mouse_xx,mouse_yy);
+		window_mouse_set(mouse_xx,mouse_yy);
+	}
 }
 
 	//checking mouse on tile
@@ -108,6 +115,19 @@ var _w = _left + tile_size * 1.5;
 var _h = _top + tile_size * 1.5;
 var _extra_space = 12;
 
+var _rel_mouse_x = mouse_x - _left;
+var _rel_mouse_y = mouse_y - _top;
+
+if (selecting_tile) {
+	
+	if (_rel_mouse_x >= tile_size * 1.5 - edge_size) selected_edge = dir.right;
+	else if (_rel_mouse_x <= edge_size) selected_edge = dir.left;
+	else if (_rel_mouse_y <= edge_size) selected_edge = dir.up;
+	else if (_rel_mouse_y >= tile_size * 1.5 - edge_size) selected_edge = dir.down;
+	else selected_edge = dir.none;
+}
+
+	//unlocking the mouse || deselecting the tile
 if (obj_camera.x = obj_camera.cam_x_goal && obj_camera.y = obj_camera.cam_y_goal) {
 	if (!point_in_rectangle(mouse_x,mouse_y,_left - _extra_space,_top - _extra_space,_w + _extra_space,_h + _extra_space)) {
 		//unlocking mouse
@@ -129,6 +149,22 @@ if (mLeftReleased) {
 	old_roomCount = global.roomCount;
 	placed_tile = false;
 }
+
+//checking if clicked and then moved
+if (mLeftPressed) {
+	click_xx = global.xx;
+	click_yy = global.yy;
+	click_moved = false;
+}
+if (mLeft) {
+	if (click_xx != global.xx) click_moved = true;
+	if (click_yy != global.yy) click_moved = true;
+}
+
+
+//reaching goal alpha
+remove_marker_cur_alpha = lerp(remove_marker_cur_alpha,remove_marker_goal_alpha,0.15);
+selected_edge_cur_alpha = lerp(selected_edge_cur_alpha,selected_edge_goal_alpha,0.15);
 
 
 //debug

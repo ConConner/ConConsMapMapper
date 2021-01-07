@@ -72,8 +72,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"9aef12b3-ee23-41c2-9679-58aa5c0fe38c","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "doors",
-    "path": "folders/Sprites/buttons/doors.yy",
+    "name": "old",
+    "path": "folders/Sprites/buttons/doors/old.yy",
   },
   "resourceVersion": "1.0",
   "name": "red_door",
