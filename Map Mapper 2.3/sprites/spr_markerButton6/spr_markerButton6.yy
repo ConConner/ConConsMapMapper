@@ -72,8 +72,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"74298608-21a6-4a5c-b91d-8b546b528c21","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "markers",
-    "path": "folders/Sprites/buttons/markers.yy",
+    "name": "old",
+    "path": "folders/Sprites/buttons/markers/old.yy",
   },
   "resourceVersion": "1.0",
   "name": "spr_markerButton6",
