@@ -36,6 +36,7 @@ function load_grid(g) {
 	var final_marker = -1;
 	var final_tile = -1;
 	var final_door = -1;
+	var final_door_subimg = 0;
 	
 
 
@@ -73,7 +74,13 @@ function load_grid(g) {
 			if (m == undefined) m = 0;
 		
 			if !(m == 0) {
-				draw_sprite(spr_marker,m-1,draw_x*32,draw_y*32);
+				if (draw_x == tile_xx && draw_y == tile_yy && selecting_tile) {
+					final_marker = m;
+					draw_sprite(spr_marker,m-1,draw_x*32,draw_y*32);
+				}
+				else {
+					draw_sprite(spr_marker,m-1,draw_x*32,draw_y*32);
+				}
 			}
 				
 			
@@ -98,29 +105,39 @@ function load_grid(g) {
 			if (m == 3 || m == 8 || m == 13 || m == 18) var subimg = 2;
 			if (m == 4 || m == 9 || m == 14 || m == 19) var subimg = 3;
 			if (m == 5 || m == 10 || m == 15 || m == 20) var subimg = 4;
-		
-		
-			if (m >= 1 && m <= 5) {
-				draw_sprite_part(spr_doorTiles,subimg,0,2,4,28,draw_x*16,draw_y*16+2);
+			//  left	  right		up		   down
+			
+			
+			if (!(floor(draw_x/2) == tile_xx && floor(draw_y/2) == tile_yy)) {
+			
+				if (m >= 1 && m <= 5) {
+					draw_sprite_part(spr_doorTiles,subimg,0,2,4,28,draw_x*16,draw_y*16+2);
+				}
+				if (m >= 6 && m <= 10) {
+					draw_sprite_part(spr_doorTiles,subimg,28,2,4,28,draw_x*16+12,draw_y*16+2);
+				}
+				if (m >= 11 && m <= 15) {
+					draw_sprite_part(spr_doorTiles,subimg,2,0,28,4,draw_x*16+2,draw_y*16-16);
+				}
+				if (m >= 16 && m <= 20) {
+					draw_sprite_part(spr_doorTiles,subimg,2,28,28,4,draw_x*16-14,draw_y*16+12);
+				}
+
 			}
-			if (m >= 6 && m <= 10) {
-				draw_sprite_part(spr_doorTiles,subimg,28,2,4,28,draw_x*16+12,draw_y*16+2);
-			}
-			if (m >= 11 && m <= 15) {
-				draw_sprite_part(spr_doorTiles,subimg,2,0,28,4,draw_x*16+2,draw_y*16-16);
-			}
-			if (m >= 16 && m <= 20) {
-				draw_sprite_part(spr_doorTiles,subimg,2,28,28,4,draw_x*16-14,draw_y*16+12);
-			}
+			
 		}
 	}}
+	
 	
 	
 	//drawing selected tile
 	var corner_x = (tile_xx)*32 + tile_size/2 - (tile_size*tile_xscale) / 2;
 	var corner_y = (tile_yy)*32 + tile_size/2 - (tile_size*tile_yscale) / 2;
+	var _w = tile_size * tile_xscale;
+	var _h = tile_size * tile_yscale;
 	
 	if (final_tile != -1 && selecting_tile) {
+		//drawing dark rectangle in the background
 		draw_set_color(c_black);
 		draw_set_alpha(0.35);
 		
@@ -129,10 +146,47 @@ function load_grid(g) {
 		draw_set_alpha(1);
 		draw_set_color(c_white);
 		
+		//drawing selected tile
 		draw_sprite_ext(spr_mapTiles,final_tile,corner_x,corner_y,tile_xscale,tile_yscale,0,c_white,1)
+		if (final_marker != -1) draw_sprite_ext(spr_marker,final_marker - 1,corner_x,corner_y,tile_xscale,tile_yscale,0,c_white,1)
+		
+		//drawing selected door
+		// stupid code for selected tiles with doors on it ;-;
+		if (selecting_tile) {
+		for (var draw_x = tile_xx*2; draw_x < tile_xx*2 + 2; draw_x++;) {
+		
+			for (var draw_y = tile_yy*2; draw_y < tile_yy*2 + 2; draw_y++;) {
+			
+				var m = ds_grid_get(global.DoorGrid,draw_x,draw_y);
+				if (m == undefined) m = 0;
+				var subimg = 0;
+			
+				if (m == 1 || m == 6 || m == 11 || m == 16) var subimg = 0;
+				if (m == 2 || m == 7 || m == 12 || m == 17) var subimg = 1;
+				if (m == 3 || m == 8 || m == 13 || m == 18) var subimg = 2;
+				if (m == 4 || m == 9 || m == 14 || m == 19) var subimg = 3;
+				if (m == 5 || m == 10 || m == 15 || m == 20) var subimg = 4;
+				//  left	  right		up		   down
+		
+				if (m >= 1 && m <= 5) {
+					draw_sprite_part_ext(spr_doorTiles,subimg,0,2,4,28,corner_x,corner_y+2,tile_xscale,tile_yscale,c_white,1);
+				}
+				if (m >= 6 && m <= 10) {
+					draw_sprite_part_ext(spr_doorTiles,subimg,28,2,4,28,corner_x+_w-6 ,corner_y+2,tile_xscale,tile_yscale,c_white,1);
+				}
+				if (m >= 11 && m <= 15) {
+					draw_sprite_part_ext(spr_doorTiles,subimg,2,0,28,4,corner_x+2,corner_y,tile_xscale,tile_yscale,c_white,1);
+				}
+				if (m >= 16 && m <= 20) {
+					draw_sprite_part_ext(spr_doorTiles,subimg,2,28,28,4,corner_x+2,corner_y+_h-6,tile_xscale,tile_yscale,c_white,1);
+				}
+			}
+		}}
+	
+		
 		draw_set_color(c_lime);
 		
-		draw_sprite_ext(spr_cursor_tile_selected,final_tile,corner_x - 2,corner_y - 2,tile_xscale,tile_yscale,0,c_lime,1)
+		draw_sprite_ext(spr_cursor_tile_selected,0,corner_x - 2,corner_y - 2,tile_xscale,tile_yscale,0,c_lime,1)
 		
 	}
 

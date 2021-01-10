@@ -21,9 +21,14 @@ if (debug_on) {
 	
 	
 	//showing debug vars
-	draw_text(0,15 * 2,"Tile xscale: " + string(tile_xscale));
-	draw_text(0,15 * 3,"Tile yscale: " + string(tile_yscale));
-	draw_text(0,15 * 5,"Cam Zoom: " + string(obj_camera.cam_zoom_goal));
+	draw_text(0,17 * 2,"Tile xscale: " + string(tile_xscale));
+	draw_text(0,17 * 3,"Tile yscale: " + string(tile_yscale));
+	draw_text(0,17 * 5,"Cam Zoom: " + string(obj_camera.cam_zoom_goal));
+	draw_text(0,17 * 7,"Mouse XX: " + string(global.xx) + ";    X: " + string(mouse_x));
+	draw_text(0,17 * 8,"Mouse YY: " + string(global.yy) + ";    Y: " + string(mouse_y));
+	draw_text(0,17 * 10,"Selected XX: " + string(tile_xx));
+	draw_text(0,17 * 11,"Selected YY: " + string(tile_yy));
+	
 	
 	draw_set_alpha(0.4);
 	draw_sprite(spr_cam,0,400 - 10,400 - 16);

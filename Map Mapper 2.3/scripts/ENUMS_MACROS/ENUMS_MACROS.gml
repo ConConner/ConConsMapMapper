@@ -31,9 +31,12 @@ enum marker {
 	circle = 1,
 	dot = 2,
 	exclamation = 3,
-	up = 5,
-	down = 4,
-	start = 6,
+	up = 8,
+	down = 9,
+	left = 6,
+	right = 7,
+	boss = 5,
+	start = 4,
 }
 	
 enum dir {

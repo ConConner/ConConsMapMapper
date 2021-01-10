@@ -28,8 +28,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Door Buttons",
-    "path": "folders/Objects/Door Buttons.yy",
+    "name": "old",
+    "path": "folders/Objects/Door Buttons/old.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_doorButton_destroy",

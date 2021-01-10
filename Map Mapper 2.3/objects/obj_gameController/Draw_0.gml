@@ -30,7 +30,7 @@ if (selecting_tile) {
 	if (selected_edge != old_selected_edge) {
 		old_selected_edge = selected_edge;
 		selected_edge_cur_alpha = 0;
-		selected_edge_goal_alpha = 0.4;
+		selected_edge_goal_alpha = 0.6;
 	}
 	
 	draw_set_colour(c_white);
@@ -62,6 +62,7 @@ if (selecting_tile) {
 		}
 		
 		remove_marker_goal_alpha = 0.15;
+		if (choosing_tile_addition) remove_marker_goal_alpha = 0;
 		draw_set_alpha(remove_marker_cur_alpha);
 		draw_sprite(spr_exit_selection,0,_left + edge_size, _top + edge_size);
 	}

@@ -28,8 +28,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Marker Buttons",
-    "path": "folders/Objects/Marker Buttons.yy",
+    "name": "old",
+    "path": "folders/Objects/Marker Buttons/old.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_marker_button4",

@@ -19,8 +19,16 @@ else {		//unselected
 	sprite_index = spr_cursor_unselected;
 }
 
-if (mouse_check_button(mb_right)) {
-	sprite_index = spr_cursor_del
+if (mouse_check_button(mb_right) && !obj_gameController.right_click_menu_close) {
+	sprite_index = spr_cursor_del;
 	image_blend = c_white;
 	image_speed = 2;
+}
+
+if (obj_gameController.right_click_menu_close) {
+	sprite_index = spr_cursor_nothing;
+	image_blend = c_white;
+	image_speed = 0.5;
+	x = mouse_x - sprite_width/2;
+	y = mouse_y - sprite_height/2;
 }

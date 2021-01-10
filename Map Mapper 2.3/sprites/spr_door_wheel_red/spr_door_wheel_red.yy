@@ -25,14 +25,11 @@
   "gridY": 50,
   "frames": [
     {"compositeImage":{"FrameId":{"name":"40a3b2fb-f27f-4e5d-85f7-34fc6fea7c9f","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"40a3b2fb-f27f-4e5d-85f7-34fc6fea7c9f","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"LayerId":{"name":"0aff3d73-fad4-4ae0-9f4b-3aa1eed07511","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-        {"FrameId":{"name":"40a3b2fb-f27f-4e5d-85f7-34fc6fea7c9f","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"LayerId":{"name":"daeafcb4-856c-455d-adad-d2ac49ac1006","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-        {"FrameId":{"name":"40a3b2fb-f27f-4e5d-85f7-34fc6fea7c9f","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"LayerId":{"name":"6fa9be43-7007-4d90-8938-26b4efe8a58b","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-        {"FrameId":{"name":"40a3b2fb-f27f-4e5d-85f7-34fc6fea7c9f","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"LayerId":{"name":"255ba9f1-ad3f-469f-ad6a-47529a500b60","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-        {"FrameId":{"name":"40a3b2fb-f27f-4e5d-85f7-34fc6fea7c9f","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"LayerId":{"name":"fa068298-72b7-4cd8-a08b-53c8f65783d4","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-        {"FrameId":{"name":"40a3b2fb-f27f-4e5d-85f7-34fc6fea7c9f","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"LayerId":{"name":"de5543eb-c148-410d-8e81-23489066015f","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
         {"FrameId":{"name":"40a3b2fb-f27f-4e5d-85f7-34fc6fea7c9f","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"LayerId":{"name":"acca5267-2b5b-4941-adc8-202205fc2ff3","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
       ],"parent":{"name":"spr_door_wheel_red","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"resourceVersion":"1.0","name":"40a3b2fb-f27f-4e5d-85f7-34fc6fea7c9f","tags":[],"resourceType":"GMSpriteFrame",},
+    {"compositeImage":{"FrameId":{"name":"a042237a-997b-462e-b73a-0a0ae599f6df","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
+        {"FrameId":{"name":"a042237a-997b-462e-b73a-0a0ae599f6df","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"LayerId":{"name":"acca5267-2b5b-4941-adc8-202205fc2ff3","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
+      ],"parent":{"name":"spr_door_wheel_red","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"resourceVersion":"1.0","name":"a042237a-997b-462e-b73a-0a0ae599f6df","tags":[],"resourceType":"GMSpriteFrame",},
   ],
   "sequence": {
     "spriteId": {"name":"spr_door_wheel_red","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},
@@ -42,12 +39,13 @@
     "playbackSpeedType": 0,
     "autoRecord": true,
     "volume": 1.0,
-    "length": 1.0,
+    "length": 2.0,
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
       {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"005ac21f-8c98-4bb2-99a6-99305d39c97c","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"40a3b2fb-f27f-4e5d-85f7-34fc6fea7c9f","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+            {"id":"c31666b5-529d-4ecd-9b70-ec94f4a5102a","Key":1.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"a042237a-997b-462e-b73a-0a0ae599f6df","path":"sprites/spr_door_wheel_red/spr_door_wheel_red.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"modifiers":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack",},
     ],
     "visibleRange": null,
