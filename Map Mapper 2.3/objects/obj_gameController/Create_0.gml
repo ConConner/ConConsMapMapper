@@ -1,9 +1,10 @@
-//setting variables
-global.grid_size = room_width / tile_size;
+//declaring globals
+global.grid_width = room_width / tile_size;			//amount of cells horizontally /			in the usable tile grid
+global.grid_height = room_height / tile_size;		//							   / vertically	
 global.roomCount = 0;
-global.currentColor = c.blue;
-global.xx = floor(mouse_x/32);
-global.yy = floor(mouse_y/32);
+
+global.xx = floor(mouse_x/32);			//the x position of the mouse on the grid
+global.yy = floor(mouse_y/32);			//the y position of the mouse on the grid
 	
 	//wheel variables
 	  //color wheel
@@ -101,23 +102,35 @@ selected_map = "unsaved";
 //creating surface
 door_surface = noone;
 
+#region setting up the grid/structs
 
-#region grids
-//creating grids
-global.mainGrid = ds_grid_create(global.grid_size,global.grid_size);
-global.SubimgGrid = ds_grid_create(global.grid_size,global.grid_size);
-global.RoomGrid = ds_grid_create(global.grid_size,global.grid_size);
-global.ColorGrid = ds_grid_create(global.grid_size,global.grid_size);
-global.MarkerGrid = ds_grid_create(global.grid_size,global.grid_size);
-global.DoorGrid = ds_grid_create(global.grid_size * 2,global.grid_size * 2);
+//creating the tile_info
+tile_info = function() constructor {
+	
+	//different tile layers
+	main = ID.empty;																				//stores if a tile is set or not
+	rm_nmb = 0;																						//stores the room number of the tile
+	color = 0;																						//stores the tiles color
+	subimg = 0;																						//stores the main tile subimage
+	mrk = marker.empty;																				//stores the subimage for the marker on that tile
+	door = [[hatch.empty, 0],[hatch.empty, 90],[hatch.empty, 180],[hatch.empty, 270]]				//Door are set up as [Door One[color ,rot] Door Two[color,rot]....
+																									
+	static clear = function() {																		////////////////////////////////////////////////
+		main = ID.empty;																			//											  //
+		rm_nmb = 0;																					// This function resets a tiles values to the //
+		color = 0;																					// cleared state. Easy way to clear a tile    //
+		subimg = 0;																					// completely of all values                   //
+		mrk = marker.empty;																			//											  //
+		door = [[hatch.empty, 0],[hatch.empty, 90],[hatch.empty, 180],[hatch.empty, 270]]			////////////////////////////////////////////////
+	}
+	
+}
 
-//setting grid regions
-ds_grid_set_region(global.mainGrid, 0, 0, global.grid_size - 1, global.grid_size - 1, 0);
-ds_grid_set_region(global.SubimgGrid, 0, 0, global.grid_size - 1, global.grid_size - 1, 0);
-ds_grid_set_region(global.RoomGrid, 0, 0, global.grid_size - 1, global.grid_size - 1, 0);
-ds_grid_set_region(global.ColorGrid, 0, 0, global.grid_size - 1, global.grid_size - 1, 1);
-ds_grid_set_region(global.MarkerGrid, 0, 0, global.grid_size - 1, global.grid_size - 1, 0);
-ds_grid_set_region(global.DoorGrid, 0, 0, global.grid_size * 2 - 1, global.grid_size * 2 - 1, 0);
+//creating the grid
+global.tile_grid = ds_grid_create(global.grid_width, global.grid_height); 
+ds_grid_set_region(global.tile_grid, 0, 0, global.grid_width, global.grid_height, new tile_info());
+
+
+#endregion
 
 instance_create_layer(mouse_x,mouse_y,"Cursor",obj_cursor);
-#endregion

@@ -15,17 +15,6 @@ enum ID {
 	filled = 1
 }
 
-enum c {
-	blue,
-	aqua,
-	green,
-	yellow,
-	orange,
-	red,
-	grey,
-	purple,
-}
-
 enum marker {
 	empty = 0,
 	circle = 1,
@@ -37,6 +26,15 @@ enum marker {
 	right = 7,
 	boss = 5,
 	start = 4,
+}
+
+enum hatch {
+	empty,
+	blue,
+	red,
+	green,
+	yellow,
+	none,
 }
 	
 enum dir {

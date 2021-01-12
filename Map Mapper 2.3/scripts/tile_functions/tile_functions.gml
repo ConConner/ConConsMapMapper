@@ -98,9 +98,9 @@ function autotile(xx,yy) {
 		else mrRight = false;
  
 		if (yy !=0) up = ds_grid_get(global.mainGrid,xx,yy - 1) * mrUp;
-		if (yy !=global.grid_size-1) down = ds_grid_get(global.mainGrid,xx,yy + 1) * mrDown;
+		if (yy !=global.grid_width-1) down = ds_grid_get(global.mainGrid,xx,yy + 1) * mrDown;
 		if (xx !=0) left = ds_grid_get(global.mainGrid,xx - 1,yy) * mrLeft;
-		if (xx !=global.grid_size-1) right = ds_grid_get(global.mainGrid,xx + 1,yy) * mrRight;
+		if (xx !=global.grid_width-1) right = ds_grid_get(global.mainGrid,xx + 1,yy) * mrRight;
  
 		return myColor * 16 + (8*right + 4*left + 2*down + up);
 	
