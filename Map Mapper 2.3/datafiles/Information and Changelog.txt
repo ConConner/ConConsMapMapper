@@ -1,5 +1,5 @@
 ---GENERAL INFORMATION---
-ConCon's Map Mapper Beta 1.1
+ConCon's Map Mapper 1.0
 
 Test-PC hardware: AMD Ryzen 5 2600
 		  NVIDIA Geforce RTX 2070
@@ -11,6 +11,17 @@ LAST UPDATED 22.12.2020
 	    (DD.MM.YYYY)
 
 ------------CHANGELOG---------------
+------------------------------------
+Release 1.0 (XX.XX.XXXX)
+------------------------------------
+# base system rework
+ # improved perfomance [ ~ 1100 fps*]
+# reworked room system
++ new cursor system
++ new colour selection (custom colours)
+
+
+
 ------------------------------------
 Beta 1.1 (10.01.2020)
 ------------------------------------

@@ -1,7 +1,7 @@
 #region setting up
 //getting mouse coordinates on grid
-global.xx = floor(mouse_x/32);
-global.yy = floor(mouse_y/32);
+global.xx = clamp(floor(mouse_x/32), 0, global.grid_width - 1);
+global.yy = clamp(floor(mouse_y/32), 0, global.grid_height - 1);
 
 //view and window sizes
 global.viewX = camera_get_view_x(view_camera[0]);
@@ -22,6 +22,7 @@ kDown = keyboard_check_direct(vk_down);
 kLeft = keyboard_check_direct(vk_left);
 kRight = keyboard_check_direct(vk_right);
 kF12 = keyboard_check_pressed(vk_f12);
+kSpacePressed = keyboard_check_pressed(vk_space);
 	//mouse input
 mLeft = mouse_check_button(mb_left);
 mRight = mouse_check_button(mb_right);
@@ -34,52 +35,52 @@ mMiddle = mouse_check_button(mb_middle);
 
 
 #region colors
-if (mMiddle && !choosingColor && canBuild) {
-	canBuild = false;
-	choosingColor = true;
-	cam_lock = true;
+//if (mMiddle && !choosingColor && canBuild) {
+//	canBuild = false;
+//	choosingColor = true;
+//	cam_lock = true;
 	
-	storeWindowMouseX = window_mouse_get_x();
-	storeWindowMouseY = window_mouse_get_y();
-	storeMouseX = mouse_x;
-	storeMouseY = mouse_y;
+//	storeWindowMouseX = window_mouse_get_x();
+//	storeWindowMouseY = window_mouse_get_y();
+//	storeMouseX = mouse_x;
+//	storeMouseY = mouse_y;
 	
-	window_mouse_set(global.window_half_width,global.window_half_height);
-	var _xx = global.half_width +global.viewX;
-	var _yy = global.half_height +global.viewY;
+//	window_mouse_set(global.window_half_width,global.window_half_height);
+//	var _xx = global.half_width +global.viewX;
+//	var _yy = global.half_height +global.viewY;
 	
-	buttonColorPicker = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_color_picker);
-	buttonBlue = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_blue); buttonAqua = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_aqua);
-	buttonGreen = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_green); buttonYellow = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_yellow);
-	buttonOrange = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_orange); buttonRed = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_red);
-	buttonGray = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_gray); buttonPurple = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_purple);
-}
+//	buttonColorPicker = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_color_picker);
+//	buttonBlue = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_blue); buttonAqua = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_aqua);
+//	buttonGreen = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_green); buttonYellow = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_yellow);
+//	buttonOrange = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_orange); buttonRed = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_red);
+//	buttonGray = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_gray); buttonPurple = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_purple);
+//}
 
-if (!mMiddle && choosingColor) {
-	choosingColor = false;
-	cam_lock = false;
-	canBuild = true;
+//if (!mMiddle && choosingColor) {
+//	choosingColor = false;
+//	cam_lock = false;
+//	canBuild = true;
 	
-	var _xx = global.half_width +global.viewX;
-	var _yy = global.half_height +global.viewY;
-	var _storeMouseXX = floor(storeMouseX/32);
-	var _storeMouseYY = floor(storeMouseY/32);
-	var _m = circle_menu(8,_xx,_yy,global.color_wheel_radius,global.color_wheel_min_radius,0);
+//	var _xx = global.half_width +global.viewX;
+//	var _yy = global.half_height +global.viewY;
+//	var _storeMouseXX = floor(storeMouseX/32);
+//	var _storeMouseYY = floor(storeMouseY/32);
+//	var _m = circle_menu(8,_xx,_yy,global.color_wheel_radius,global.color_wheel_min_radius,0);
 	
-	if (_m == 3) colorSelecting = c.blue; if (_m == 2) colorSelecting = c.aqua; if (_m == 1) colorSelecting = c.green;
-	if (_m == 0) colorSelecting = c.yellow; if (_m == 7) colorSelecting = c.orange; if (_m == 6) colorSelecting = c.red;
-	if (_m == 5) colorSelecting = c.grey; if (_m == 4) colorSelecting = c.purple;
-	if (_m == 8) if (ds_grid_get(global.mainGrid,_storeMouseXX,_storeMouseYY) != 0) colorSelecting = ds_grid_get(global.ColorGrid,_storeMouseXX,_storeMouseYY);
+//	if (_m == 3) colorSelecting = c_blue; if (_m == 2) colorSelecting = c_aqua; if (_m == 1) colorSelecting = c_green;
+//	if (_m == 0) colorSelecting = c_yellow; if (_m == 7) colorSelecting = c_orange; if (_m == 6) colorSelecting = c_red;
+//	if (_m == 5) colorSelecting = c_grey; if (_m == 4) colorSelecting = c_purple;
+//	if (_m == 8) if (ds_grid_get(global.mainGrid,_storeMouseXX,_storeMouseYY) != 0) colorSelecting = ds_grid_get(global.ColorGrid,_storeMouseXX,_storeMouseYY);
 	
-	if (_m != -1) global.currentColor = colorSelecting;
-	colorSelecting = 0;
+//	if (_m != -1) global.selected_color = colorSelecting;
+//	colorSelecting = 0;
 	
-	window_mouse_set(storeWindowMouseX,storeWindowMouseY);
+//	window_mouse_set(storeWindowMouseX,storeWindowMouseY);
 	
-	instance_destroy(buttonBlue); instance_destroy(buttonAqua); instance_destroy(buttonGreen); instance_destroy(buttonYellow); 
-	instance_destroy(buttonOrange); instance_destroy(buttonRed); instance_destroy(buttonGray); instance_destroy(buttonPurple);
-	instance_destroy(buttonColorPicker);
-}
+//	instance_destroy(buttonBlue); instance_destroy(buttonAqua); instance_destroy(buttonGreen); instance_destroy(buttonYellow); 
+//	instance_destroy(buttonOrange); instance_destroy(buttonRed); instance_destroy(buttonGray); instance_destroy(buttonPurple);
+//	instance_destroy(buttonColorPicker);
+//}
 #endregion
 
 
@@ -322,6 +323,16 @@ selected_edge_cur_alpha = lerp(selected_edge_cur_alpha,selected_edge_goal_alpha,
 
 //debug
 if (kF12) debug_on = !debug_on;
+
+if (debug_on) {
+	var _tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
+	show_debug_message(_tile);
+}
+
+if (kSpacePressed) {
+	canBuild = !canBuild;
+}
+
 
 //incrementing timers
 door_menu_open_timer ++;

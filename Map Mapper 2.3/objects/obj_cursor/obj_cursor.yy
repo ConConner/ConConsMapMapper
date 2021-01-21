@@ -1,7 +1,7 @@
 {
   "spriteId": {
-    "name": "spr_cursor_unselected",
-    "path": "sprites/spr_cursor_unselected/spr_cursor_unselected.yy",
+    "name": "spr_cursor_add",
+    "path": "sprites/spr_cursor_add/spr_cursor_add.yy",
   },
   "solid": false,
   "visible": true,
@@ -23,6 +23,7 @@
   "eventList": [
     {"isDnD":false,"eventNum":0,"eventType":3,"collisionObjectId":null,"parent":{"name":"obj_cursor","path":"objects/obj_cursor/obj_cursor.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
     {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"parent":{"name":"obj_cursor","path":"objects/obj_cursor/obj_cursor.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"isDnD":false,"eventNum":0,"eventType":8,"collisionObjectId":null,"parent":{"name":"obj_cursor","path":"objects/obj_cursor/obj_cursor.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
   ],
   "properties": [],
   "overriddenProperties": [],

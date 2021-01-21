@@ -35,3 +35,16 @@ if (debug_on) {
 	draw_set_alpha(1);
 	
 }
+
+//test drawing
+draw_set_alpha(1);
+draw_set_color(c_white);
+
+if (mMiddle) {
+	draw_hue_shift(273, 273, 255, 255, 63);
+	
+	global.selected_color = get_mouse_hsv(273, 273, 255, 255);
+}
+
+draw_set_alpha(1);
+draw_set_color(c_white);

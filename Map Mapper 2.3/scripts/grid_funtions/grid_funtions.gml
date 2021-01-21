@@ -1,3 +1,19 @@
+function set_up_grid() {
+	for (var i = 0; i < global.grid_width; i++) {
+		
+		for (var j = 0; j < global.grid_height; j++) {
+			
+			if (ds_grid_get(global.tile_grid, i, j) == 0) {
+				
+				ds_grid_set(global.tile_grid, i, j, new tile_info(ID.empty,0,0,0,marker.empty,[[hatch.empty, 0],[hatch.empty, 90],[hatch.empty, 180],[hatch.empty, 270]]));
+				
+			}
+			
+		}
+	}
+}
+
+
 function draw_grid(w,inc) {
 	
 	for (var i = 0; i < room_height/inc+1; i += 1)
@@ -38,13 +54,23 @@ function load_grid() {
 	
 		for (var draw_y = min_y; draw_y < max_y; draw_y++) {
 			
+			var pos_x = draw_x * tile_size;
+			var pos_y = draw_y * tile_size;
 			
 			var tile = ds_grid_get(global.tile_grid, draw_x, draw_y);
+			var col = tile.col
 			
-			draw_set_font(fnt_simple_text);
-			draw_text(draw_x * tile_size, draw_y * tile_size, tile.main);
-			
-			
+			// normal tile drawing
+			if (tile.main == ID.filled) { 
+				
+				//drawing the inside of the tile
+				draw_rectangle_color(pos_x, pos_y, pos_x + tile_size - 1, pos_y + tile_size - 1, col, col, col, col, false);
+				
+				//drawing outline
+				draw_sprite(spr_mapTiles, tile.subimg, pos_x, pos_y);
+				
+				
+			}
 		}
 	}
 
