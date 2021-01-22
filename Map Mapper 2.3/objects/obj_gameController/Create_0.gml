@@ -137,6 +137,10 @@ global.tile_grid = ds_grid_create(global.grid_width, global.grid_height);
 ds_grid_set_region(global.tile_grid, 0, 0, global.grid_width, global.grid_height, 0);
 set_up_grid()
 
+//text grid
+global.text_grid = ds_grid_create(20,3);
+ds_grid_set_region(global.text_grid, 0, 0, 19, 2, 0);
+
 #endregion
 
 instance_create_layer(mouse_x,mouse_y,"Cursor",obj_cursor);

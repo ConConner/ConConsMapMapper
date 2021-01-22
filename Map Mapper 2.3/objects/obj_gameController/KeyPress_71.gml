@@ -1,0 +1,1 @@
+add_text_message("NEW COLOUR SET", 3);

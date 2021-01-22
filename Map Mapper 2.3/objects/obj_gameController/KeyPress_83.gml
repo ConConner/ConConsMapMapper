@@ -1,2 +1,1 @@
-var fname = get_save_filename("conners map file (.cmf)|*"+extension,"");
-if (fname != "") save_map(fname);
+add_text_message("TEST MESSAGE", 3);

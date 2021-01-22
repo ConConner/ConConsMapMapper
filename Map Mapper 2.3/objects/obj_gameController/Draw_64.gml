@@ -1,7 +1,6 @@
 draw_set_color(c_white);
 draw_set_font(fnt_simple_text);
 display_set_gui_size(800,800);
-draw_text(0,780,"Current Map: " + selected_map);
 
 
 //debug
@@ -48,3 +47,7 @@ if (mMiddle) {
 
 draw_set_alpha(1);
 draw_set_color(c_white);
+
+draw_set_halign(fa_right);
+update_text_message(795,778);
+draw_set_halign(fa_left);

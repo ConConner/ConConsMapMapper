@@ -226,3 +226,89 @@ function load_grid() {
 		
 	}
 }
+	
+	
+function add_text_message(msg, lifetime) {
+	
+	grid_shift_x_up(global.text_grid);
+	
+	//setting the new text
+	//message
+	ds_grid_set(global.text_grid, 0, text.messg, msg);
+	//lifetime
+	ds_grid_set(global.text_grid, 0, text.life, lifetime);
+	//alpha
+	ds_grid_set(global.text_grid, 0, text.alph, 1);
+	
+}
+
+
+function grid_shift_x_up(grid) {
+	
+	var grid_length = ds_grid_width(grid)
+	for (var i = 0; i < grid_length; i++) {
+		
+		//getting variables
+		var pos = (i - grid_length) * -1 - 1;
+		var m = ds_grid_get(grid, pos, text.messg);
+		var _lifetime = ds_grid_get(grid, pos, text.life);
+		var _alpha = ds_grid_get(grid, pos, text.alph);
+		
+		if (m != 0) {
+			
+			//checking if grid is long enough for shift
+			if (pos = grid_length) {
+				ds_grid_resize(grid, grid_length + 1, 3)
+			}
+			
+			//shifting the value one position up
+			ds_grid_set(grid, pos + 1, text.messg, m);
+			ds_grid_set(grid, pos + 1, text.life, _lifetime);
+			ds_grid_set(grid, pos + 1, text.alph, _alpha);
+			
+			//deleting the old value
+			ds_grid_set(grid, pos, text.messg, 0);
+			ds_grid_set(grid, pos, text.life, 0);
+			ds_grid_set(grid, pos, text.alph, 0);
+			
+		}
+		
+	}
+	
+}
+	
+	
+function update_text_message(_x, _y) {
+	
+	var grid = global.text_grid;
+	var grid_length = ds_grid_width(grid);
+	var spacing = 22;
+	
+	for (var i = 0; i < grid_length; i++) {
+		
+		var m = ds_grid_get(grid, i, text.messg);
+		var _lifetime = ds_grid_get(grid, i, text.life);
+		var _alpha = ds_grid_get(grid, i, text.alph);
+		
+		//drawing the text
+		if (m != 0) {
+			draw_set_alpha(_alpha)
+			draw_text(_x, _y - i * spacing, m)
+		}
+		
+		//updating the vars
+		if (_lifetime <= 1) {
+			ds_grid_set(grid, i, text.alph, _lifetime);
+		}
+		
+		ds_grid_set(grid, i, text.life, _lifetime -0.01);
+		
+		if (_lifetime <= 0) {
+			ds_grid_set(grid, i, text.messg, 0);
+			ds_grid_set(grid, i, text.life, 0);
+			ds_grid_set(grid, i, text.alph, 0);
+		}
+		
+	}
+	
+}

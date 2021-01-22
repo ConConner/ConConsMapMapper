@@ -45,6 +45,12 @@ enum dir {
 	none,
 }
 
+enum text {
+	messg,
+	life,
+	alph,
+}
+
 
 #macro tile_size 32 
 #macro border_margin 64

@@ -1,0 +1,1 @@
+add_text_message("SAVED MAP", 3);

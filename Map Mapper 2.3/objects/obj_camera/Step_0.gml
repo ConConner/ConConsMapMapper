@@ -55,9 +55,7 @@ xx = x;
 yy = y;
 
 
-//zoom
-if (mScrlUp) cam_zoom_goal -= 0.2;
-if (mScrlDown) cam_zoom_goal += 0.2;
+
 
 cam_zoom_goal = clamp(cam_zoom_goal,0.40,1.20);
 
