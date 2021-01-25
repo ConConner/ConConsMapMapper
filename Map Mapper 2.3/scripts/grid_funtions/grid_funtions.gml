@@ -14,22 +14,28 @@ function set_up_grid() {
 }
 
 
-function draw_grid(w,inc) {
+function draw_grid(w, h, thickness, inc) {
 	
-	for (var i = 0; i < room_height/inc+1; i += 1)
+	for (var i = 0; i < h / inc + 1; i ++)	//horizontal lines
 	{
-		if ((i % 25) == 0) draw_set_alpha(0.8);
-		else draw_set_alpha(0.4);
-		draw_line_width(0,i*inc,room_width,i*inc,w);
+		
+		var pos_x = max(0 - global.cam_pos_x, 0);
+		var pos_y = i * inc - global.cam_pos_y;
+		
+		draw_set_alpha(0.4);
+		draw_line_width(pos_x , pos_y, min(w - global.cam_pos_x, global.view_width), pos_y, thickness);
 
 	}
 
 
-	for (var i = 0; i < room_width/inc+1; i += 1)
+	for (var i = 0; i < w / inc + 1; i ++)	//vertical lines
 	{
-		if ((i % 25) == 0) draw_set_alpha(0.8);
-		else draw_set_alpha(0.4);
-		draw_line_width(i*inc,0,i*inc,room_width,w);
+		
+		var pos_x = i * inc - global.cam_pos_x;
+		var pos_y = max(0 - global.cam_pos_y, 0);
+		
+		draw_set_alpha(0.4);
+		draw_line_width(pos_x, pos_y, pos_x, min(h - global.cam_pos_y, global.view_height), thickness);
 	}
 
 
@@ -39,10 +45,10 @@ function draw_grid(w,inc) {
 function load_grid() {
 	
 	//getting camera position
-	var cam_x = camera_get_view_x(view_camera[0]);
-	var cam_y = camera_get_view_y(view_camera[0]);
-	var cam_w = camera_get_view_width(view_camera[0]);
-	var cam_h = camera_get_view_height(view_camera[0]);
+	var cam_x = global.cam_pos_x;
+	var cam_y = global.cam_pos_y;
+	var cam_w = global.view_width;
+	var cam_h = global.view_height;
 	var min_x = max(0,floor( cam_x / tile_size ) -1);
 	var min_y = max(0,floor( cam_y / tile_size ) -1);
 	var max_x = min(global.grid_width,floor( min_x + ( cam_w / tile_size ) ) +2);
@@ -54,8 +60,8 @@ function load_grid() {
 	
 		for (var draw_y = min_y; draw_y < max_y; draw_y++) {
 			
-			var pos_x = draw_x * tile_size;
-			var pos_y = draw_y * tile_size;
+			var pos_x = draw_x * tile_size - global.cam_pos_x;
+			var pos_y = draw_y * tile_size - global.cam_pos_y;
 			
 			var tile = ds_grid_get(global.tile_grid, draw_x, draw_y);
 			var col = tile.col

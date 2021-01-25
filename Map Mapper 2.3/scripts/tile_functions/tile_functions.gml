@@ -82,7 +82,6 @@ function add_tiles() {
 	if (yy != 0) ds_grid_set(global.tile_grid, xx, yy - 1, new tile_info(tile_up.main, tile_up.rm_nmb, tile_up.col, tile_up.subimg, tile_up.mrk, tile_up.door));
 	if (yy != global.grid_height - 1) ds_grid_set(global.tile_grid, xx, yy + 1, new tile_info(tile_down.main, tile_down.rm_nmb, tile_down.col, tile_down.subimg, tile_down.mrk, tile_down.door));
 	
-	show_debug_message(tile);
 }
 	
 function autotile(xx,yy) {
@@ -121,7 +120,7 @@ function autotile(xx,yy) {
 		
  
 		if (yy !=0) _up = tile_up.main * mrUp;
-		if (yy !=global.grid_width-1) _down = tile_down.main * mrDown;
+		if (yy !=global.grid_height-1) _down = tile_down.main * mrDown;
 		if (xx !=0) _left = tile_left.main * mrLeft;
 		if (xx !=global.grid_width-1) _right = tile_right.main * mrRight;
  

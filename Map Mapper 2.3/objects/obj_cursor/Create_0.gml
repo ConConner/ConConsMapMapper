@@ -1,3 +1,6 @@
+image_speed = 0;
+image_alpha = 0;
+
 goal_x = 0; //goal X position
 goal_y = 0;	//goal Y position
 cursor_x = 0;	//current X position
@@ -18,3 +21,12 @@ over_button = false;
 
 goal_icon_frame = 0; //goal of the icon subimage
 icon_frame = 0;
+
+cursor_mode = curs_mode.on_grid;
+
+enum curs_mode {
+	on_grid,
+	on_menu,
+	on_button,
+	off_anything,
+}

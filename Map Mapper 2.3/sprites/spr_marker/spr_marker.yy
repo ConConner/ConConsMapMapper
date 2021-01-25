@@ -100,8 +100,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"5182e8c3-b30f-41a2-b2ca-355bdd88f7ac","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "Sprites",
-    "path": "folders/Sprites.yy",
+    "name": "map_tiles",
+    "path": "folders/Sprites/map_tiles.yy",
   },
   "resourceVersion": "1.0",
   "name": "spr_marker",

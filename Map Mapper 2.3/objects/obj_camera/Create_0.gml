@@ -1,7 +1,5 @@
 view_width = 800;
 view_height = 800;
-cam_zoom = 1;
-cam_zoom_goal = 1;
 
 cam_x_goal = -1;
 cam_y_goal = -1;
@@ -17,6 +15,3 @@ alarm[0]=1;
 surface_resize(application_surface,view_width*window_scale,view_height*window_scale);
 
 spd = 1;
-
-x = room_width / 2;
-y = room_height / 2;

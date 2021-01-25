@@ -1,14 +1,11 @@
 #macro view view_camera[0]
 
 //keyboard input
-kUp = keyboard_check(vk_up);
-kDown = keyboard_check(vk_down);
-kLeft = keyboard_check(vk_left);
-kRight = keyboard_check(vk_right);
-kCtrl = keyboard_check(vk_control);
-
-mScrlUp = mouse_wheel_up();
-mScrlDown = mouse_wheel_down();
+kUp = 0//keyboard_check(vk_up);
+kDown = 0//keyboard_check(vk_down);
+kLeft = 0//keyboard_check(vk_left);
+kRight = 0//keyboard_check(vk_right);
+kCtrl = 0//keyboard_check(vk_control);
 
 //movement
 xx = device_mouse_x_to_gui(0);
@@ -49,19 +46,10 @@ if (window_has_focus() && obj_gameController.cam_lock != true) {
 
 
 x = clamp(x,0+view_width/2,room_width-view_width/2);
-y = clamp(y,0+view_height/2,room_width-view_height/2);
+y = clamp(y,0+view_height/2,room_height-view_height/2);
 
 xx = x;
 yy = y;
-
-
-
-
-cam_zoom_goal = clamp(cam_zoom_goal,0.40,1.20);
-
-if (cam_zoom != cam_zoom_goal) {	
-	cam_zoom = lerp(cam_zoom,cam_zoom_goal,0.4);	
-}
 
 
 //camlock
@@ -83,5 +71,5 @@ if (!obj_gameController.cam_lock) {
 }
 
 
-camera_set_view_size(view,view_width*cam_zoom,view_height*cam_zoom);
+camera_set_view_size(view,view_width,view_height);
 camera_set_view_pos(view,x-view_width/2,y-view_width/2);

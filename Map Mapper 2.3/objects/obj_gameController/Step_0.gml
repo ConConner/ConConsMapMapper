@@ -1,19 +1,18 @@
 #region setting up
 //getting mouse coordinates on grid
-global.xx = clamp(floor(mouse_x/32), 0, global.grid_width - 1);
-global.yy = clamp(floor(mouse_y/32), 0, global.grid_height - 1);
+global.xx = clamp(floor((mouse_x + global.cam_pos_x) / tile_size), 0, global.grid_width - 1);
+global.yy = clamp(floor((mouse_y + global.cam_pos_y) / tile_size), 0, global.grid_height - 1);
+real_xx = floor((mouse_x + global.cam_pos_x) / tile_size);
+real_yy = floor((mouse_y + global.cam_pos_y) / tile_size);
 
 //view and window sizes
-global.viewX = camera_get_view_x(view_camera[0]);
-global.viewY = camera_get_view_y(view_camera[0]);
-global.view_width = camera_get_view_width(view_camera[0]);
-global.view_height = camera_get_view_height(view_camera[0]);
-global.half_width = global.view_width / 2;
-global.half_height = global.view_height / 2;
+#macro view_half_w = (global.view_width / 2)
+#macro view_half_h = (global.view_height / 2)
+
 global.window_width = window_get_width();
 global.window_height = window_get_height();
-global.window_half_width = global.window_width / 2;
-global.window_half_height = global.window_height / 2;
+#macro window_half_width  (global.window_width / 2)
+#macro window_half_height  (global.window_height / 2)
 
 
 //getting key input
@@ -31,6 +30,19 @@ mRightReleased = mouse_check_button_released(mb_right);
 mLeftReleased = mouse_check_button_released(mb_left);
 mLeftPressed = mouse_check_button_pressed(mb_left);
 mMiddle = mouse_check_button(mb_middle);
+#endregion
+
+
+#region camera
+
+if (kLeft) global.cam_pos_x -= border_margin / 2 / 5;
+if (kRight) global.cam_pos_x += border_margin / 2 / 5;
+if (kUp) global.cam_pos_y -= border_margin / 2 / 5;
+if (kDown) global.cam_pos_y += border_margin / 2 / 5;
+
+global.cam_pos_x = clamp(global.cam_pos_x, 0 - global.view_width / 2, global.grid_width * tile_size - global.view_width / 2);
+global.cam_pos_y = clamp(global.cam_pos_y, 0 - global.view_height / 2, global.grid_height * tile_size - global.view_height / 2);
+
 #endregion
 
 
@@ -285,6 +297,9 @@ if (obj_camera.x = obj_camera.cam_x_goal && obj_camera.y = obj_camera.cam_y_goal
 
 #endregion
 
+
+#region building
+
 if (mRightReleased) {
 	right_click_menu_close = false;
 }
@@ -294,8 +309,10 @@ if (mLeftReleased) {
 }
 
 	//Building with mouse
-if (mLeft && !left_click_menu_close) add_tiles();
-if (mRight && !right_click_menu_close) add_tiles();
+if (obj_cursor.cursor_mode == curs_mode.on_grid) {
+	if (mLeft && !left_click_menu_close) add_tiles();
+	if (mRight && !right_click_menu_close) add_tiles();
+}
 
 if (mLeftReleased) {
 	add_tiles();
@@ -315,26 +332,32 @@ if (mLeft) {
 	if (click_yy != global.yy) click_moved = true;
 }
 
+#endregion
+
+
+#region reaching
 
 //reaching goal alpha
 remove_marker_cur_alpha = lerp(remove_marker_cur_alpha,remove_marker_goal_alpha,0.15);
 selected_edge_cur_alpha = lerp(selected_edge_cur_alpha,selected_edge_goal_alpha,0.15);
 
+#endregion
 
-//debug
+
+#region debug
+
 if (kF12) debug_on = !debug_on;
 
 if (debug_on) {
-	var _tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
-	show_debug_message(_tile);
 }
 
-if (kSpacePressed) {
-	canBuild = !canBuild;
-}
+#endregion
 
 
-//incrementing timers
+#region incrementing timers
+
 door_menu_open_timer ++;
 door_menu_close_timer ++;
 selection_open_timer ++;
+
+#endregion

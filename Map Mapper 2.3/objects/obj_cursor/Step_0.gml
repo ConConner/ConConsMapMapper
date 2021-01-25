@@ -1,7 +1,7 @@
 //adjusting cursor sizes
-if (obj_gameController.canBuild) {
-	goal_x = global.xx * tile_size;
-	goal_y = global.yy * tile_size;
+if (cursor_mode == curs_mode.on_grid) {
+	goal_x = global.xx * tile_size - global.cam_pos_x;
+	goal_y = global.yy * tile_size - global.cam_pos_y;
 		
 	var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
 	if (tile.main == ID.filled) {
@@ -15,7 +15,7 @@ if (obj_gameController.canBuild) {
 	}
 }
 
-if (!obj_gameController.canBuild) {
+if (cursor_mode == curs_mode.off_anything) {
 	
 	goal_x = mouse_x - tile_size / 2;
 	goal_y = mouse_y - tile_size / 2;
@@ -24,23 +24,30 @@ if (!obj_gameController.canBuild) {
 	
 }
 
+
+//setting cursor mode
+if ((obj_gameController.real_xx != global.xx && abs(obj_gameController.real_xx - global.xx) > 1) || (obj_gameController.real_yy != global.yy && abs(obj_gameController.real_yy - global.yy) > 1)) {
+	cursor_mode = curs_mode.off_anything;
+} else {
+	cursor_mode = curs_mode.on_grid;
+}
+
+
 //buttons
-if (mouse_hovering_over_object(obj_button)) {
-	var _button = instance_place(mouse_x,mouse_y,obj_button)
-		
-	selection_box_w = _button.sprite_width + 8;
-	selection_box_h = _button.sprite_height + 8;
-		
-	goal_x = _button.x + _button.sprite_width / 2 - tile_size / 2;
-	goal_y = _button.y + _button.sprite_height / 2 - tile_size / 2;
+var button_id = button_check();
+if (button_id != 0) {
+	cursor_mode = curs_mode.on_button;
 	
-	over_button = true;
-} else over_button = false;
+	selection_box_w = button_id.button_width;
+	selection_box_h = button_id.button_height;
+	goal_x = button_id.x + button_id.button_width / 2 - tile_size / 2;
+	goal_y = button_id.y + button_id.button_height / 2 - tile_size / 2;
+}
+
 
 //setting selection positions
 goal_selection_h = selection_box_h / 2;
 goal_selection_w = selection_box_w / 2;
-
 
 //reaching goal pos
 cursor_x = lerp(cursor_x, goal_x, 0.4);
