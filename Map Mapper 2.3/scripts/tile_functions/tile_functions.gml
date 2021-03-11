@@ -71,6 +71,7 @@ function add_tiles() {
 			if (yy != global.grid_height - 1) tile_down.subimg = autotile(xx,yy + 1);
 	
 			global.roomCount ++;
+			deleted_tile = true;
 		}
 	}
 	

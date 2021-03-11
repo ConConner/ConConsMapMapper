@@ -321,6 +321,10 @@ if (mLeftReleased) {
 	placed_tile = false;
 }
 
+if (mRightReleased) {
+	deleted_tile = false;
+}
+
 //checking if clicked and then moved
 if (mLeftPressed) {
 	click_xx = global.xx;
@@ -332,6 +336,15 @@ if (mLeft) {
 	if (click_yy != global.yy) click_moved = true;
 }
 
+//deactivating buttons
+if (placed_tile || deleted_tile) {
+	
+	color_button.deactivate();
+} else {
+	
+	color_button.activate();
+}
+
 #endregion
 
 
@@ -340,6 +353,18 @@ if (mLeft) {
 //reaching goal alpha
 remove_marker_cur_alpha = lerp(remove_marker_cur_alpha,remove_marker_goal_alpha,0.15);
 selected_edge_cur_alpha = lerp(selected_edge_cur_alpha,selected_edge_goal_alpha,0.15);
+
+#endregion
+
+
+#region buttons
+
+var m_distance = point_distance(color_button.x, color_button.y, mouse_x, mouse_y);
+show_debug_message(m_distance)
+
+color_button.goal_alpha = (0.0035157 * power(m_distance,2) + 10) / 100;
+
+button_update();
 
 #endregion
 

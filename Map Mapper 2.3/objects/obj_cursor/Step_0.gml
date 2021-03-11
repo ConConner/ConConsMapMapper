@@ -36,12 +36,15 @@ if ((obj_gameController.real_xx != global.xx && abs(obj_gameController.real_xx -
 //buttons
 var button_id = button_check();
 if (button_id != 0) {
-	cursor_mode = curs_mode.on_button;
 	
-	selection_box_w = button_id.button_width;
-	selection_box_h = button_id.button_height;
-	goal_x = button_id.x + button_id.button_width / 2 - tile_size / 2;
-	goal_y = button_id.y + button_id.button_height / 2 - tile_size / 2;
+	if (button_id.active) {
+		cursor_mode = curs_mode.on_button;
+		
+		selection_box_w = button_id.button_width + 8;
+		selection_box_h = button_id.button_height + 8;
+		goal_x = button_id.x + button_id.button_width / 2 - tile_size / 2;
+		goal_y = button_id.y + button_id.button_height / 2 - tile_size / 2;
+	}
 }
 
 

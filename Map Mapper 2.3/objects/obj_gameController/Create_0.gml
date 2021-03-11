@@ -60,6 +60,7 @@ global.cam_goal_y = 0;
 canBuild = true;
 choosing_tile_addition = false;
 placed_tile = false;
+deleted_tile = false;
 selecting_tile = false;
 cam_lock = false;
 click_moved = false;
@@ -176,11 +177,12 @@ button_create = function(_x, _y, _spr) constructor {
 	//button vars
 	x = _x;
 	y = _y;
-	goal_x = 0;
-	goal_y = 0;
+	goal_x = _x;
+	goal_y = _y;
+	goal_alpha = 1;
 	sprite_index = _spr;
 	image_index = 0;
-	image_alpha = 1;
+	image_alpha = goal_alpha;
 	button_width = sprite_get_width(sprite_index);
 	button_height = sprite_get_height(sprite_index);
 	
@@ -202,6 +204,9 @@ button_create = function(_x, _y, _spr) constructor {
 		} else return(false);
 		
 	}
+	static fade = function() {	//fades current alpha to goal alpha
+		image_alpha = lerp(image_alpha, goal_alpha, 0.3);
+	}
 	static draw = function() {
 		draw_sprite_ext(sprite_index, image_index, x, y, 1, 1, 0, c_white, image_alpha);
 	}
@@ -216,8 +221,7 @@ button_create = function(_x, _y, _spr) constructor {
 //button list
 global.button_list = ds_list_create();
 
-color_button = make_button(0, 704, spr_color_button);
-menu_button = make_button(global.view_width / 2 - tile_size * 2, 0, spr_menu_button);
+color_button = make_button(tile_size / 2, (global.view_height - tile_size / 2) - sprite_get_height(spr_color_button), spr_color_button);
 
 #endregion
 

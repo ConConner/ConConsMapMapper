@@ -79,3 +79,18 @@ function button_check() {
 	}
 	return(0);
 }
+	
+	
+function button_update() {
+	
+	for(var i = 0; i < ds_list_size(global.button_list); i++) {
+		
+		var _id = ds_list_find_value(global.button_list, i);
+		if (_id != 0) {
+			
+			_id.move();
+			_id.fade();
+			
+		}
+	}
+}
