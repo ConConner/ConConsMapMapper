@@ -42,20 +42,22 @@ function draw_nine_slice( spr, _x1, _y1, _x2, _y2) {
 	
 	//Edges
 	//left edge
-	draw_sprite_part_ext(spr, 0, 0, _size, _size, 1, _x1, _y1 + _size, 1, _h - (_size*2), c_white, 1); 
+	draw_sprite_part_ext(spr, 0, 0, _size, _size, 1, _x1, _y1 + _size, 1, _h - (_size*2), c_white, image_alpha); 
 	//right edge
-	draw_sprite_part_ext(spr, 0, _size * 2, _size, _size, 1, _x1 + _w - _size, _y1 + _size, 1, _h - (_size*2), c_white, 1);
+	draw_sprite_part_ext(spr, 0, _size * 2, _size, _size, 1, _x1 + _w - _size, _y1 + _size, 1, _h - (_size*2), c_white, image_alpha);
 	//top edge
-	draw_sprite_part_ext(spr, 0, _size, 0, 1, _size, _x1 + _size, _y1, _w - (_size*2), 1, c_white, 1);
+	draw_sprite_part_ext(spr, 0, _size, 0, 1, _size, _x1 + _size, _y1, _w - (_size*2), 1, c_white, image_alpha);
 	//bottom edge
-	draw_sprite_part_ext(spr, 0, _size, _size * 2, 1, _size, _x1 + _size, _y1 + _h - _size, _w - (_size*2), 1, c_white, 1);
+	draw_sprite_part_ext(spr, 0, _size, _size * 2, 1, _size, _x1 + _size, _y1 + _h - _size, _w - (_size*2), 1, c_white, image_alpha);
 	
 	//Middle
-	draw_sprite_part_ext(spr, 0, _size, _size, 1, 1, _x1 + _size, _y1 + _size, _w - (_size*2), _h - (_size*2), c_white, 1);
+	draw_sprite_part_ext(spr, 0, _size, _size, 1, 1, _x1 + _size, _y1 + _size, _w - (_size*2), _h - (_size*2), c_white, image_alpha);
 }
 	
 	
 function make_button(_x, _y, _spr) {
+	
+	//Creates a new button at the goal coordinates and with the set sprite
 	
 	var button_id = new button_create(_x, _y, _spr);
 	ds_list_add(global.button_list, button_id);
@@ -66,6 +68,8 @@ function make_button(_x, _y, _spr) {
 
 
 function button_check() {
+	
+	//returns the button ID currently hovered over by the mouse
 	
 	for(var i = 0; i < ds_list_size(global.button_list); i++) {
 		
@@ -83,14 +87,34 @@ function button_check() {
 	
 function button_update() {
 	
+	//updates and draws the button
+	
 	for(var i = 0; i < ds_list_size(global.button_list); i++) {
 		
 		var _id = ds_list_find_value(global.button_list, i);
 		if (_id != 0) {
-			
-			_id.move();
-			_id.fade();
+			if (_id.button_enabled == true) {
+				_id.move();
+				_id.fade();
+				_id.draw();
+			}
 			
 		}
 	}
+}
+
+
+function remove_button(_button) {
+	
+	//removes a button
+	//returns true if sucessfully deleted
+	
+	if (is_struct(_button)) {
+		
+		var _button_pos = ds_list_find_index(global.button_list,_button);
+		ds_list_delete(global.button_list,_button_pos);
+		delete _button;
+		return(true);
+	}
+	else return(false);
 }

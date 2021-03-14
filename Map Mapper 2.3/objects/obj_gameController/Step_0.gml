@@ -354,18 +354,62 @@ if (placed_tile || deleted_tile) {
 remove_marker_cur_alpha = lerp(remove_marker_cur_alpha,remove_marker_goal_alpha,0.15);
 selected_edge_cur_alpha = lerp(selected_edge_cur_alpha,selected_edge_goal_alpha,0.15);
 
+menu_pos_x = lerp(menu_pos_x, menu_goal_pos_x, 0.30);
+menu_pos_y = lerp(menu_pos_y, menu_goal_pos_y, 0.30);
+menu_width = lerp(menu_width, menu_goal_width, 0.30);
+menu_height = lerp(menu_height, menu_goal_height, 0.30);
+
+menu_drawing_alpha = lerp(menu_drawing_alpha, menu_drawing_goal_alpha, 0.15);
+background_alpha = lerp(background_alpha, background_goal_alpha, 0.15);
+
+
+	//reaching goal pos faster
+	if (menu_pos_x > menu_goal_pos_x - 1) menu_pos_x = menu_goal_pos_x;
+	if (menu_pos_y > menu_goal_pos_y - 1) menu_pos_y = menu_goal_pos_y;
+	if (menu_width > menu_goal_width - 1) menu_width = menu_goal_width;
+	if (menu_height > menu_goal_height - 1) menu_height = menu_goal_height;
+
 #endregion
 
 
 #region buttons
 
-var m_distance = point_distance(color_button.x, color_button.y, mouse_x, mouse_y);
-show_debug_message(m_distance)
+if (!color_button.active) {
+	//button middle coords
+	var _pointX = color_button.x + (sprite_get_width(color_button.sprite_index) / 2);
+	var _pointY = color_button.y + (sprite_get_height(color_button.sprite_index) / 2);
+	var m_distance = point_distance(_pointX, _pointY, mouse_x, mouse_y);
+	color_button.goal_alpha = (0.0035157 * power(m_distance,2) + 10) / 100;
+} else {
+	color_button.goal_alpha = 1;
+}
 
-color_button.goal_alpha = (0.0035157 * power(m_distance,2) + 10) / 100;
+#endregion
 
-button_update();
 
+#region menus
+
+//reacting to button
+var _selected_button = button_check();
+if (mLeftPressed) {
+	if (_selected_button != 0) {
+		canBuild = false;
+		in_menu = true;
+	}
+	
+	switch (_selected_button) {
+		case color_button:
+			
+			//this code gets run basically once, like a create event
+			current_menu = menu_state.color_menu;
+			color_button.disable();
+			
+			//creating the selection boxes
+			hue_selection = make_button(0, 0, spr_cursor_selector);
+			value_selection = make_button(0,0,spr_cursor_selector);
+			break;
+	}
+}
 #endregion
 
 

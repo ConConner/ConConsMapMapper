@@ -8,7 +8,6 @@ global.yy = floor(mouse_y/32);			//the y position of the mouse on the grid
 
 #region tile globals
 global.roomCount = 0;
-global.selected_color = make_color_rgb(0,105,170);
 
 	//wheel variables
 	  //color wheel
@@ -127,6 +126,36 @@ buttonDoorRed = 0;
 buttonDoorGreen = 0;
 buttonDoorYellow = 0;
 
+//menu vars
+current_menu = menu_state.nothing;
+in_menu = false;
+
+menu_pos_x = global.view_width / 2;
+menu_pos_y = global.view_height / 2;
+menu_width = tile_size * 4;
+menu_height = tile_size * 4;
+
+menu_goal_pos_x = global.view_width / 2;
+menu_goal_pos_y = global.view_height / 2;
+menu_goal_width = tile_size * 4;
+menu_goal_height = tile_size * 4;
+
+menu_drawing_alpha = 0;
+menu_drawing_goal_alpha = 0;
+background_alpha = 0;
+background_goal_alpha = 0;
+
+//color vars
+global.selected_color = make_color_rgb(0,105,170);
+
+cur_color_hue = color_get_hue(global.selected_color);
+cur_color_sat = color_get_saturation(global.selected_color);
+cur_color_val = color_get_value(global.selected_color);
+
+selected_color_hue = cur_color_hue;
+selected_color_sat = cur_color_sat;
+selected_color_val = cur_color_val;
+
 //other
 selected_map = "unsaved";
 
@@ -187,6 +216,7 @@ button_create = function(_x, _y, _spr) constructor {
 	button_height = sprite_get_height(sprite_index);
 	
 	active = true;
+	button_enabled = true;
 	
 	//functions
 	static jmp = function() { //sets the button x/y coordinates to the goal position
@@ -210,6 +240,12 @@ button_create = function(_x, _y, _spr) constructor {
 	static draw = function() {
 		draw_sprite_ext(sprite_index, image_index, x, y, 1, 1, 0, c_white, image_alpha);
 	}
+	static disable = function() {
+		button_enabled = false;
+	}
+	static enable = function() {
+		button_enabled = true;
+	}
 	static activate = function() {
 		active = true;
 	}
@@ -225,4 +261,5 @@ color_button = make_button(tile_size / 2, (global.view_height - tile_size / 2) -
 
 #endregion
 
+//creating the cursor
 instance_create_layer(mouse_x,mouse_y,"Cursor",obj_cursor);

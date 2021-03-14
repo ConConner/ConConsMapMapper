@@ -3,6 +3,11 @@ enum ID {
 	filled = 1
 }
 
+enum menu_state {
+	nothing,
+	color_menu
+}
+
 enum marker {
 	empty = 0,
 	circle = 1,
@@ -13,7 +18,7 @@ enum marker {
 	left = 6,
 	right = 7,
 	boss = 5,
-	start = 4,
+	start = 4
 }
 
 enum hatch {
@@ -22,7 +27,7 @@ enum hatch {
 	red,
 	green,
 	yellow,
-	none,
+	none
 }
 	
 enum dir {
@@ -30,13 +35,13 @@ enum dir {
 	right,
 	up,
 	down,
-	none,
+	none
 }
 
 enum text {
 	messg,
 	life,
-	alph,
+	alph
 }
 
 

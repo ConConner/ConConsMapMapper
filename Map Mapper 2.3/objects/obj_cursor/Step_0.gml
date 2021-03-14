@@ -32,12 +32,16 @@ if ((obj_gameController.real_xx != global.xx && abs(obj_gameController.real_xx -
 	cursor_mode = curs_mode.on_grid;
 }
 
+if (obj_gameController.in_menu) {
+	cursor_mode = curs_mode.off_anything;
+}
+
 
 //buttons
 var button_id = button_check();
 if (button_id != 0) {
 	
-	if (button_id.active) {
+	if (button_id.active && button_id.button_enabled) {
 		cursor_mode = curs_mode.on_button;
 		
 		selection_box_w = button_id.button_width + 8;
