@@ -29,3 +29,12 @@ function set_mouse_hsv(_x, _y, w, h) {
 	selected_color_sat = sat_value;
 	
 }
+	
+function get_hex_rgb(_col) {
+	var _red = color_get_red(_col);
+	var _green = color_get_green(_col);
+	var _blue = color_get_blue(_col);
+	
+	var _hex = "#" + string(dec_to_hex(_red)) + string(dec_to_hex(_green)) + string(dec_to_hex(_blue));
+	return(_hex)
+}

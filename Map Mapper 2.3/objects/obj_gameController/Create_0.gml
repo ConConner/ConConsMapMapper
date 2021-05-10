@@ -126,9 +126,19 @@ buttonDoorRed = 0;
 buttonDoorGreen = 0;
 buttonDoorYellow = 0;
 
+//button = 0;
+color_button = 0;
+hue_selection = 0;
+value_selection = 0;
+rgb_code_selection = 0;
+color_decline_button = 0;
+color_confirm_button = 0;
+
 //menu vars
 current_menu = menu_state.nothing;
 in_menu = false;
+
+close_menu = false;
 
 menu_pos_x = global.view_width / 2;
 menu_pos_y = global.view_height / 2;
@@ -148,13 +158,10 @@ background_goal_alpha = 0;
 //color vars
 global.selected_color = make_color_rgb(0,105,170);
 
-cur_color_hue = color_get_hue(global.selected_color);
-cur_color_sat = color_get_saturation(global.selected_color);
-cur_color_val = color_get_value(global.selected_color);
-
-selected_color_hue = cur_color_hue;
-selected_color_sat = cur_color_sat;
-selected_color_val = cur_color_val;
+selected_color_hue = color_get_hue(global.selected_color);
+selected_color_sat = color_get_saturation(global.selected_color);
+selected_color_val = color_get_value(global.selected_color);
+selected_rgb_hex = get_hex_rgb(global.selected_color);
 
 //other
 selected_map = "unsaved";

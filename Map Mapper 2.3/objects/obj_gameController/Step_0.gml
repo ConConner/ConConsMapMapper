@@ -356,18 +356,26 @@ selected_edge_cur_alpha = lerp(selected_edge_cur_alpha,selected_edge_goal_alpha,
 
 menu_pos_x = lerp(menu_pos_x, menu_goal_pos_x, 0.30);
 menu_pos_y = lerp(menu_pos_y, menu_goal_pos_y, 0.30);
-menu_width = lerp(menu_width, menu_goal_width, 0.30);
-menu_height = lerp(menu_height, menu_goal_height, 0.30);
+menu_width = lerp(menu_width, menu_goal_width, 0.40);
+menu_height = lerp(menu_height, menu_goal_height, 0.40);
 
-menu_drawing_alpha = lerp(menu_drawing_alpha, menu_drawing_goal_alpha, 0.15);
+menu_drawing_alpha = lerp(menu_drawing_alpha, menu_drawing_goal_alpha, 0.30);
 background_alpha = lerp(background_alpha, background_goal_alpha, 0.15);
 
 
 	//reaching goal pos faster
-	if (menu_pos_x > menu_goal_pos_x - 1) menu_pos_x = menu_goal_pos_x;
-	if (menu_pos_y > menu_goal_pos_y - 1) menu_pos_y = menu_goal_pos_y;
-	if (menu_width > menu_goal_width - 1) menu_width = menu_goal_width;
-	if (menu_height > menu_goal_height - 1) menu_height = menu_goal_height;
+	if (!close_menu) {
+		if (menu_pos_x > menu_goal_pos_x - 1) menu_pos_x = menu_goal_pos_x;
+		if (menu_pos_y > menu_goal_pos_y - 1) menu_pos_y = menu_goal_pos_y;
+		if (menu_width > menu_goal_width - 1) menu_width = menu_goal_width;
+		if (menu_height > menu_goal_height - 1) menu_height = menu_goal_height;
+	}
+	if (close_menu) {
+		if (menu_pos_x < menu_goal_pos_x + 1) menu_pos_x = menu_goal_pos_x;
+		if (menu_pos_y < menu_goal_pos_y + 1) menu_pos_y = menu_goal_pos_y;
+		if (menu_width < menu_goal_width + 1) menu_width = menu_goal_width;
+		if (menu_height < menu_goal_height + 1) menu_height = menu_goal_height;
+	}
 
 #endregion
 
@@ -392,24 +400,76 @@ if (!color_button.active) {
 //reacting to button
 var _selected_button = button_check();
 if (mLeftPressed) {
-	if (_selected_button != 0) {
+	if (_selected_button != 0) if (_selected_button.button_enabled) {
 		canBuild = false;
 		in_menu = true;
-	}
 	
-	switch (_selected_button) {
-		case color_button:
+		switch (_selected_button) {
 			
-			//this code gets run basically once, like a create event
-			current_menu = menu_state.color_menu;
-			color_button.disable();
+			case color_button: {
 			
-			//creating the selection boxes
-			hue_selection = make_button(0, 0, spr_cursor_selector);
-			value_selection = make_button(0,0,spr_cursor_selector);
-			break;
+				//this code gets run basically once, like a create event
+				current_menu = menu_state.color_menu;
+				color_button.disable();
+			
+				//creating the selection boxes
+				hue_selection = make_button(0, 0, spr_cursor_selector);
+				value_selection = make_button(0,0,spr_cursor_selector);
+				rgb_code_selection = make_button(0,0,spr_cursor_selector);
+				
+				//confirm, decline
+				color_decline_button = make_button(0,0,spr_menu_decline);
+				color_decline_button.goal_alpha = 0;
+				color_decline_button.image_alpha = 0;
+				color_confirm_button = make_button(0,0,spr_menu_confirm);
+				color_confirm_button.goal_alpha = 0;
+				color_confirm_button.image_alpha = 0;
+				
+				break; }
+		
+			case rgb_code_selection: {
+			
+				var _val = string_delete(selected_rgb_hex, 1, 1);
+				clipboard_set_text(_val);
+				add_text_message("Copied #" + string(_val) + " to clipboard", 3);
+			
+				break; }
+				
+			case color_decline_button: {
+				
+				close_menu = true;
+				//removing all the menu buttons
+				remove_button(hue_selection);
+				remove_button(value_selection);
+				remove_button(rgb_code_selection);
+				remove_button(color_decline_button);
+				remove_button(color_confirm_button);
+				
+				//resetting colour to old color
+				selected_color_hue = color_get_hue(global.selected_color);
+				selected_color_sat = color_get_saturation(global.selected_color);
+				selected_color_val = color_get_value(global.selected_color);
+				
+				break; }
+				
+			case color_confirm_button: {
+				
+				close_menu = true;
+				//removing all the menu buttons
+				remove_button(hue_selection);
+				remove_button(value_selection);
+				remove_button(rgb_code_selection);
+				remove_button(color_decline_button);
+				remove_button(color_confirm_button);
+				
+				//setting new colour
+				global.selected_color = make_color_hsv(selected_color_hue, selected_color_sat, selected_color_val);
+				
+				break; }
+		}
 	}
 }
+
 #endregion
 
 

@@ -286,6 +286,8 @@ function grid_shift_x_up(grid) {
 	
 function update_text_message(_x, _y) {
 	
+	draw_set_halign(fa_right);
+	
 	var grid = global.text_grid;
 	var grid_length = ds_grid_width(grid);
 	var spacing = 22;
@@ -316,5 +318,7 @@ function update_text_message(_x, _y) {
 		}
 		
 	}
+	
+	draw_set_halign(fa_left);
 	
 }

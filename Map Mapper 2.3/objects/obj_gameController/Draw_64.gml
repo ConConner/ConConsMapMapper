@@ -12,6 +12,8 @@ draw_set_color(c_white);
 switch (current_menu) {
 	case menu_state.color_menu:
 		
+		#region colour menu
+		
 		//darkening the background
 		draw_set_alpha(background_alpha);
 		draw_set_color(c_black);
@@ -22,8 +24,10 @@ switch (current_menu) {
 		draw_set_alpha(1)
 		image_alpha = 1;
 		
-		menu_goal_width = global.view_width - tile_size;
-		menu_goal_height = 350;
+		if (!close_menu) {
+			menu_goal_width = global.view_width - tile_size;
+			menu_goal_height = 350;
+		}
 		menu_pos_x = (global.view_width / 2) - (menu_width / 2);
 		menu_pos_y = (global.view_height / 2) - (menu_height / 2);
 		
@@ -47,7 +51,7 @@ switch (current_menu) {
 			
 			
 				//value slider
-			draw_text(menu_pos_x + 317, menu_pos_y + 303, " VALUE");
+			draw_text(menu_pos_x + 314, menu_pos_y + 303, "VALUE");
 			draw_nine_slice(spr_edge_nineslice, menu_pos_x + 314, menu_pos_y + 40, menu_pos_x + 384, menu_pos_y + 302);
 			
 			var col1 = make_color_hsv(selected_color_hue, selected_color_sat, 255);
@@ -80,7 +84,25 @@ switch (current_menu) {
 			}
 			
 			
-			//updating selction boxes
+			//drawing a color preview
+			var old_col = global.selected_color;
+			var new_col = make_color_hsv(selected_color_hue, selected_color_sat, selected_color_val);
+			draw_nine_slice(spr_edge_nineslice, menu_pos_x + 416, menu_pos_y + 40, menu_pos_x + 486, menu_pos_y + 110);
+			
+			draw_rectangle_color(menu_pos_x + 419, menu_pos_y + 43, menu_pos_x + 483, menu_pos_y + 74, old_col, old_col, old_col, old_col, false); // old colour
+			draw_rectangle_color(menu_pos_x + 419, menu_pos_y + 75, menu_pos_x + 483, menu_pos_y + 107, new_col, new_col, new_col, new_col, false); //new colour
+			
+			draw_text(menu_pos_x + 416, menu_pos_y + 17, "OLD")
+			draw_text(menu_pos_x + 416, menu_pos_y + 113, "NEW")
+			
+			
+				//drawing color code
+			selected_rgb_hex = get_hex_rgb(new_col);
+			draw_nine_slice(spr_edge_nineslice, menu_pos_x + 416, menu_pos_y + 267, menu_pos_x + 510, menu_pos_y + 299);
+			draw_text(menu_pos_x + 421, menu_pos_y + 272, selected_rgb_hex);
+			draw_text(menu_pos_x + 416, menu_pos_y + 303, "HEX");
+			
+			#region updating selection boxes
 			hue_selection.goal_x = menu_pos_x + 20;
 			hue_selection.goal_y = menu_pos_y + 40;
 			hue_selection.button_width = 261;
@@ -91,7 +113,51 @@ switch (current_menu) {
 			value_selection.button_width = 70;
 			value_selection.button_height = 261;
 			
+			rgb_code_selection.goal_x = menu_pos_x + 416;
+			rgb_code_selection.goal_y = menu_pos_y + 267;
+			rgb_code_selection.button_width = 94;
+			rgb_code_selection.button_height = 32;
+			
+			color_decline_button.goal_x = menu_pos_x + menu_width - 1 - 3.5*tile_size;
+			color_decline_button.goal_y = menu_pos_y - tile_size / 2;
+			color_decline_button.goal_alpha = menu_drawing_alpha
+			color_decline_button.jmp();
+			color_confirm_button.goal_x = menu_pos_x + menu_width - 2*tile_size;
+			color_confirm_button.goal_y = menu_pos_y - tile_size / 2;
+			color_confirm_button.goal_alpha = menu_drawing_alpha
+			color_confirm_button.jmp();
+			#endregion
+			
 		}
+			
+		#region closing process
+		
+		if (close_menu) {
+			menu_drawing_goal_alpha = 0;
+			background_goal_alpha = 0;
+			
+			if (menu_drawing_alpha <= 0.01) { //this happens after the button fadeout
+				menu_goal_width = 32;
+				menu_goal_height = 32;
+				
+				if (menu_width < menu_goal_width + 3 && menu_height < menu_goal_height + 3) { //this happens after the animation finished
+					//enabling building again
+					color_button.enable();
+					close_menu = false;
+					canBuild = true;
+					in_menu = false;
+					
+					//ending menu
+					current_menu = menu_state.nothing;
+				}
+			}
+			
+			
+		}
+		
+		#endregion
+		
+		#endregion
 		
 		break;
 		
@@ -99,13 +165,17 @@ switch (current_menu) {
 		break;
 }
 
+update_text_message(global.view_width,global.view_height - 22);
+
+
 //button drawing
 button_update();
 
 
-
 //debug
 if (debug_on) {
+	draw_set_alpha(1);
+	
 	//debug message
 	draw_set_colour(c_yellow);
 	draw_text(0,0,"DEBUG MODE");
@@ -136,5 +206,6 @@ if (debug_on) {
 	draw_text(0,17 * 18,"Selected Col Hue: " + string(selected_color_hue));
 	draw_text(0,17 * 19,"Selected Col Sat: " + string(selected_color_sat));
 	draw_text(0,17 * 20,"Selected Col Val: " + string(selected_color_val));
+	draw_text(0,17 * 22,"Selected Button: " + string(button_check()));
 	
 }
