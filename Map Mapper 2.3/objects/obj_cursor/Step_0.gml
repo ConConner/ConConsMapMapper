@@ -24,6 +24,15 @@ if (cursor_mode == curs_mode.off_anything) {
 	
 }
 
+if (cursor_mode == curs_mode.drag_to_move) {
+	
+	goal_x = mouse_x - tile_size / 2;
+	goal_y = mouse_y - tile_size / 2;
+	selection_box_h = 36;
+	selection_box_w = 36;
+	
+}
+
 
 //setting cursor mode
 if ((obj_gameController.real_xx != global.xx && abs(obj_gameController.real_xx - global.xx) > 1) || (obj_gameController.real_yy != global.yy && abs(obj_gameController.real_yy - global.yy) > 1)) {
@@ -34,6 +43,10 @@ if ((obj_gameController.real_xx != global.xx && abs(obj_gameController.real_xx -
 
 if (obj_gameController.in_menu) {
 	cursor_mode = curs_mode.off_anything;
+}
+
+if (obj_gameController.moving_with_mouse) {
+	cursor_mode = curs_mode.drag_to_move;
 }
 
 

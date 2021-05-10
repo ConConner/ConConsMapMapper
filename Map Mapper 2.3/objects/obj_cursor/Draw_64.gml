@@ -40,11 +40,19 @@ if (cursor_mode == curs_mode.on_grid) {
 	goal_icon_alpha = 0;
 }
 
+if (cursor_mode == curs_mode.drag_to_move) {
+	
+	goal_icon_frame = 5;
+	icon_frame = 5;
+	goal_icon_alpha = 1;
+	
+}
+
 
 //text after hovering over button
 var _button = button_check();
 if (_button != 0) {
-	if (_button.button_enabled == true) {
+	if (_button.button_enabled && _button.active) {
 		
 		draw_set_alpha(1);
 		var _left = cursor_x - goal_selection_w / 2 - 4;
@@ -58,6 +66,14 @@ if (_button != 0) {
 				
 			case obj_gameController.rgb_code_selection:
 				draw_text(_left - 4, _top - 14, "CLICK TO COPY");
+				break;
+				
+			case obj_gameController.color_decline_button:
+				draw_text(_left + 6, _top - 17, "CANCEL");
+				break;
+				
+			case obj_gameController.color_confirm_button:
+				draw_text(_left + 6, _top - 17, "SAVE");
 				break;
 		
 		}

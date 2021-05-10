@@ -29,4 +29,5 @@ enum curs_mode {
 	on_menu,
 	on_button,
 	off_anything,
+	drag_to_move,
 }

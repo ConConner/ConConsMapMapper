@@ -52,6 +52,11 @@ global.cam_pos_x = 0;
 global.cam_pos_y = 0;
 global.cam_goal_x = 0;
 global.cam_goal_y = 0;
+	//mouse movement
+start_mouse_x = 0;
+start_mouse_y = 0;
+start_cam_x = 0;
+start_cam_y = 0;
 
 #endregion
 
@@ -63,6 +68,7 @@ deleted_tile = false;
 selecting_tile = false;
 cam_lock = false;
 click_moved = false;
+moving_with_mouse = false;
 
 right_click_menu_close = false;
 left_click_menu_close = false;
@@ -202,7 +208,7 @@ ds_grid_set_region(global.tile_grid, 0, 0, global.grid_width, global.grid_height
 set_up_grid()
 
 //text grid
-global.text_grid = ds_grid_create(20,3);
+global.text_grid = ds_grid_create(7,3);
 ds_grid_set_region(global.text_grid, 0, 0, 19, 2, 0);
 
 

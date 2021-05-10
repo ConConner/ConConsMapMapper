@@ -21,6 +21,9 @@ kDown = keyboard_check_direct(vk_down);
 kLeft = keyboard_check_direct(vk_left);
 kRight = keyboard_check_direct(vk_right);
 kF12 = keyboard_check_pressed(vk_f12);
+kCtrl = keyboard_check(vk_control);
+kShift = keyboard_check(vk_shift);
+kSpace = keyboard_check(vk_space);
 kSpacePressed = keyboard_check_pressed(vk_space);
 	//mouse input
 mLeft = mouse_check_button(mb_left);
@@ -30,15 +33,55 @@ mRightReleased = mouse_check_button_released(mb_right);
 mLeftReleased = mouse_check_button_released(mb_left);
 mLeftPressed = mouse_check_button_pressed(mb_left);
 mMiddle = mouse_check_button(mb_middle);
+mMiddlePressed = mouse_check_button_pressed(mb_middle);
+mWheelUp = mouse_wheel_up();
+mWheelDown = mouse_wheel_down();
 #endregion
 
 
 #region camera
 
+//cam controls
+//keyboard controls
 if (kLeft) global.cam_pos_x -= border_margin / 2 / 5;
 if (kRight) global.cam_pos_x += border_margin / 2 / 5;
 if (kUp) global.cam_pos_y -= border_margin / 2 / 5;
 if (kDown) global.cam_pos_y += border_margin / 2 / 5;
+
+//scroll controls
+if (!kShift) {
+	if (mWheelUp) global.cam_pos_y -= border_margin / 4;
+	if (mWheelDown) global.cam_pos_y += border_margin / 4;
+} else {
+	if (mWheelUp) global.cam_pos_x -= border_margin / 4;
+	if (mWheelDown) global.cam_pos_x += border_margin / 4;
+}
+
+//mouse controls
+if ((kSpace || mMiddle) && current_menu == menu_state.nothing) {
+	canBuild = false;
+	moving_with_mouse = true;
+	
+	if (mLeftPressed || mMiddlePressed) {
+		start_mouse_x = mouse_x;
+		start_mouse_y = mouse_y;
+		start_cam_x = global.cam_pos_x;
+		start_cam_y = global.cam_pos_y;
+	}
+	
+	if (mLeft || mMiddle) {
+		var _xshift = mouse_x - start_mouse_x;
+		var _yshift = mouse_y - start_mouse_y;
+		
+		global.cam_pos_x = start_cam_x - _xshift;
+		global.cam_pos_y = start_cam_y - _yshift;
+	}
+}
+if ((!kSpace && !mMiddle) && current_menu == menu_state.nothing) {
+	canBuild = true;
+	moving_with_mouse = false;
+}
+
 
 global.cam_pos_x = clamp(global.cam_pos_x, 0 - global.view_width / 2, global.grid_width * tile_size - global.view_width / 2);
 global.cam_pos_y = clamp(global.cam_pos_y, 0 - global.view_height / 2, global.grid_height * tile_size - global.view_height / 2);
@@ -431,7 +474,7 @@ if (mLeftPressed) {
 			
 				var _val = string_delete(selected_rgb_hex, 1, 1);
 				clipboard_set_text(_val);
-				add_text_message("Copied #" + string(_val) + " to clipboard", 3);
+				add_text_message("Copied #" + string(_val) + " to clipboard", 1.5);
 			
 				break; }
 				
@@ -450,6 +493,9 @@ if (mLeftPressed) {
 				selected_color_sat = color_get_saturation(global.selected_color);
 				selected_color_val = color_get_value(global.selected_color);
 				
+				//text message
+				add_text_message("color discarded", 1.5);
+				
 				break; }
 				
 			case color_confirm_button: {
@@ -464,6 +510,9 @@ if (mLeftPressed) {
 				
 				//setting new colour
 				global.selected_color = make_color_hsv(selected_color_hue, selected_color_sat, selected_color_val);
+				
+				//text message
+				add_text_message("applied color", 1.5);
 				
 				break; }
 		}

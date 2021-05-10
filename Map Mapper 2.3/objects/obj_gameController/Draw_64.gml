@@ -10,9 +10,7 @@ draw_set_color(c_white);
 
 	//drawing the menu
 switch (current_menu) {
-	case menu_state.color_menu:
-		
-		#region colour menu
+	case menu_state.color_menu: {
 		
 		//darkening the background
 		draw_set_alpha(background_alpha);
@@ -157,12 +155,11 @@ switch (current_menu) {
 		
 		#endregion
 		
-		#endregion
+		break; }
 		
-		break;
+	case menu_state.nothing: {
+		break; }
 		
-	case menu_state.nothing:
-		break;
 }
 
 update_text_message(global.view_width,global.view_height - 22);
