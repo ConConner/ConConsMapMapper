@@ -15,10 +15,13 @@ LAST UPDATED 22.12.2020
 Release 1.0 (XX.XX.XXXX)
 ------------------------------------
 # base system rework
- # improved perfomance [ ~ 1100 fps*]
+ # improved perfomance [ ~ 1000 fps*]
 # reworked room system
 + new cursor system
-+ new colour selection (custom colours)
++ new color selection (custom colors)
++ new camera movement options
+  [space + drag][arrow keys][scrolling]
+
 
 
 
@@ -44,7 +47,7 @@ Beta 1.0 (22.12.2020)
 # improved performance [ ~ 500 fps*]
  + larger grid size [150 x 150]
 + Saving and Loading as .cmf 
-+ reworked colour selection
++ reworked color selection
 
 
 

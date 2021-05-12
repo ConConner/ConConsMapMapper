@@ -1,2 +1,3 @@
-var fname = get_open_filename("conners map file (.cmf)|*"+extension,"");
-if (fname != "") load_map(fname);
+var fname = get_open_filename("Map File (.mf)|*"+extension,"");
+
+load_map(fname);

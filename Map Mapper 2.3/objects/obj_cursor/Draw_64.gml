@@ -61,7 +61,7 @@ if (_button != 0) {
 		switch (_button) {
 		
 			case obj_gameController.color_button:
-				draw_text(_left, _top - 22, "COLOR MENU");
+				draw_text(_left + 2, _top - 22, "COLOR MENU");
 				break;
 				
 			case obj_gameController.rgb_code_selection:
@@ -74,6 +74,10 @@ if (_button != 0) {
 				
 			case obj_gameController.color_confirm_button:
 				draw_text(_left + 6, _top - 17, "SAVE");
+				break;
+				
+			case obj_gameController.igmenu_button:
+				draw_text(_left + 2, _top + 44, "MENU");
 				break;
 		
 		}

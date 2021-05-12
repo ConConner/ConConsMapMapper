@@ -7,4 +7,4 @@ WINDOWS ONLY (no other platforms planned yet)
 
 For help and reporting bugs write me a message on Discord or write an E-Mail to contendohelp@gmail.com
 
-Discord: Conner#1212
+Discord: Conner#4315

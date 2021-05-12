@@ -47,4 +47,4 @@ enum text {
 
 #macro tile_size 32 
 #macro border_margin 64
-#macro extension ".cmf"
+#macro extension ".mf"

@@ -1,5 +1,6 @@
 {
   "resources": [
+    {"id":{"name":"spr_open_igmenu","path":"sprites/spr_open_igmenu/spr_open_igmenu.yy",},"order":4,},
     {"id":{"name":"spr_color_wheel_yellow","path":"sprites/spr_color_wheel_yellow/spr_color_wheel_yellow.yy",},"order":5,},
     {"id":{"name":"spr_door_wheel_green","path":"sprites/spr_door_wheel_green/spr_door_wheel_green.yy",},"order":2,},
     {"id":{"name":"snap_from_gml","path":"scripts/snap_from_gml/snap_from_gml.yy",},"order":0,},
@@ -137,8 +138,8 @@
     {"isScaled":true,"autocrop":true,"border":2,"mipsToGenerate":0,"groupParent":null,"targets":-1,"resourceVersion":"1.3","name":"texturegroup1","resourceType":"GMTextureGroup",},
   ],
   "IncludedFiles": [
-    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"README.txt","resourceType":"GMIncludedFile",},
-    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"Information and Changelog.txt","resourceType":"GMIncludedFile",},
+    {"CopyToMask":153157610357391598,"filePath":"datafiles","resourceVersion":"1.0","name":"README.txt","resourceType":"GMIncludedFile",},
+    {"CopyToMask":153157610357391598,"filePath":"datafiles","resourceVersion":"1.0","name":"Information and Changelog.txt","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2.3.2.560",

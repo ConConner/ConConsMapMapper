@@ -1,7 +1,13 @@
+//mapper information
+global.version = "1.0";
+
 //declaring globals
 //grid globals
-global.grid_width = 60;			//amount of cells horizontally /			in the usable tile grid
-global.grid_height = 34;		//							   / vertically	
+global.grid_width = 32;			//amount of cells horizontally /			in the usable tile grid
+global.grid_height = 32;		//							   / vertically	
+
+//maximum possible map size without any errors: 1476 x 1476
+//stack overflow before 2000 x 2000
 
 global.xx = floor(mouse_x/32);			//the x position of the mouse on the grid
 global.yy = floor(mouse_y/32);			//the y position of the mouse on the grid
@@ -270,7 +276,9 @@ button_create = function(_x, _y, _spr) constructor {
 //button list
 global.button_list = ds_list_create();
 
+//main Buttons
 color_button = make_button(tile_size / 2, (global.view_height - tile_size / 2) - sprite_get_height(spr_color_button), spr_color_button);
+igmenu_button = make_button(tile_size / 2, 4, spr_open_igmenu);
 
 #endregion
 
