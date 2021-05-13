@@ -1,5 +1,5 @@
 //mapper information
-global.version = "1.0";
+#macro current_version "1.0"
 
 //declaring globals
 //grid globals
@@ -8,6 +8,7 @@ global.grid_height = 32;		//							   / vertically
 
 //maximum possible map size without any errors: 1476 x 1476
 //stack overflow before 2000 x 2000
+//these sizes cant be saved...
 
 global.xx = floor(mouse_x/32);			//the x position of the mouse on the grid
 global.yy = floor(mouse_y/32);			//the y position of the mouse on the grid
@@ -182,8 +183,6 @@ selected_map = "unsaved";
 door_surface = noone;
 
 
-
-
 #region setting up the data structures
 //creating the tile_info
 tile_info = function(_main, _rm_nmb, _col, _subimg, _mrk, _door) constructor {
@@ -195,15 +194,6 @@ tile_info = function(_main, _rm_nmb, _col, _subimg, _mrk, _door) constructor {
 	subimg = _subimg;																				//stores the main tile subimage
 	mrk = _mrk;																						//stores the subimage for the marker on that tile
 	door = _door																					//Doors are set up as [Door One[color ,rot] Door Two[color,rot]....
-																									
-	static clear = function() {																		////////////////////////////////////////////////
-		main = ID.empty;																			//											  //
-		rm_nmb = 0;																					// This function resets a tiles values to the //
-		col = 0;																					// cleared state. Easy way to clear a tile    //
-		subimg = 0;																					// completely of all values                   //
-		mrk = marker.empty;																			//											  //
-		door = [[hatch.empty, 0],[hatch.empty, 90],[hatch.empty, 180],[hatch.empty, 270]]			////////////////////////////////////////////////
-	}
 	
 }
 
@@ -214,13 +204,14 @@ ds_grid_set_region(global.tile_grid, 0, 0, global.grid_width, global.grid_height
 set_up_grid()
 
 //text grid
-global.text_grid = ds_grid_create(7,3);
-ds_grid_set_region(global.text_grid, 0, 0, 19, 2, 0);
+#macro max_text_amount 7
+global.text_grid = ds_grid_create(max_text_amount,4);
+ds_grid_set_region(global.text_grid, 0, 0, max_text_amount, 4, 0);
 
 
 //BUTTONS
 //button struct
-button_create = function(_x, _y, _spr) constructor {
+button_create = function(_x, _y, _spr, _menu_level) constructor {
 	
 	//button vars
 	x = _x;
@@ -233,6 +224,7 @@ button_create = function(_x, _y, _spr) constructor {
 	image_alpha = goal_alpha;
 	button_width = sprite_get_width(sprite_index);
 	button_height = sprite_get_height(sprite_index);
+	menu_level = _menu_level
 	
 	active = true;
 	button_enabled = true;
@@ -256,29 +248,34 @@ button_create = function(_x, _y, _spr) constructor {
 	static fade = function() {	//fades current alpha to goal alpha
 		image_alpha = lerp(image_alpha, goal_alpha, 0.3);
 	}
-	static draw = function() {
+	static draw = function() {  //draws the button
 		draw_sprite_ext(sprite_index, image_index, x, y, 1, 1, 0, c_white, image_alpha);
 	}
-	static disable = function() {
+	static disable = function() {  //shuts off all button processes
 		button_enabled = false;
 	}
-	static enable = function() {
+	static enable = function() {  //activates the button process again
 		button_enabled = true;
 	}
-	static activate = function() {
+	static activate = function() { //makes the button usable
 		active = true;
 	}
-	static deactivate = function() {
+	static deactivate = function() { //makes the button unuseable
 		active = false;
 	}
 }
 	
 //button list
 global.button_list = ds_list_create();
+#endregion
+
+
+#region buttons
 
 //main Buttons
-color_button = make_button(tile_size / 2, (global.view_height - tile_size / 2) - sprite_get_height(spr_color_button), spr_color_button);
-igmenu_button = make_button(tile_size / 2, 4, spr_open_igmenu);
+color_button = make_button(tile_size / 2, (global.view_height - tile_size / 2) - sprite_get_height(spr_color_button), spr_color_button, menu_state.nothing);
+igmenu_button = make_button(tile_size / 2, 4, spr_open_igmenu, menu_state.nothing);
+
 
 #endregion
 

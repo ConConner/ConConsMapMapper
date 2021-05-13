@@ -234,7 +234,19 @@ function load_grid() {
 }
 	
 	
-function add_text_message(msg, lifetime) {
+function clear_cell(cell_struct) {
+	
+		cell_struct.main = ID.empty;
+		cell_struct.rm_nmb = 0;
+		cell_struct.col = 0;
+		cell_struct.subimg = 0;
+		cell_struct.mrk = marker.empty;
+		cell_struct.door = [[hatch.empty, 0],[hatch.empty, 90],[hatch.empty, 180],[hatch.empty, 270]]
+	
+}
+	
+	
+function add_text_message(msg, lifetime, col) {
 	
 	grid_shift_x_up(global.text_grid);
 	
@@ -245,6 +257,8 @@ function add_text_message(msg, lifetime) {
 	ds_grid_set(global.text_grid, 0, text.life, lifetime);
 	//alpha
 	ds_grid_set(global.text_grid, 0, text.alph, 1);
+	//color
+	ds_grid_set(global.text_grid, 0, text.col, col);
 	
 }
 
@@ -259,23 +273,26 @@ function grid_shift_x_up(grid) {
 		var m = ds_grid_get(grid, pos, text.messg);
 		var _lifetime = ds_grid_get(grid, pos, text.life);
 		var _alpha = ds_grid_get(grid, pos, text.alph);
+		var _color = ds_grid_get(grid, pos, text.col);
 		
 		if (m != 0) {
 			
 			//checking if grid is long enough for shift
 			if (pos = grid_length) {
-				ds_grid_resize(grid, grid_length + 1, 3)
+				ds_grid_resize(grid, grid_length + 1, 4)
 			}
 			
 			//shifting the value one position up
 			ds_grid_set(grid, pos + 1, text.messg, m);
 			ds_grid_set(grid, pos + 1, text.life, _lifetime);
 			ds_grid_set(grid, pos + 1, text.alph, _alpha);
+			ds_grid_set(grid, pos + 1, text.col, _color);
 			
 			//deleting the old value
 			ds_grid_set(grid, pos, text.messg, 0);
 			ds_grid_set(grid, pos, text.life, 0);
 			ds_grid_set(grid, pos, text.alph, 0);
+			ds_grid_set(grid, pos, text.col, 0);
 			
 		}
 		
@@ -297,11 +314,11 @@ function update_text_message(_x, _y) {
 		var m = ds_grid_get(grid, i, text.messg);
 		var _lifetime = ds_grid_get(grid, i, text.life);
 		var _alpha = ds_grid_get(grid, i, text.alph);
+		var _color = ds_grid_get(grid, i, text.col);
 		
 		//drawing the text
 		if (m != 0) {
-			draw_set_alpha(_alpha)
-			draw_text(_x, _y - i * spacing, m)
+			draw_text_color(_x, _y - i * spacing, m, _color, _color, _color, _color, _alpha);
 		}
 		
 		//updating the vars

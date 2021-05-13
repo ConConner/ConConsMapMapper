@@ -55,11 +55,11 @@ function draw_nine_slice( spr, _x1, _y1, _x2, _y2) {
 }
 	
 	
-function make_button(_x, _y, _spr) {
+function make_button(_x, _y, _spr, _menu_level) {
 	
 	//Creates a new button at the goal coordinates and with the set sprite
 	
-	var button_id = new button_create(_x, _y, _spr);
+	var button_id = new button_create(_x, _y, _spr, _menu_level);
 	ds_list_add(global.button_list, button_id);
 	if (button_id != noone) return(button_id);
 	else return(-1);
@@ -95,6 +95,10 @@ function button_update() {
 		if (_id != 0) {
 			if (_id.button_enabled == true) {
 				_id.move();
+				if (_id.menu_level != obj_gameController.current_menu) {
+					_id.goal_alpha = 0;
+					_id.deactivate();
+				}
 				_id.fade();
 				_id.draw();
 			}

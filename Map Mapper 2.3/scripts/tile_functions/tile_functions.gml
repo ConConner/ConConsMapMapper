@@ -63,7 +63,7 @@ function add_tiles() {
 	
 		if (mRight && tile.main = ID.filled) {
 		
-			tile.clear();
+			clear_cell(tile);
 	
 			if (xx != 0) tile_left.subimg = autotile(xx - 1,yy);
 			if (xx != global.grid_width - 1) tile_right.subimg = autotile(xx + 1,yy);

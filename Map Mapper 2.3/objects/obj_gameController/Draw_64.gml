@@ -128,9 +128,7 @@ switch (current_menu) {
 			
 		}
 			
-		#region closing process
-		
-		if (close_menu) {
+		if (close_menu) { //closing process
 			menu_drawing_goal_alpha = 0;
 			background_goal_alpha = 0;
 			
@@ -139,8 +137,8 @@ switch (current_menu) {
 				menu_goal_height = 32;
 				
 				if (menu_width < menu_goal_width + 3 && menu_height < menu_goal_height + 3) { //this happens after the animation finished
+					
 					//enabling building again
-					color_button.enable();
 					close_menu = false;
 					canBuild = true;
 					in_menu = false;
@@ -153,7 +151,33 @@ switch (current_menu) {
 			
 		}
 		
-		#endregion
+		break; }
+		
+	case menu_state.ig_menu: {
+		
+		//darkening the background
+		draw_set_alpha(background_alpha);
+		draw_set_color(c_black);
+		draw_rectangle(0,0,global.view_width,global.view_height,false);
+		draw_set_color(c_white);
+		
+		//drawing nineslice background
+		draw_set_alpha(1)
+		image_alpha = 1;
+		
+		menu_width = global.view_width + 64;
+		menu_goal_height = 112;
+		
+		//moving the button
+		igmenu_button.y = menu_pos_y + menu_height + 32;
+		
+		draw_nine_slice(spr_menu_nineslice, menu_pos_x, menu_pos_y, menu_pos_x + menu_width, menu_pos_y + menu_height);
+		
+		if (menu_height > menu_goal_height - 2) { //this happens after the menu background is done
+			
+			background_goal_alpha = 0.6;
+			
+		}
 		
 		break; }
 		
@@ -185,24 +209,25 @@ if (debug_on) {
 	draw_set_halign(fa_right)
 	draw_text(800,0,_fps);
 	draw_set_halign(fa_left)
-	draw_set_colour(c_grey);
+	draw_set_colour(c_ltgrey);
 	
 	
 	//showing debug vars
-	draw_text(0,17 * 2,"Tile xscale: " + string(tile_xscale));
-	draw_text(0,17 * 3,"Tile yscale: " + string(tile_yscale));
-	draw_text(0,17 * 5,"Mouse XX: " + string(global.xx) + ";    X: " + string(mouse_x));
-	draw_text(0,17 * 6,"Mouse YY: " + string(global.yy) + ";    Y: " + string(mouse_y));
-	draw_text(0,17 * 8,"Camera X: " + string(global.cam_pos_x));
-	draw_text(0,17 * 9,"Camera Y: " + string(global.cam_pos_y));
-	draw_text(0,17 * 11,"Cursor Mode: " + string(obj_cursor.cursor_mode));
-	draw_text(0,17 * 13,"Menu X" + string(menu_pos_x));
-	draw_text(0,17 * 14,"Menu X" + string(menu_pos_x));
-	draw_text(0,17 * 15,"Menu width: " + string(menu_width));
-	draw_text(0,17 * 16,"Menu height: " + string(menu_height));
-	draw_text(0,17 * 18,"Selected Col Hue: " + string(selected_color_hue));
-	draw_text(0,17 * 19,"Selected Col Sat: " + string(selected_color_sat));
-	draw_text(0,17 * 20,"Selected Col Val: " + string(selected_color_val));
-	draw_text(0,17 * 22,"Selected Button: " + string(button_check()));
+	draw_text(5,17 * 2,"Tile xscale: " + string(tile_xscale));
+	draw_text(5,17 * 3,"Tile yscale: " + string(tile_yscale));
+	draw_text(5,17 * 5,"Mouse XX: " + string(global.xx) + ";    X: " + string(mouse_x));
+	draw_text(5,17 * 6,"Mouse YY: " + string(global.yy) + ";    Y: " + string(mouse_y));
+	draw_text(5,17 * 8,"Camera X: " + string(global.cam_pos_x));
+	draw_text(5,17 * 9,"Camera Y: " + string(global.cam_pos_y));
+	draw_text(5,17 * 11,"Cursor Mode: " + string(obj_cursor.cursor_mode));
+	draw_text(5,17 * 13,"Menu X" + string(menu_pos_x));
+	draw_text(5,17 * 14,"Menu X" + string(menu_pos_x));
+	draw_text(5,17 * 15,"Menu width: " + string(menu_width));
+	draw_text(5,17 * 16,"Menu height: " + string(menu_height));
+	draw_text(5,17 * 18,"Selected Col Hue: " + string(selected_color_hue));
+	draw_text(5,17 * 19,"Selected Col Sat: " + string(selected_color_sat));
+	draw_text(5,17 * 20,"Selected Col Val: " + string(selected_color_val));
+	draw_text(5,17 * 22,"Color Button goal alpha: " + string(color_button.goal_alpha));
+	draw_text(5,17 * 23,"Color Button goal alpha: " + string(color_button.image_alpha));
 	
 }

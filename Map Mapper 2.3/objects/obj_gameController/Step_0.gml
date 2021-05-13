@@ -383,9 +383,11 @@ if (mLeft) {
 if (placed_tile || deleted_tile) {
 	
 	color_button.deactivate();
-} else {
+	igmenu_button.deactivate();
+} else if (current_menu == menu_state.nothing) {
 	
 	color_button.activate();
+	igmenu_button.activate();
 }
 
 #endregion
@@ -425,14 +427,34 @@ background_alpha = lerp(background_alpha, background_goal_alpha, 0.15);
 
 #region buttons
 
-if (!color_button.active) {
+//color button transparency
+if (!color_button.active && current_menu == menu_state.nothing) {
+	
 	//button middle coords
 	var _pointX = color_button.x + (sprite_get_width(color_button.sprite_index) / 2);
 	var _pointY = color_button.y + (sprite_get_height(color_button.sprite_index) / 2);
 	var m_distance = point_distance(_pointX, _pointY, mouse_x, mouse_y);
-	color_button.goal_alpha = (0.0035157 * power(m_distance,2) + 10) / 100;
-} else {
+	color_button.goal_alpha = clamp((0.0035157 * power(m_distance,2) + 10) / 100, 0, 1);
+	
+} else if (current_menu == menu_state.nothing) {
+	
 	color_button.goal_alpha = 1;
+	
+}
+
+//ig menu button transparency
+if (!igmenu_button.active && current_menu == menu_state.nothing) {
+	
+	//button middle coords
+	var _pointX = igmenu_button.x + (sprite_get_width(igmenu_button.sprite_index) / 2);
+	var _pointY = igmenu_button.y + (sprite_get_height(igmenu_button.sprite_index) / 2);
+	var m_distance = point_distance(_pointX, _pointY, mouse_x, mouse_y);
+	igmenu_button.goal_alpha = clamp((0.0135157 * power(m_distance,2) + 10) / 100, 0, 1);
+	
+} else if (current_menu == menu_state.nothing) {
+	
+	igmenu_button.goal_alpha = 1;
+	
 }
 
 #endregion
@@ -443,7 +465,7 @@ if (!color_button.active) {
 //reacting to button
 var _selected_button = button_check();
 if (mLeftPressed) {
-	if (_selected_button != 0) if (_selected_button.button_enabled) {
+	if ((_selected_button != 0) && (_selected_button.button_enabled && _selected_button.active)) {
 		canBuild = false;
 		in_menu = true;
 	
@@ -453,18 +475,17 @@ if (mLeftPressed) {
 			
 				//this code gets run basically once, like a create event
 				current_menu = menu_state.color_menu;
-				color_button.disable();
 			
 				//creating the selection boxes
-				hue_selection = make_button(0, 0, spr_cursor_selector);
-				value_selection = make_button(0,0,spr_cursor_selector);
-				rgb_code_selection = make_button(0,0,spr_cursor_selector);
+				hue_selection = make_button(0, 0, spr_cursor_selector, menu_state.color_menu);
+				value_selection = make_button(0,0,spr_cursor_selector, menu_state.color_menu);
+				rgb_code_selection = make_button(0,0,spr_cursor_selector, menu_state.color_menu);
 				
 				//confirm, decline
-				color_decline_button = make_button(0,0,spr_menu_decline);
+				color_decline_button = make_button(0,0,spr_menu_decline, menu_state.color_menu);
 				color_decline_button.goal_alpha = 0;
 				color_decline_button.image_alpha = 0;
-				color_confirm_button = make_button(0,0,spr_menu_confirm);
+				color_confirm_button = make_button(0,0,spr_menu_confirm, menu_state.color_menu);
 				color_confirm_button.goal_alpha = 0;
 				color_confirm_button.image_alpha = 0;
 				
@@ -474,7 +495,7 @@ if (mLeftPressed) {
 			
 				var _val = string_delete(selected_rgb_hex, 1, 1);
 				clipboard_set_text(_val);
-				add_text_message("Copied #" + string(_val) + " to clipboard", 1.5);
+				add_text_message("Copied #" + string(_val) + " to clipboard", 1.5, c_white);
 			
 				break; }
 				
@@ -494,7 +515,7 @@ if (mLeftPressed) {
 				selected_color_val = color_get_value(global.selected_color);
 				
 				//text message
-				add_text_message("color discarded", 1.5);
+				add_text_message("color discarded", 1.5, c_white);
 				
 				break; }
 				
@@ -512,9 +533,23 @@ if (mLeftPressed) {
 				global.selected_color = make_color_hsv(selected_color_hue, selected_color_sat, selected_color_val);
 				
 				//text message
-				add_text_message("applied color", 1.5);
+				add_text_message("applied color", 1.5, c_lime);
 				
 				break; }
+				
+			
+			case igmenu_button: {
+			
+				current_menu = menu_state.ig_menu;
+				menu_goal_pos_x = -32;
+				menu_pos_x = -32;
+				menu_goal_pos_y = -10;
+				menu_pos_y = -10;
+				menu_goal_height = 0;
+				menu_height = 0;
+			
+				break; }
+			
 		}
 	}
 }

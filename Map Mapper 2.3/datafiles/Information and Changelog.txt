@@ -17,6 +17,7 @@ Release 1.0 (XX.XX.XXXX)
 # base system rework
  # improved perfomance [ ~ 1000 fps*]
 # reworked room system
+# improved saving and loading
 + new cursor system
 + new color selection (custom colors)
 + new camera movement options

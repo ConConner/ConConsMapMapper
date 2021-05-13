@@ -5,7 +5,16 @@ enum ID {
 
 enum menu_state {
 	nothing,
-	color_menu
+	color_menu,
+	ig_menu
+}
+
+enum tool {
+	pen,
+	door_tool,
+	marker_tool,
+	selector,
+	eyedropper
 }
 
 enum marker {
@@ -41,7 +50,8 @@ enum dir {
 enum text {
 	messg,
 	life,
-	alph
+	alph,
+	col
 }
 
 
