@@ -11,6 +11,7 @@ enum menu_state {
 
 enum tool {
 	pen,
+	color_brush,
 	door_tool,
 	marker_tool,
 	selector,

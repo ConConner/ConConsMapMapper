@@ -77,7 +77,7 @@ function button_check() {
 		if (_id != 0) {
 			
 			if(_id.check(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0))) {
-					return(_id);
+					if (_id.active) return(_id);
 			}
 		}
 	}
@@ -121,4 +121,11 @@ function remove_button(_button) {
 		return(true);
 	}
 	else return(false);
+}
+	
+
+function draw_checkbox(_x, _y, _value) {
+
+	draw_sprite(spr_checkbox, _value, _x, _y);
+
 }

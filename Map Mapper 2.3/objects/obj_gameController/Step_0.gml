@@ -89,279 +89,23 @@ global.cam_pos_y = clamp(global.cam_pos_y, 0 - global.view_height / 2, global.gr
 #endregion
 
 
-#region colors
-//if (mMiddle && !choosingColor && canBuild) {
-//	canBuild = false;
-//	choosingColor = true;
-//	cam_lock = true;
-	
-//	storeWindowMouseX = window_mouse_get_x();
-//	storeWindowMouseY = window_mouse_get_y();
-//	storeMouseX = mouse_x;
-//	storeMouseY = mouse_y;
-	
-//	window_mouse_set(global.window_half_width,global.window_half_height);
-//	var _xx = global.half_width +global.viewX;
-//	var _yy = global.half_height +global.viewY;
-	
-//	buttonColorPicker = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_color_picker);
-//	buttonBlue = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_blue); buttonAqua = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_aqua);
-//	buttonGreen = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_green); buttonYellow = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_yellow);
-//	buttonOrange = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_orange); buttonRed = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_red);
-//	buttonGray = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_gray); buttonPurple = instance_create_layer(_xx,_yy,"Markers",obj_color_wheel_purple);
-//}
+#region tools
 
-//if (!mMiddle && choosingColor) {
-//	choosingColor = false;
-//	cam_lock = false;
-//	canBuild = true;
-	
-//	var _xx = global.half_width +global.viewX;
-//	var _yy = global.half_height +global.viewY;
-//	var _storeMouseXX = floor(storeMouseX/32);
-//	var _storeMouseYY = floor(storeMouseY/32);
-//	var _m = circle_menu(8,_xx,_yy,global.color_wheel_radius,global.color_wheel_min_radius,0);
-	
-//	if (_m == 3) colorSelecting = c_blue; if (_m == 2) colorSelecting = c_aqua; if (_m == 1) colorSelecting = c_green;
-//	if (_m == 0) colorSelecting = c_yellow; if (_m == 7) colorSelecting = c_orange; if (_m == 6) colorSelecting = c_red;
-//	if (_m == 5) colorSelecting = c_grey; if (_m == 4) colorSelecting = c_purple;
-//	if (_m == 8) if (ds_grid_get(global.mainGrid,_storeMouseXX,_storeMouseYY) != 0) colorSelecting = ds_grid_get(global.ColorGrid,_storeMouseXX,_storeMouseYY);
-	
-//	if (_m != -1) global.selected_color = colorSelecting;
-//	colorSelecting = 0;
-	
-//	window_mouse_set(storeWindowMouseX,storeWindowMouseY);
-	
-//	instance_destroy(buttonBlue); instance_destroy(buttonAqua); instance_destroy(buttonGreen); instance_destroy(buttonYellow); 
-//	instance_destroy(buttonOrange); instance_destroy(buttonRed); instance_destroy(buttonGray); instance_destroy(buttonPurple);
-//	instance_destroy(buttonColorPicker);
-//}
-#endregion
-
-
-#region selecting tile
-if (!selecting_tile) {
-	tile_xx = global.xx;
-	tile_yy = global.yy;
-	
-	tile_xscale_goal = 1;
-	tile_yscale_goal = 1;
-}
-
-	//reaching scale
-tile_xscale = lerp(tile_xscale,tile_xscale_goal,0.22)
-tile_yscale = lerp(tile_yscale,tile_yscale_goal,0.22)
-
-	//locking mouse
-if (selecting_tile) {
-	if (obj_camera.x != obj_camera.cam_x_goal || obj_camera.y != obj_camera.cam_y_goal) {
-	
-		var mouse_xx = obj_camera.cam_x_goal - camera_get_view_x(view);
-		var mouse_yy = obj_camera.cam_y_goal - camera_get_view_y(view);
-	
-		window_mouse_set(mouse_xx,mouse_yy);
-	}
-}
-
-	//checking mouse on tile
-var _top = tile_yy * tile_size - tile_size/4;
-var _left = tile_xx * tile_size - tile_size/4;
-var _w = _left + tile_size * 1.5;
-var _h = _top + tile_size * 1.5;
-var _extra_space = 12;
-
-var _rel_mouse_x = mouse_x - _left;
-var _rel_mouse_y = mouse_y - _top;
-
-if (selecting_tile && !choosing_tile_addition) {
-	
-	if (_rel_mouse_x >= tile_size * 1.5 - edge_size) selected_edge = dir.right;
-	else if (_rel_mouse_x <= edge_size) selected_edge = dir.left;
-	else if (_rel_mouse_y <= edge_size) selected_edge = dir.up;
-	else if (_rel_mouse_y >= tile_size * 1.5 - edge_size) selected_edge = dir.down;
-	else selected_edge = dir.none;
-}
-
-
-//bringing up the ring menu
-if (mLeftPressed && selecting_tile && selected_edge != dir.none && !choosing_tile_addition) {
-	
-	clicked_selected_edge = selected_edge;
-	choosing_tile_addition = true;
-	door_menu_open_timer = 0;
-	
-	var _xx = global.half_width + global.viewX;
-	var _yy = global.half_height + global.viewY;
-	
-	//spawning the objects
-	//markers
-	buttonMarker1 = instance_create_layer(_xx,_yy,"Markers",obj_marker_wheel_1); buttonMarker2 = instance_create_layer(_xx,_yy,"Markers",obj_marker_wheel_2);
-	buttonMarker3 = instance_create_layer(_xx,_yy,"Markers",obj_marker_wheel_3); buttonMarker4 = instance_create_layer(_xx,_yy,"Markers",obj_marker_wheel_4);
-	buttonMarker5 = instance_create_layer(_xx,_yy,"Markers",obj_marker_wheel_5); buttonMarker6 = instance_create_layer(_xx,_yy,"Markers",obj_marker_wheel_6);
-	
-	buttonMarker5.selected_edge = clicked_selected_edge;
-	
-	//doors
-	buttonDoorBlue = instance_create_layer(_xx,_yy,"Markers",obj_door_wheel_blue); buttonDoorRed = instance_create_layer(_xx,_yy,"Markers",obj_door_wheel_red);
-	buttonDoorGreen = instance_create_layer(_xx,_yy,"Markers",obj_door_wheel_green); buttonDoorYellow = instance_create_layer(_xx,_yy,"Markers",obj_door_wheel_yellow);
-}
-
-
-//Clearing Tile
-if (mLeftPressed && selected_edge == dir.none && selecting_tile && selection_open_timer >= 1) {
-	//unlocking mouse
-		cam_lock = false;
-		canBuild = true;
-		selecting_tile = false;
-		door_menu_close_timer = 0;
-		
-		selected_edge = dir.none
-		clicked_selected_edge = dir.none;
-		surface_free(door_surface);
-		
-	ds_grid_set(global.MarkerGrid, tile_xx, tile_yy, 0);
-	ds_grid_set(global.DoorGrid, tile_xx * 2, tile_yy * 2, 0);
-	ds_grid_set(global.DoorGrid, tile_xx * 2 + 1, tile_yy * 2, 0);
-	ds_grid_set(global.DoorGrid, tile_xx * 2, tile_yy * 2 + 1, 0);
-	ds_grid_set(global.DoorGrid, tile_xx * 2 + 1, tile_yy * 2 + 1, 0);
-}
-
-//Menu Interaction
-if (mLeftPressed && choosing_tile_addition && door_menu_open_timer >= 1) {
-	
-	var _xx = global.half_width +global.viewX;
-	var _yy = global.half_height +global.viewY;
-	
-	var m = circle_menu(6,_xx,_yy,global.marker_wheel_radius,global.marker_wheel_min_radius,30)
-	var n = circle_menu(4,_xx,_yy,global.door_wheel_radius,global.door_wheel_min_radius,0)
-	var _edge = clicked_selected_edge;
-	
-
-	//markers
-	if (m == 2) ds_grid_set(global.MarkerGrid,tile_xx,tile_yy,marker.circle);
-	if (m == 1) ds_grid_set(global.MarkerGrid,tile_xx,tile_yy,marker.dot);
-	if (m == 0) ds_grid_set(global.MarkerGrid,tile_xx,tile_yy,marker.exclamation);
-	if (m == 5) ds_grid_set(global.MarkerGrid,tile_xx,tile_yy,marker.boss);
-	if (m == 4) ds_grid_set(global.MarkerGrid,tile_xx,tile_yy,marker.left + _edge);
-	if (m == 3) ds_grid_set(global.MarkerGrid,tile_xx,tile_yy,marker.start);
-	
-	//doors
-	var _xxOffset = 0;
-	var _yyOffset = 0;
-	
-	var _xxOffset2 = 0;
-	var _yyOffset2 = 0;
-	
-	var _xxOffset3 = 0;
-	var _yyOffset3 = 0;
-	
-	var _edge2 = 0
-	
-	if (_edge == dir.left) {_xxOffset = 0; _yyOffset = 0; _xxOffset2 = -1; _yyOffset2 = 0; _xxOffset3 = -1; _yyOffset3 = 0; _edge2 = dir.right;}
-	if (_edge == dir.right) {_xxOffset = 1; _yyOffset = 0; _xxOffset2 = 2; _yyOffset2 = 0; _xxOffset3 = 1; _yyOffset3 = 0; _edge2 = dir.left;}
-	if (_edge == dir.up) {_xxOffset = 0; _yyOffset = 1; _xxOffset2 = 1; _yyOffset2 = -1; _xxOffset3 = 0; _yyOffset3 = -1; _edge2 = dir.down;}
-	if (_edge == dir.down) {_xxOffset = 1; _yyOffset = 1; _xxOffset2 = 0; _yyOffset2 = 3; _xxOffset3 = 0; _yyOffset3 = 1; _edge2 = dir.up;}
-	
-	var _rmNext = ds_grid_get(global.mainGrid, tile_xx + _xxOffset3, tile_yy + _yyOffset3);
-	
-	if (n == 1) {
-		ds_grid_set(global.DoorGrid, tile_xx * 2 + _xxOffset, tile_yy * 2 + _yyOffset, 1 + 5 * _edge);
-		if (_rmNext == ID.filled) ds_grid_set(global.DoorGrid, tile_xx * 2 + _xxOffset2, tile_yy * 2 + _yyOffset2, 1 + 5 * _edge2);
-	}
-	
-	if (n == 0) {
-		ds_grid_set(global.DoorGrid, tile_xx * 2 + _xxOffset, tile_yy * 2 + _yyOffset, 2 + 5 * _edge);
-		if (_rmNext == ID.filled) ds_grid_set(global.DoorGrid, tile_xx * 2 + _xxOffset2, tile_yy * 2 + _yyOffset2, 2 + 5 * _edge2);
-	}
-	
-	if (n == 3) {
-		ds_grid_set(global.DoorGrid, tile_xx * 2 + _xxOffset, tile_yy * 2 + _yyOffset, 3 + 5 * _edge);
-		if (_rmNext == ID.filled) ds_grid_set(global.DoorGrid, tile_xx * 2 + _xxOffset2, tile_yy * 2 + _yyOffset2, 3 + 5 * _edge2);
-	}
-	
-	if (n == 2) {
-		ds_grid_set(global.DoorGrid, tile_xx * 2 + _xxOffset, tile_yy * 2 + _yyOffset, 4 + 5 * _edge);
-		if (_rmNext == ID.filled) ds_grid_set(global.DoorGrid, tile_xx * 2 + _xxOffset2, tile_yy * 2 + _yyOffset2, 4 + 5 * _edge2);
-	}
-	
-	
-	//closing menu
-	cam_lock = false;
-	canBuild = true;
-	selecting_tile = false;
-	left_click_menu_close = true;
-	door_menu_close_timer = 0;
-		
-	selected_edge = dir.none;
-	clicked_selected_edge = dir.none;
-	choosing_tile_addition = false;
-		
-	//deleting the buttons
-	instance_destroy(buttonMarker1);		instance_destroy(buttonMarker2);		instance_destroy(buttonMarker3);
-	instance_destroy(buttonMarker4);		instance_destroy(buttonMarker5);		instance_destroy(buttonMarker6);		
-	instance_destroy(buttonDoorBlue);		instance_destroy(buttonDoorRed);		instance_destroy(buttonDoorGreen);		instance_destroy(buttonDoorYellow);
-	alarm[0] = 1;
-}
-
-
-	//unlocking the mouse || deselecting the tile
-if (obj_camera.x = obj_camera.cam_x_goal && obj_camera.y = obj_camera.cam_y_goal) {
-	
-	if (!point_in_rectangle(mouse_x,mouse_y,_left - _extra_space,_top - _extra_space,_w + _extra_space,_h + _extra_space) && !choosing_tile_addition) {
-		//unlocking mouse
-		cam_lock = false;
-		canBuild = true;
-		selecting_tile = false;
-		
-		selected_edge = dir.none
-		clicked_selected_edge = dir.none;
-		surface_free(door_surface);
-	}
-	
-		//unlocking if right clicked
-	if (mRightPressed && selecting_tile) {
-		cam_lock = false;
-		canBuild = true;
-		selecting_tile = false;
-		right_click_menu_close = true;
-		door_menu_close_timer = 0;
-		
-		selected_edge = dir.none;
-		clicked_selected_edge = dir.none;
-		choosing_tile_addition = false;
-		
-		//deleting the buttons
-		instance_destroy(buttonMarker1);		instance_destroy(buttonMarker2);		instance_destroy(buttonMarker3);
-		instance_destroy(buttonMarker4);		instance_destroy(buttonMarker5);		instance_destroy(buttonMarker6);		
-		instance_destroy(buttonDoorBlue);		instance_destroy(buttonDoorRed);		instance_destroy(buttonDoorGreen);		instance_destroy(buttonDoorYellow);
-		surface_free(door_surface);
-	}
-}
-
-#endregion
-
-
-#region building
-
-if (mRightReleased) {
-	right_click_menu_close = false;
-}
-
-if (mLeftReleased) {
-	left_click_menu_close = false;
-}
-
-	//Building with mouse
+//Building with mouse
 if (obj_cursor.cursor_mode == curs_mode.on_grid) {
-	if (mLeft && !left_click_menu_close) add_tiles();
-	if (mRight && !right_click_menu_close) add_tiles();
+	
+	if (mLeft) add_tiles();
+	if (mRight) add_tiles();
+	
 }
 
 if (mLeftReleased) {
+	
 	add_tiles();
 	global.roomCount = old_roomCount + 1;
 	old_roomCount = global.roomCount;
 	placed_tile = false;
+	
 }
 
 if (mRightReleased) {
@@ -384,10 +128,12 @@ if (placed_tile || deleted_tile) {
 	
 	color_button.deactivate();
 	igmenu_button.deactivate();
+	
 } else if (current_menu == menu_state.nothing) {
 	
 	color_button.activate();
 	igmenu_button.activate();
+	
 }
 
 #endregion
@@ -457,6 +203,7 @@ if (!igmenu_button.active && current_menu == menu_state.nothing) {
 	
 }
 
+
 #endregion
 
 
@@ -490,7 +237,6 @@ if (mLeftPressed) {
 				color_confirm_button.image_alpha = 0;
 				
 				break; }
-		
 			case rgb_code_selection: {
 			
 				var _val = string_delete(selected_rgb_hex, 1, 1);
@@ -498,7 +244,6 @@ if (mLeftPressed) {
 				add_text_message("Copied #" + string(_val) + " to clipboard", 1.5, c_white);
 			
 				break; }
-				
 			case color_decline_button: {
 				
 				close_menu = true;
@@ -518,7 +263,6 @@ if (mLeftPressed) {
 				add_text_message("color discarded", 1.5, c_white);
 				
 				break; }
-				
 			case color_confirm_button: {
 				
 				close_menu = true;
@@ -537,7 +281,6 @@ if (mLeftPressed) {
 				
 				break; }
 				
-			
 			case igmenu_button: {
 			
 				current_menu = menu_state.ig_menu;
@@ -548,6 +291,39 @@ if (mLeftPressed) {
 				menu_goal_height = 0;
 				menu_height = 0;
 			
+				break; }
+			case pen_tool_button: {
+				current_tool = tool.pen;
+				break; }
+			case eyedropper_tool_button: {
+				current_tool = tool.eyedropper;
+				break; }
+			case color_brush_tool_button: {
+				current_tool = tool.color_brush;
+				break; }
+			case door_tool_button: {
+				current_tool = tool.door_tool;
+				break; }
+			case marker_tool_button: {
+				current_tool = tool.marker_tool;
+				break; }
+			case selection_tool_button: {
+				current_tool = tool.selector;
+				break; }
+			case save_button: {
+				
+				var fname = get_save_filename("Map File (.mf)|*"+extension,"");
+				save_map(fname);
+				
+				break; }
+			case load_button: {
+				
+				var fname = get_open_filename("Map File (.mf)|*"+extension,"");
+				load_map(fname);
+				
+				break; }
+			case tooltip_button: {
+				show_tooltips = !show_tooltips;
 				break; }
 			
 		}

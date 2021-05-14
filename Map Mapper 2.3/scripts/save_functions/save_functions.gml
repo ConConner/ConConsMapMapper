@@ -72,7 +72,7 @@ function load_map(file_name) {
 			_converted_array = json_parse(_json_string);
 		
 			//updating the grid and writing values
-			if !(global.grid_width == _grid_width || global.grid_height == _grid_height) { //resizing the grid if not the same size
+			if (global.grid_width != _grid_width || global.grid_height != _grid_height) { //resizing the grid if not the same size
 				ds_grid_resize(global.tile_grid, _grid_width, _grid_height);
 				global.grid_width = _grid_width;
 				global.grid_height = _grid_height;

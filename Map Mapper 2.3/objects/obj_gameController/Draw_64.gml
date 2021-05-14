@@ -29,12 +29,13 @@ switch (current_menu) {
 		menu_pos_x = (global.view_width / 2) - (menu_width / 2);
 		menu_pos_y = (global.view_height / 2) - (menu_height / 2);
 		
+		background_goal_alpha = 0.6;
+		
 		draw_nine_slice(spr_menu_nineslice, menu_pos_x, menu_pos_y, menu_pos_x + menu_width, menu_pos_y + menu_height);
 		
 		if (menu_width > menu_goal_width - 20 && menu_height > menu_goal_height - 20) { //this happens after the menu background is done
 			
 			menu_drawing_goal_alpha = 1;
-			background_goal_alpha = 0.6;
 			image_alpha = menu_drawing_alpha;
 			draw_set_alpha(menu_drawing_alpha);
 			
@@ -166,7 +167,9 @@ switch (current_menu) {
 		image_alpha = 1;
 		
 		menu_width = global.view_width + 64;
-		menu_goal_height = 112;
+		if (!close_menu) menu_goal_height = 112;
+		
+		background_goal_alpha = 0.6;
 		
 		//moving the button
 		igmenu_button.y = menu_pos_y + menu_height + 32;
@@ -175,9 +178,106 @@ switch (current_menu) {
 		
 		if (menu_height > menu_goal_height - 2) { //this happens after the menu background is done
 			
-			background_goal_alpha = 0.6;
+			//tool information and more text
+			menu_drawing_goal_alpha = 1;
+			draw_set_alpha(menu_drawing_alpha);
+			draw_set_color(c_ltgrey);
+			
+			if (show_tooltips) {
+				
+				draw_text(32, 224, "Tool information:");
+				switch (current_tool) {
+				
+					case tool.pen: {
+						draw_text(32, 258, "The pen tool is probably going to be your\nmost used tool. It is used to add and remove\nmap-tiles and also to add onto existing tiles.");
+						draw_text(32, 258, "\n\n\n\nLeft click and drag to start a new room.\nRight click and drag to remove existing tiles.");
+						draw_text(32, 258, "\n\n\n\n\n\nAn existing room can be expanded by\ndragging off of an existing room.");
+						break; }
+					case tool.eyedropper: {
+						draw_text(32, 258, "The color picker allows you to click on an\nalready existing map-tile to copy the color\nof it as your primary color.");
+						break; }
+					case tool.color_brush: {
+						draw_text(32, 258, "With the color brush you can change the\ncolor of all map tiles of the selected tiles room.");
+						draw_text(32, 258, "\n\nIt is also possible to change all map tiles,\nwith the same color, to a new color.");
+						break; }
+				
+				}
+				
+			}
+			
+			//drawing tooltip section
+			draw_set_color(c_white);
+			draw_checkbox(32, global.window_height - 32, show_tooltips);
+			draw_text(32 + 27, global.window_height - 32, "tooltips");
 			
 		}
+		
+		#region updating button pos
+		pen_tool_button.goal_alpha = 1;
+		pen_tool_button.goal_y = menu_pos_y + menu_height - 98;
+		if (menu_height > menu_goal_height - 2) pen_tool_button.activate();
+		if (current_tool == tool.pen) pen_tool_button.image_index = 1;
+		else pen_tool_button.image_index = 0;
+		
+		eyedropper_tool_button.goal_alpha = 1;
+		eyedropper_tool_button.goal_y = menu_pos_y + menu_height - 98;
+		if (menu_height > menu_goal_height - 2) eyedropper_tool_button.activate();
+		if (current_tool == tool.eyedropper) eyedropper_tool_button.image_index = 1;
+		else eyedropper_tool_button.image_index = 0;
+		
+		color_brush_tool_button.goal_alpha = 1;
+		color_brush_tool_button.goal_y = menu_pos_y + menu_height - 98;
+		if (menu_height > menu_goal_height - 2) color_brush_tool_button.activate();
+		if (current_tool == tool.color_brush) color_brush_tool_button.image_index = 1;
+		else color_brush_tool_button.image_index = 0;
+		
+		door_tool_button.goal_alpha = 1;
+		door_tool_button.goal_y = menu_pos_y + menu_height - 98;
+		if (menu_height > menu_goal_height - 2) door_tool_button.activate();
+		if (current_tool == tool.door_tool) door_tool_button.image_index = 1;
+		else door_tool_button.image_index = 0;
+		
+		marker_tool_button.goal_alpha = 1;
+		marker_tool_button.goal_y = menu_pos_y + menu_height - 98;
+		if (menu_height > menu_goal_height - 2) marker_tool_button.activate();
+		if (current_tool == tool.marker_tool) marker_tool_button.image_index = 1;
+		else marker_tool_button.image_index = 0;
+		
+		selection_tool_button.goal_alpha = 1;
+		selection_tool_button.goal_y = menu_pos_y + menu_height - 98;
+		if (menu_height > menu_goal_height - 2) selection_tool_button.activate();
+		if (current_tool == tool.selector) selection_tool_button.image_index = 1;
+		else selection_tool_button.image_index = 0;
+		
+		save_button.goal_alpha = 1;
+		save_button.goal_y = menu_pos_y + menu_height - 98;
+		if (menu_height > menu_goal_height - 2) save_button.activate();
+		
+		load_button.goal_alpha = 1;
+		load_button.goal_y = menu_pos_y + menu_height - 98;
+		if (menu_height > menu_goal_height - 2) load_button.activate();
+		
+		tooltip_button.activate();
+		tooltip_button.button_height = 23;
+		tooltip_button.button_width = 105;
+		#endregion
+		
+		if (close_menu) { //closing process
+			menu_goal_height = 0;
+			background_goal_alpha = 0;
+			menu_drawing_goal_alpha = 0;
+			
+			if (menu_height < menu_goal_height + 5) {
+				current_menu = menu_state.nothing;
+				close_menu = false;
+				
+				canBuild = true;
+				in_menu = false;
+			}
+		}
+		
+		//closing if clicking anywhere else
+		if (mLeftPressed && mouse_y > menu_pos_y + menu_goal_height && button_check() == 0) close_menu = true;
 		
 		break; }
 		
@@ -227,7 +327,7 @@ if (debug_on) {
 	draw_text(5,17 * 18,"Selected Col Hue: " + string(selected_color_hue));
 	draw_text(5,17 * 19,"Selected Col Sat: " + string(selected_color_sat));
 	draw_text(5,17 * 20,"Selected Col Val: " + string(selected_color_val));
-	draw_text(5,17 * 22,"Color Button goal alpha: " + string(color_button.goal_alpha));
-	draw_text(5,17 * 23,"Color Button goal alpha: " + string(color_button.image_alpha));
+	draw_text(5,17 * 22,"Tooltip width: " + string(tooltip_button.button_width));
+	draw_text(5,17 * 23,"Tooltip height: " + string(tooltip_button.button_height));
 	
 }

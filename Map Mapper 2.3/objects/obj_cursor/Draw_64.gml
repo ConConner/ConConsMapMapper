@@ -6,16 +6,21 @@ draw_set_alpha(1);
 //drawing the corners
 //top left
 draw_sprite(spr_cursor_edge, 0, x - current_selection_w, y - current_selection_h);
+
 //top right
 draw_sprite_ext(spr_cursor_edge, 0, x + current_selection_w, y - current_selection_h, -1, 1, image_angle, c_white, 1);
+
 //bottom left
 draw_sprite_ext(spr_cursor_edge, 0, x - current_selection_w, y + current_selection_h, 1, -1, image_angle, c_white, 1);
+
 //bottom right
 draw_sprite_ext(spr_cursor_edge, 0, x + current_selection_w, y + current_selection_h, -1, -1, image_angle, c_white, 1);
+
 
 //drawing middle icon
 //setting the alpha
 var tile = ds_grid_get(global.tile_grid,global.xx,global.yy);
+
 
 if (cursor_mode == curs_mode.on_grid) {
 
@@ -60,25 +65,52 @@ if (_button != 0) {
 	
 		switch (_button) {
 		
-			case obj_gameController.color_button:
+			case obj_gameController.color_button: {
 				draw_text(_left + 2, _top - 22, "COLOR MENU");
-				break;
+				break; }
 				
-			case obj_gameController.rgb_code_selection:
+			case obj_gameController.rgb_code_selection: {
 				draw_text(_left - 4, _top - 14, "CLICK TO COPY");
-				break;
+				break; }
 				
-			case obj_gameController.color_decline_button:
+			case obj_gameController.color_decline_button: {
 				draw_text(_left + 6, _top - 17, "CANCEL");
-				break;
+				break; }
 				
-			case obj_gameController.color_confirm_button:
+			case obj_gameController.color_confirm_button: {
 				draw_text(_left + 6, _top - 17, "SAVE");
-				break;
+				break; }
 				
-			case obj_gameController.igmenu_button:
+			case obj_gameController.igmenu_button: {
 				draw_text(_left + 2, _top + 44, "MENU");
-				break;
+				break; }
+				
+			#region menu buttons
+			case obj_gameController.pen_tool_button: {
+				draw_text(_left + 2, _top + 69, "PEN");
+				break; }
+			case obj_gameController.eyedropper_tool_button: {
+				draw_text(_left + 2, _top + 69, "color picker");
+				break; }
+			case obj_gameController.color_brush_tool_button: {
+				draw_text(_left + 2, _top + 69, "color brush");
+				break; }
+			case obj_gameController.door_tool_button: {
+				draw_text(_left + 2, _top + 69, "connections");
+				break; }
+			case obj_gameController.marker_tool_button: {
+				draw_text(_left + 2, _top + 69, "markers");
+				break; }
+			case obj_gameController.selection_tool_button: {
+				draw_text(_left + 2, _top + 69, "selection tool");
+				break; }
+			case obj_gameController.save_button: {
+				draw_text(_left + 2, _top + 69, "save map");
+				break; }
+			case obj_gameController.load_button: {
+				draw_text(_left - 17, _top + 69, "load map");
+				break; }
+			#endregion
 		
 		}
 	}
@@ -86,7 +118,7 @@ if (_button != 0) {
 
 
 draw_set_alpha(icon_alpha);
-draw_sprite(spr_cursor_add, icon_frame, x, y);
+draw_sprite(spr_cursor_middle, icon_frame, x, y);
 
 //resetting alpha
 draw_set_alpha(1);

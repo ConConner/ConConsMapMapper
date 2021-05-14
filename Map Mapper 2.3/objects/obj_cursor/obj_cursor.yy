@@ -1,7 +1,7 @@
 {
   "spriteId": {
-    "name": "spr_cursor_add",
-    "path": "sprites/spr_cursor_add/spr_cursor_add.yy",
+    "name": "spr_cursor_middle",
+    "path": "sprites/spr_cursor_middle/spr_cursor_middle.yy",
   },
   "solid": false,
   "visible": true,

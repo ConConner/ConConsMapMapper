@@ -149,7 +149,10 @@ color_confirm_button = 0;
 
 //menu vars
 current_menu = menu_state.nothing;
+current_tool = tool.pen;
 in_menu = false;
+
+show_tooltips = true;
 
 close_menu = false;
 
@@ -184,6 +187,7 @@ door_surface = noone;
 
 
 #region setting up the data structures
+
 //creating the tile_info
 tile_info = function(_main, _rm_nmb, _col, _subimg, _mrk, _door) constructor {
 	
@@ -221,7 +225,7 @@ button_create = function(_x, _y, _spr, _menu_level) constructor {
 	goal_alpha = 1;
 	sprite_index = _spr;
 	image_index = 0;
-	image_alpha = goal_alpha;
+	image_alpha = 0;
 	button_width = sprite_get_width(sprite_index);
 	button_height = sprite_get_height(sprite_index);
 	menu_level = _menu_level
@@ -275,6 +279,18 @@ global.button_list = ds_list_create();
 //main Buttons
 color_button = make_button(tile_size / 2, (global.view_height - tile_size / 2) - sprite_get_height(spr_color_button), spr_color_button, menu_state.nothing);
 igmenu_button = make_button(tile_size / 2, 4, spr_open_igmenu, menu_state.nothing);
+
+//ig menu buttons
+pen_tool_button = make_button(16, -10, spr_pen_tool, menu_state.ig_menu);
+eyedropper_tool_button = make_button(16 + 72 * 1, -10, spr_eyedropper_tool, menu_state.ig_menu);
+color_brush_tool_button = make_button(16 + 72 * 2, -10, spr_color_brush, menu_state.ig_menu);
+door_tool_button = make_button(16 + 72 * 3, -10, spr_door_tool, menu_state.ig_menu);
+marker_tool_button = make_button(16 + 72 * 4, -10, spr_marker_tool, menu_state.ig_menu);
+selection_tool_button = make_button(16 + 72 * 5, -10, spr_selection_tool, menu_state.ig_menu);
+save_button = make_button(global.window_width - 80 - 72, -10, spr_save, menu_state.ig_menu);
+load_button = make_button(global.window_width - 80, -10, spr_load, menu_state.ig_menu);
+
+tooltip_button = make_button(32, global.window_height - 32, spr_cursor_selector, menu_state.ig_menu);
 
 
 #endregion
