@@ -1,8 +1,5 @@
 {
-  "spriteId": {
-    "name": "spr_color_wheel_yellow",
-    "path": "sprites/spr_color_wheel_yellow/spr_color_wheel_yellow.yy",
-  },
+  "spriteId": null,
   "solid": false,
   "visible": true,
   "spriteMaskId": null,

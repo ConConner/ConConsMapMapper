@@ -17,10 +17,14 @@ current_selection_h = selection_box_h / 2;	//
 goal_icon_alpha = 0;	//goal alpha of the icon in the middle
 icon_alpha = 0;	//current alpha opf the icon in the middle
 
+goal_cursor_alpha = 1;
+cursor_alpha = 0;
+
 over_button = false;
 
 goal_icon_frame = 0; //goal of the icon subimage
 icon_frame = 0;
+icon_sprite = spr_cursor_middle;
 
 cursor_mode = curs_mode.on_grid;
 

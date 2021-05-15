@@ -11,30 +11,7 @@ function add_tiles() {
 	if (yy != global.grid_height - 1) var tile_down = ds_grid_get(global.tile_grid, xx, yy + 1);
 
 	if (canBuild) {
-		//selecting a tile
-		//if (mLeftReleased && !placed_tile && !selecting_tile && !click_moved && door_menu_close_timer >= 6) {
-		
-		//	var m = ds_grid_get(global.tile_grid, xx, yy);
-		
-		//	if (m == 1) {
-		//		//setting _up selection
-		//		cam_lock = true;
-		//		canBuild = false;
-		//		selecting_tile = true;
-		//		tile_xscale_goal = 1.5;
-		//		tile_yscale_goal = 1.5;
-		//		selection_open_timer = 0;
-			
-		//		obj_camera.cam_x_goal = global.xx*tile_size + tile_size/2;
-		//		obj_camera.cam_y_goal = global.yy*tile_size + tile_size/2;
-			
-		//		tile_xx = global.xx;
-		//		tile_yy = global.yy;
-			
-		//	}
-		//}
-	
-	
+
 		//editing rooms
 		if (tile.main = ID.filled) {
 			global.roomCount = tile.rm_nmb;
@@ -131,4 +108,40 @@ function autotile(xx,yy) {
 	else return 0;
 
 
+}
+	
+function get_pixel_color(_x, _y) {
+	
+	global.selected_color = draw_getpixel(_x, _y);
+	
+}
+	
+function replace_room_color(_room_number, _col) {
+	
+	for (var i = 0; i < global.grid_width; i++) {
+		for (var j = 0; j < global.grid_height; j++) {
+			
+			//looping through the grid and checking if the tiles have the same room
+			var _tile = ds_grid_get(global.tile_grid, i, j);
+			
+			if (_tile.rm_nmb == _room_number) _tile.col = _col;
+			
+		}
+	}
+	
+}
+
+function replace_same_color(_col, _col2) {
+	
+	for (var i = 0; i < global.grid_width; i++) {
+		for (var j = 0; j < global.grid_height; j++) {
+			
+			//looping through the grid and checking if the tiles have the same col1
+			var _tile = ds_grid_get(global.tile_grid, i, j);
+			
+			if (_tile.col == _col) _tile.col = _col2;
+			
+		}
+	}
+	
 }

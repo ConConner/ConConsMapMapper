@@ -88,11 +88,14 @@ switch (current_menu) {
 			var new_col = make_color_hsv(selected_color_hue, selected_color_sat, selected_color_val);
 			draw_nine_slice(spr_edge_nineslice, menu_pos_x + 416, menu_pos_y + 40, menu_pos_x + 486, menu_pos_y + 110);
 			
-			draw_rectangle_color(menu_pos_x + 419, menu_pos_y + 43, menu_pos_x + 483, menu_pos_y + 74, old_col, old_col, old_col, old_col, false); // old colour
-			draw_rectangle_color(menu_pos_x + 419, menu_pos_y + 75, menu_pos_x + 483, menu_pos_y + 107, new_col, new_col, new_col, new_col, false); //new colour
+			draw_rectangle_color(menu_pos_x + 419, menu_pos_y + 75, menu_pos_x + 483, menu_pos_y + 107, old_col, old_col, old_col, old_col, false); // old colour
+			draw_rectangle_color(menu_pos_x + 419, menu_pos_y + 43, menu_pos_x + 483, menu_pos_y + 74, new_col, new_col, new_col, new_col, false); //new colour
 			
-			draw_text(menu_pos_x + 416, menu_pos_y + 17, "OLD")
-			draw_text(menu_pos_x + 416, menu_pos_y + 113, "NEW")
+			//menu_pos_x + 419, menu_pos_y + 43, menu_pos_x + 483, menu_pos_y + 74,
+			//menu_pos_x + 419, menu_pos_y + 75, menu_pos_x + 483, menu_pos_y + 107
+			
+			draw_text(menu_pos_x + 416, menu_pos_y + 17, "NEW");
+			draw_text(menu_pos_x + 416, menu_pos_y + 113, "OLD");
 			
 			
 				//drawing color code
@@ -185,21 +188,29 @@ switch (current_menu) {
 			
 			if (show_tooltips) {
 				
-				draw_text(32, 224, "Tool information:");
+				draw_text(32, text_offset - 30, "Tool information:");
+				#macro text_offset 258
 				switch (current_tool) {
 				
 					case tool.pen: {
-						draw_text(32, 258, "The pen tool is probably going to be your\nmost used tool. It is used to add and remove\nmap-tiles and also to add onto existing tiles.");
-						draw_text(32, 258, "\n\n\n\nLeft click and drag to start a new room.\nRight click and drag to remove existing tiles.");
-						draw_text(32, 258, "\n\n\n\n\n\nAn existing room can be expanded by\ndragging off of an existing room.");
+						draw_text(32, text_offset, "The pen tool is probably going to be your\nmost used tool. It is used to add and remove\nmap-tiles and also to add onto existing tiles.");
+						draw_text(32, text_offset, "\n\n\n\nLeft click and drag to start a new room.\nRight click and drag to remove existing tiles.");
+						draw_text(32, text_offset, "\n\n\n\n\n\nAn existing room can be expanded by\ndragging off of an existing room.");
 						break; }
 					case tool.eyedropper: {
-						draw_text(32, 258, "The color picker allows you to click on an\nalready existing map-tile to copy the color\nof it as your primary color.");
+						draw_text(32, text_offset, "The color picker allows you to click on an\nalready existing map-tile to copy the color\nof it as your primary color.");
 						break; }
 					case tool.color_brush: {
-						draw_text(32, 258, "With the color brush you can change the\ncolor of all map tiles of the selected tiles room.");
-						draw_text(32, 258, "\n\nIt is also possible to change all map tiles,\nwith the same color, to a new color.");
+						draw_text(32, text_offset, "With the color brush you can change the\ncolor of all map tiles of the selected tiles room.");
+						draw_text(32, text_offset, "\n\nIt is also possible to change all map tiles,\nwith the same color, to a new color.");
+						draw_text(32, text_offset, "\n\n\n\n\nLeft click to change the color of the selected room.\nright click to change all tiles with the same color.");
 						break; }
+					case tool.door_tool: {
+						draw_text(32, text_offset, "With the connection tool you can create\nconnections between or in rooms. The connections\nhave colors as well, just like your tiles.");
+						draw_text(32, text_offset, "\n\n\nThey use the color you have currently selected\nbut you can also quickly swap between four\npresets.");
+						draw_text(32, text_offset, "\n\n\n\n\n\n\nDrag over two tiles to create a connection between\nthem. Dragging with a right click deletes the connection.");
+						draw_text(32, text_offset, "\n\n\n\n\n\n\n\n\nif you are unsure, where you can create a connection,\nthe cursor will show arrows, pointing into possible locations.");
+					}
 				
 				}
 				
@@ -313,21 +324,21 @@ if (debug_on) {
 	
 	
 	//showing debug vars
-	draw_text(5,17 * 2,"Tile xscale: " + string(tile_xscale));
-	draw_text(5,17 * 3,"Tile yscale: " + string(tile_yscale));
-	draw_text(5,17 * 5,"Mouse XX: " + string(global.xx) + ";    X: " + string(mouse_x));
-	draw_text(5,17 * 6,"Mouse YY: " + string(global.yy) + ";    Y: " + string(mouse_y));
-	draw_text(5,17 * 8,"Camera X: " + string(global.cam_pos_x));
-	draw_text(5,17 * 9,"Camera Y: " + string(global.cam_pos_y));
-	draw_text(5,17 * 11,"Cursor Mode: " + string(obj_cursor.cursor_mode));
-	draw_text(5,17 * 13,"Menu X" + string(menu_pos_x));
-	draw_text(5,17 * 14,"Menu X" + string(menu_pos_x));
-	draw_text(5,17 * 15,"Menu width: " + string(menu_width));
-	draw_text(5,17 * 16,"Menu height: " + string(menu_height));
-	draw_text(5,17 * 18,"Selected Col Hue: " + string(selected_color_hue));
-	draw_text(5,17 * 19,"Selected Col Sat: " + string(selected_color_sat));
-	draw_text(5,17 * 20,"Selected Col Val: " + string(selected_color_val));
-	draw_text(5,17 * 22,"Tooltip width: " + string(tooltip_button.button_width));
-	draw_text(5,17 * 23,"Tooltip height: " + string(tooltip_button.button_height));
+	draw_text(5,17 * 3,"Mouse XX: " + string(global.xx) + ";    X: " + string(mouse_x));
+	draw_text(5,17 * 4,"Mouse YY: " + string(global.yy) + ";    Y: " + string(mouse_y));
+	draw_text(5,17 * 6,"Camera X: " + string(global.cam_pos_x));
+	draw_text(5,17 * 7,"Camera Y: " + string(global.cam_pos_y));
+	draw_text(5,17 * 9,"Cursor Mode: " + string(obj_cursor.cursor_mode));
+	draw_text(5,17 * 11,"Menu X" + string(menu_pos_x));
+	draw_text(5,17 * 12,"Menu Y" + string(menu_pos_y));
+	draw_text(5,17 * 13,"Menu width: " + string(menu_width));
+	draw_text(5,17 * 14,"Menu height: " + string(menu_height));
+	draw_text(5,17 * 16,"Selected Col Hue: " + string(selected_color_hue));
+	draw_text(5,17 * 17,"Selected Col Sat: " + string(selected_color_sat));
+	draw_text(5,17 * 18,"Selected Col Val: " + string(selected_color_val));
+	draw_text(5,17 * 20,"Tooltip width: " + string(tooltip_button.button_width));
+	draw_text(5,17 * 21,"Tooltip height: " + string(tooltip_button.button_height));
+	draw_text(5,17 * 23,"Cursor X: " + string(obj_cursor.goal_x));
+	draw_text(5,17 * 24,"Cursor Y: " + string(obj_cursor.goal_y));
 	
 }

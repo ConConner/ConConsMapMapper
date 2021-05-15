@@ -33,11 +33,7 @@ enum marker {
 
 enum hatch {
 	empty,
-	blue,
-	red,
-	green,
-	yellow,
-	none
+	filled
 }
 	
 enum dir {

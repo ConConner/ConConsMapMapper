@@ -77,67 +77,22 @@ cam_lock = false;
 click_moved = false;
 moving_with_mouse = false;
 
-right_click_menu_close = false;
-left_click_menu_close = false;
+adjust_cursor = false;
+adding_connection = false;
+
 
 debug_on = false;
 
 //var = X
 old_roomCount = 0;
-colorSelecting = 0;
-
-remove_marker_goal_alpha = 1;
-remove_marker_cur_alpha = 1;
-selected_edge_goal_alpha = 1;
-selected_edge_cur_alpha = 1;
 
 click_xx = 0;
 click_yy = 0;
 
-	//selecting tiles
-tile_xscale = 1;
-tile_xscale_goal = 1;
-tile_yscale = 1;
-tile_yscale_goal = 1;
-
-tile_xx = -1;
-tile_yy = -1;
-
-door_menu_open_timer = 0;
-door_menu_close_timer = 0;
-selection_open_timer = 0;
-
-		//selecting edge
-selected_edge = dir.none;
-clicked_selected_edge = dir.none;
-old_selected_edge = selected_edge;
-edge_size = 10;
-
-
-	//buttons
-	 //color wheel
-buttonBlue = 0
-buttonAqua = 0
-buttonGreen = 0
-buttonYellow = 0
-buttonOrange = 0
-buttonRed = 0
-buttonGray = 0
-buttonPurple = 0
-
-	 //marker
-buttonMarker1 = 0;
-buttonMarker2 = 0;
-buttonMarker3 = 0;
-buttonMarker4 = 0;
-buttonMarker5 = 0;
-buttonMarker6 = 0;
-
-	 //door
-buttonDoorBlue = 0;
-buttonDoorRed = 0;
-buttonDoorGreen = 0;
-buttonDoorYellow = 0;
+connection_xx = 0;
+connection_yy = 0;
+connection_xx2 = 0;
+connection_yy2 = 0;
 
 //button = 0;
 color_button = 0;
@@ -150,6 +105,7 @@ color_confirm_button = 0;
 //menu vars
 current_menu = menu_state.nothing;
 current_tool = tool.pen;
+old_tool = current_tool;
 in_menu = false;
 
 show_tooltips = true;
@@ -198,6 +154,8 @@ tile_info = function(_main, _rm_nmb, _col, _subimg, _mrk, _door) constructor {
 	subimg = _subimg;																				//stores the main tile subimage
 	mrk = _mrk;																						//stores the subimage for the marker on that tile
 	door = _door																					//Doors are set up as [Door One[color ,rot] Door Two[color,rot]....
+	//Door 0 = up; Door 1 = down; Door 2 = down; Door 3 = left;
+	
 	
 }
 
@@ -292,8 +250,20 @@ load_button = make_button(global.window_width - 80, -10, spr_load, menu_state.ig
 
 tooltip_button = make_button(32, global.window_height - 32, spr_cursor_selector, menu_state.ig_menu);
 
+//door color buttons
+blue_door_button = make_button(16, 400, spr_door_colors, menu_state.nothing);
+blue_door_button.disable();
+red_door_button = make_button(16, 400, spr_door_colors, menu_state.nothing);
+red_door_button.disable();
+green_door_button = make_button(16, 400, spr_door_colors, menu_state.nothing);
+green_door_button.disable();
+yellow_door_button = make_button(16, 400, spr_door_colors, menu_state.nothing);
+yellow_door_button.disable();
+
 
 #endregion
 
 //creating the cursor
 instance_create_layer(mouse_x,mouse_y,"Cursor",obj_cursor);
+
+cool_sprite = noone;

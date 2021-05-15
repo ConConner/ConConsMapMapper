@@ -1,18 +1,89 @@
 //adjusting cursor sizes
 if (cursor_mode == curs_mode.on_grid) {
-	goal_x = global.xx * tile_size - global.cam_pos_x;
-	goal_y = global.yy * tile_size - global.cam_pos_y;
+	
+	switch (obj_gameController.current_tool) {
 		
-	var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
-	if (tile.main == ID.filled) {
-		selection_box_h = tile_size + 8;
-		selection_box_w = tile_size + 8;
+		case tool.pen: {
+			goal_x = global.xx * tile_size - global.cam_pos_x;
+			goal_y = global.yy * tile_size - global.cam_pos_y;
+		
+			var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
+			if (tile.main == ID.filled) {
+				selection_box_h = tile_size + 8;
+				selection_box_w = tile_size + 8;
+			}
+	
+			if (tile.main == ID.empty || obj_gameController.placed_tile) {
+				selection_box_h = tile_size - 4;
+				selection_box_w = tile_size - 4;
+			}
+			
+			break; }
+	
+		case tool.eyedropper: {
+			goal_x = mouse_x - tile_size / 2;
+			goal_y = mouse_y - tile_size / 2;
+			selection_box_h = 4;
+			selection_box_w = 4;
+			
+			break; }
+			
+		case tool.color_brush: {
+			goal_x = global.xx * tile_size - global.cam_pos_x;
+			goal_y = global.yy * tile_size - global.cam_pos_y;
+		
+			var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
+			if (tile.main == ID.filled) {
+				selection_box_h = tile_size - 4;
+				selection_box_w = tile_size - 4;
+			}
+	
+			if (tile.main == ID.empty) {
+				selection_box_h = tile_size - 8;
+				selection_box_w = tile_size - 8;
+			}
+			
+			break; }
+			
+		case tool.door_tool: {
+			if (!obj_gameController.adding_connection) { //position if not currently adding a connection
+				goal_x = global.xx * tile_size - global.cam_pos_x;
+				goal_y = global.yy * tile_size - global.cam_pos_y;
+			}
+		
+			var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
+			if (tile.main == ID.filled) {
+				selection_box_h = tile_size + 8;
+				selection_box_w = tile_size + 8;
+			}
+	
+			if (tile.main == ID.empty && !obj_gameController.adding_connection) {
+				selection_box_h = tile_size - 8;
+				selection_box_w = tile_size - 8;
+			}
+			
+			if (obj_gameController.adjust_cursor) { //adjusting cursor position and size
+				if (obj_gameController.connection_xx2 != obj_gameController.connection_xx) {
+					selection_box_w = tile_size * 2 + 8;
+				}
+				if (obj_gameController.connection_yy2 != obj_gameController.connection_yy) {
+					selection_box_h = tile_size * 2 + 8;
+				}
+				
+				var _new_x = obj_gameController.connection_xx + (obj_gameController.connection_xx2 - obj_gameController.connection_xx) / 2; //the middle between two tiles
+				var _new_y = obj_gameController.connection_yy + (obj_gameController.connection_yy2 - obj_gameController.connection_yy) / 2; 
+				
+				goal_x = _new_x * tile_size - global.cam_pos_x; //adjusting position
+				goal_y = _new_y * tile_size - global.cam_pos_y;
+				
+			} else if (obj_gameController.adding_connection) {
+				goal_x = obj_gameController.connection_xx * tile_size - global.cam_pos_x;
+				goal_y = obj_gameController.connection_yy * tile_size - global.cam_pos_y;
+			}
+			
+			break; }
 	}
 	
-	if (tile.main == ID.empty || obj_gameController.placed_tile) {
-		selection_box_h = tile_size - 4;
-		selection_box_w = tile_size - 4;
-	}
 }
 
 if (cursor_mode == curs_mode.off_anything) {
@@ -84,6 +155,7 @@ current_selection_h = lerp(current_selection_h , goal_selection_h, 0.2);
 
 //reaching goal alpha
 icon_alpha = lerp(icon_alpha, goal_icon_alpha, 0.2);
+cursor_alpha = lerp(cursor_alpha, goal_cursor_alpha, 0.2)
 
 
 //reaching goal subimg

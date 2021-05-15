@@ -16,15 +16,18 @@ global.window_height = window_get_height();
 
 
 //getting key input
-kUp = keyboard_check_direct(vk_up);
-kDown = keyboard_check_direct(vk_down);
-kLeft = keyboard_check_direct(vk_left);
-kRight = keyboard_check_direct(vk_right);
+kUp = keyboard_check(vk_up);
+kDown = keyboard_check(vk_down);
+kLeft = keyboard_check(vk_left);
+kRight = keyboard_check(vk_right);
 kF12 = keyboard_check_pressed(vk_f12);
 kCtrl = keyboard_check(vk_control);
 kShift = keyboard_check(vk_shift);
 kSpace = keyboard_check(vk_space);
 kSpacePressed = keyboard_check_pressed(vk_space);
+kAlt = keyboard_check(vk_alt);
+kAltReleased = keyboard_check_released(vk_alt);
+kAltPressed = keyboard_check_pressed(vk_alt);
 	//mouse input
 mLeft = mouse_check_button(mb_left);
 mRight = mouse_check_button(mb_right);
@@ -40,46 +43,47 @@ mWheelDown = mouse_wheel_down();
 
 
 #region camera
+if (current_menu == menu_state.nothing) {
+	//cam controls
+	//keyboard controls
+	if (kLeft) global.cam_pos_x -= border_margin / 2 / 5;
+	if (kRight) global.cam_pos_x += border_margin / 2 / 5;
+	if (kUp) global.cam_pos_y -= border_margin / 2 / 5;
+	if (kDown) global.cam_pos_y += border_margin / 2 / 5;
 
-//cam controls
-//keyboard controls
-if (kLeft) global.cam_pos_x -= border_margin / 2 / 5;
-if (kRight) global.cam_pos_x += border_margin / 2 / 5;
-if (kUp) global.cam_pos_y -= border_margin / 2 / 5;
-if (kDown) global.cam_pos_y += border_margin / 2 / 5;
-
-//scroll controls
-if (!kShift) {
-	if (mWheelUp) global.cam_pos_y -= border_margin / 4;
-	if (mWheelDown) global.cam_pos_y += border_margin / 4;
-} else {
-	if (mWheelUp) global.cam_pos_x -= border_margin / 4;
-	if (mWheelDown) global.cam_pos_x += border_margin / 4;
-}
-
-//mouse controls
-if ((kSpace || mMiddle) && current_menu == menu_state.nothing) {
-	canBuild = false;
-	moving_with_mouse = true;
-	
-	if (mLeftPressed || mMiddlePressed) {
-		start_mouse_x = mouse_x;
-		start_mouse_y = mouse_y;
-		start_cam_x = global.cam_pos_x;
-		start_cam_y = global.cam_pos_y;
+	//scroll controls
+	if (!kShift) {
+		if (mWheelUp) global.cam_pos_y -= border_margin / 4;
+		if (mWheelDown) global.cam_pos_y += border_margin / 4;
+	} else {
+		if (mWheelUp) global.cam_pos_x -= border_margin / 4;
+		if (mWheelDown) global.cam_pos_x += border_margin / 4;
 	}
+
+	//mouse controls
+	if ((kSpace || mMiddle) && current_menu == menu_state.nothing) {
+		canBuild = false;
+		moving_with_mouse = true;
 	
-	if (mLeft || mMiddle) {
-		var _xshift = mouse_x - start_mouse_x;
-		var _yshift = mouse_y - start_mouse_y;
+		if (mLeftPressed || mMiddlePressed) {
+			start_mouse_x = mouse_x;
+			start_mouse_y = mouse_y;
+			start_cam_x = global.cam_pos_x;
+			start_cam_y = global.cam_pos_y;
+		}
+	
+		if (mLeft || mMiddle) {
+			var _xshift = mouse_x - start_mouse_x;
+			var _yshift = mouse_y - start_mouse_y;
 		
-		global.cam_pos_x = start_cam_x - _xshift;
-		global.cam_pos_y = start_cam_y - _yshift;
+			global.cam_pos_x = start_cam_x - _xshift;
+			global.cam_pos_y = start_cam_y - _yshift;
+		}
 	}
-}
-if ((!kSpace && !mMiddle) && current_menu == menu_state.nothing) {
-	canBuild = true;
-	moving_with_mouse = false;
+	if ((!kSpace && !mMiddle) && current_menu == menu_state.nothing) {
+		canBuild = true;
+		moving_with_mouse = false;
+	}
 }
 
 
@@ -94,31 +98,160 @@ global.cam_pos_y = clamp(global.cam_pos_y, 0 - global.view_height / 2, global.gr
 //Building with mouse
 if (obj_cursor.cursor_mode == curs_mode.on_grid) {
 	
-	if (mLeft) add_tiles();
-	if (mRight) add_tiles();
-	
+	var _tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
+	switch (current_tool) {
+		
+		case tool.pen: {
+			if (mLeft) add_tiles();
+			if (mRight) add_tiles();
+			
+			if (mLeftReleased) {
+			add_tiles();
+			global.roomCount = old_roomCount + 1;
+			old_roomCount = global.roomCount;
+			placed_tile = false;
+			}
+			
+			if (mRightReleased) deleted_tile = false;
+			
+			break; }
+			
+		case tool.eyedropper: {
+			
+			if (mLeftPressed) {
+				get_pixel_color(mouse_x, mouse_y);
+				current_tool = tool.pen;
+				add_text_message("copied color", 1.5, c_lime);
+				
+			}
+			
+			break; }
+			
+		case tool.color_brush: {
+			if (mLeftPressed && _tile.main = ID.filled) replace_room_color(_tile.rm_nmb, global.selected_color);
+			if (mRightPressed && _tile.main = ID.filled) replace_same_color(_tile.col, global.selected_color);
+			
+			break; }
+			
+		case tool.door_tool: {
+			if (!adding_connection) {
+				connection_xx = global.xx;
+				connection_yy = global.yy;
+				connection_xx2 = global.xx;
+				connection_yy2 = global.yy;
+			}
+			
+			if ((mLeftPressed || mRightPressed) && _tile.main == ID.filled) { //selecting start pos
+				connection_xx = global.xx;
+				connection_yy = global.yy;
+				
+				adding_connection = true;
+			}
+			
+			if ((mLeft || mRight) && click_moved && _tile.main == ID.filled) { //selecting the door
+				connection_xx2 = clamp(global.xx, connection_xx - 1, connection_xx + 1);
+				connection_yy2 = clamp(global.yy, connection_yy - 1, connection_yy + 1);
+				var _tile2 = ds_grid_get(global.tile_grid, connection_xx2, connection_yy2);
+					
+				if (_tile2.main == ID.empty) { //all of these are safety measures, to ensure that no empty tile is selected
+					connection_xx2 = connection_xx;
+					connection_yy2 = connection_yy;
+				}
+				if ((connection_xx2 > connection_xx || connection_xx2 < connection_xx) && (connection_yy2 > connection_yy || connection_yy2 < connection_yy)) {
+					connection_yy2 = connection_yy 
+				}
+				if (connection_xx == connection_xx2 && connection_yy == connection_yy2) {
+					click_moved = false;
+					adjust_cursor = false;
+				} else adjust_cursor = true; //adjusting cursor width and position
+			
+			}
+			
+			if (mLeftReleased || mRightReleased) { //placing the door
+				//adding doors if correctly selected
+				var _tile1 = ds_grid_get(global.tile_grid, connection_xx, connection_yy);
+				var _tile2 = ds_grid_get(global.tile_grid, connection_xx2, connection_yy2);
+				
+				//adding or deleting the door
+				if (mLeftReleased) {
+					if (connection_xx != connection_xx2 || connection_yy != connection_yy2) {
+						//checking the side
+						if (connection_xx < connection_xx2) { // room1 | room2
+							_tile1.door[1,0] = hatch.filled;
+							_tile1.door[1,1] = global.selected_color;
+						
+							_tile2.door[3,0] = hatch.filled;
+							_tile2.door[3,1] = global.selected_color;
+						}
+					
+						if (connection_xx > connection_xx2) { // room2 | room1
+							_tile1.door[3,0] = hatch.filled;
+							_tile1.door[3,1] = global.selected_color;
+						
+							_tile2.door[1,0] = hatch.filled;
+							_tile2.door[1,1] = global.selected_color;
+						}
+					
+						if (connection_yy < connection_yy2) { // room1 above room2
+							_tile1.door[2,0] = hatch.filled;
+							_tile1.door[2,1] = global.selected_color;
+						
+							_tile2.door[0,0] = hatch.filled;
+							_tile2.door[0,1] = global.selected_color;
+						}
+					
+						if (connection_yy > connection_yy2) { // room2 above room1
+						_tile1.door[0,0] = hatch.filled;
+						_tile1.door[0,1] = global.selected_color;
+						
+						_tile2.door[2,0] = hatch.filled;
+						_tile2.door[2,1] = global.selected_color;
+					}
+					}
+				}
+				
+				if (mRightReleased) {
+					if (connection_xx != connection_xx2 || connection_yy != connection_yy2) {
+					//checking the side
+						if (connection_xx < connection_xx2) { // room1 | room2
+							_tile1.door[1,0] = hatch.empty;
+							_tile2.door[3,0] = hatch.empty;
+						}
+					
+						if (connection_xx > connection_xx2) { // room2 | room1
+							_tile1.door[3,0] = hatch.empty;
+							_tile2.door[1,0] = hatch.empty;
+						}
+					
+						if (connection_yy < connection_yy2) { // room1 above room2
+							_tile1.door[2,0] = hatch.empty;
+							_tile2.door[0,0] = hatch.empty;
+						}
+					
+						if (connection_yy > connection_yy2) { // room2 above room1
+							_tile1.door[0,0] = hatch.empty;
+							_tile2.door[2,0] = hatch.empty;
+						}
+					}
+				}
+							
+				adjust_cursor = false;
+				adding_connection = false;
+			}
+			
+			break; }
+		
+	}
 }
 
-if (mLeftReleased) {
-	
-	add_tiles();
-	global.roomCount = old_roomCount + 1;
-	old_roomCount = global.roomCount;
-	placed_tile = false;
-	
-}
-
-if (mRightReleased) {
-	deleted_tile = false;
-}
 
 //checking if clicked and then moved
-if (mLeftPressed) {
+if (mLeftPressed || mRightPressed) {
 	click_xx = global.xx;
 	click_yy = global.yy;
 	click_moved = false;
 }
-if (mLeft) {
+if (mLeft || mRight) {
 	if (click_xx != global.xx) click_moved = true;
 	if (click_yy != global.yy) click_moved = true;
 }
@@ -135,6 +268,12 @@ if (placed_tile || deleted_tile) {
 	igmenu_button.activate();
 	
 }
+	
+//quick tool swap
+//swaps between the latest tool and the color picker
+if (kAltPressed) old_tool = current_tool;
+if (kAlt && !adding_connection) current_tool = tool.eyedropper;
+if (kAltReleased) current_tool = old_tool;
 
 #endregion
 
@@ -142,9 +281,6 @@ if (placed_tile || deleted_tile) {
 #region reaching
 
 //reaching goal alpha
-remove_marker_cur_alpha = lerp(remove_marker_cur_alpha,remove_marker_goal_alpha,0.15);
-selected_edge_cur_alpha = lerp(selected_edge_cur_alpha,selected_edge_goal_alpha,0.15);
-
 menu_pos_x = lerp(menu_pos_x, menu_goal_pos_x, 0.30);
 menu_pos_y = lerp(menu_pos_y, menu_goal_pos_y, 0.30);
 menu_width = lerp(menu_width, menu_goal_width, 0.40);
@@ -203,6 +339,40 @@ if (!igmenu_button.active && current_menu == menu_state.nothing) {
 	
 }
 
+#region door color buttons
+if ((current_tool == tool.door_tool) || (old_tool == tool.door_tool && kAlt)) {
+	blue_door_button.enable();
+	blue_door_button.activate();
+	blue_door_button.goal_alpha = 1;
+	red_door_button.enable();
+	red_door_button.activate();
+	red_door_button.goal_alpha = 1;
+	green_door_button.enable();
+	green_door_button.activate();
+	green_door_button.goal_alpha = 1;
+	yellow_door_button.enable();
+	yellow_door_button.activate();
+	yellow_door_button.goal_alpha = 1;
+	
+} else {
+	blue_door_button.disable();
+	red_door_button.disable();
+	green_door_button.disable();
+	yellow_door_button.disable();
+	
+}
+
+blue_door_button.goal_y = global.window_height / 2 - 128;
+red_door_button.goal_y = global.window_height / 2 - 64;
+green_door_button.goal_y = global.window_height / 2;
+yellow_door_button.goal_y = global.window_height / 2 + 64;
+
+blue_door_button.image_index = 0;
+red_door_button.image_index = 1;
+green_door_button.image_index = 2;
+yellow_door_button.image_index = 3;
+#endregion
+
 
 #endregion
 
@@ -235,6 +405,12 @@ if (mLeftPressed) {
 				color_confirm_button = make_button(0,0,spr_menu_confirm, menu_state.color_menu);
 				color_confirm_button.goal_alpha = 0;
 				color_confirm_button.image_alpha = 0;
+				
+				//setting the selected color to the current color
+				selected_color_hue = color_get_hue(global.selected_color);
+				selected_color_sat = color_get_saturation(global.selected_color);
+				selected_color_val = color_get_value(global.selected_color);
+				selected_rgb_hex = get_hex_rgb(global.selected_color);
 				
 				break; }
 			case rgb_code_selection: {
@@ -325,6 +501,31 @@ if (mLeftPressed) {
 			case tooltip_button: {
 				show_tooltips = !show_tooltips;
 				break; }
+				
+			case blue_door_button: {
+				in_menu = false;
+				canBuild = true;
+				global.selected_color = make_color_rgb(0,0,255);
+				add_text_message("applied color", 1.5, c_lime);
+				break; }
+			case red_door_button: {
+				in_menu = false;
+				canBuild = true;
+				global.selected_color = make_color_rgb(255,0,0);
+				add_text_message("applied color", 1.5, c_lime);
+				break; }
+			case green_door_button: {
+				in_menu = false;
+				canBuild = true;
+				global.selected_color = make_color_rgb(0,255,0);
+				add_text_message("applied color", 1.5, c_lime);
+				break; }
+			case yellow_door_button: {
+				in_menu = false;
+				canBuild = true;
+				global.selected_color = make_color_rgb(255,255,0);
+				add_text_message("applied color", 1.5, c_lime);
+				break; }
 			
 		}
 	}
@@ -342,11 +543,3 @@ if (debug_on) {
 
 #endregion
 
-
-#region incrementing timers
-
-door_menu_open_timer ++;
-door_menu_close_timer ++;
-selection_open_timer ++;
-
-#endregion
