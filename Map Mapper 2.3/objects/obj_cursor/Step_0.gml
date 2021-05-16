@@ -82,6 +82,23 @@ if (cursor_mode == curs_mode.on_grid) {
 			}
 			
 			break; }
+			
+		case tool.marker_tool: {
+			goal_x = global.xx * tile_size - global.cam_pos_x;
+			goal_y = global.yy * tile_size - global.cam_pos_y;
+		
+			var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
+			if (tile.main == ID.filled) {
+				selection_box_h = tile_size - 4;
+				selection_box_w = tile_size - 4;
+			}
+	
+			if (tile.main == ID.empty || obj_gameController.placed_tile) {
+				selection_box_h = tile_size - 8;
+				selection_box_w = tile_size - 8;
+			}
+			
+			break; }
 	}
 	
 }
@@ -104,6 +121,15 @@ if (cursor_mode == curs_mode.drag_to_move) {
 	
 }
 
+if (cursor_mode == curs_mode.on_tileset) {
+	
+	goal_x = mouse_x - tile_size / 2;
+	goal_y = mouse_y - tile_size / 2;
+	selection_box_h = 4;
+	selection_box_w = 4;
+	
+}
+
 
 //setting cursor mode
 if ((obj_gameController.real_xx != global.xx && abs(obj_gameController.real_xx - global.xx) > 1) || (obj_gameController.real_yy != global.yy && abs(obj_gameController.real_yy - global.yy) > 1)) {
@@ -118,6 +144,10 @@ if (obj_gameController.in_menu) {
 
 if (obj_gameController.moving_with_mouse) {
 	cursor_mode = curs_mode.drag_to_move;
+}
+	
+if (obj_gameController.current_tool == tool.marker_tool	&& mouse_x >= global.window_width - 96) {
+	cursor_mode = curs_mode.on_tileset;
 }
 
 

@@ -297,11 +297,33 @@ switch (current_menu) {
 		
 }
 
-update_text_message(global.view_width,global.view_height - 22);
+//drawing a the tileset
+//calculating amount of tiles per page
+space_per_page = global.view_height - 32 - 64;
+tiles_per_page = floor(space_per_page / 40);
 
+image_alpha = 1;
+
+if (current_menu == menu_state.nothing && current_tool == tool.marker_tool) {
+	tileset_goal_x = global.view_width - 96;
+} else {
+	tileset_goal_x = global.view_width + 10;
+}
+
+draw_nine_slice(spr_menu_nineslice, tileset_x, -32, global.view_width + 32, global.view_height + 32)
+if (sprite_exists(marker_sprite)) draw_marker_set(tileset_x + 32, 64);
+
+draw_set_color(c_black);
+draw_rectangle(tileset_x + 10, 0, global.view_width, 64, false);
+draw_rectangle(tileset_x + 10, global.view_height - 64, global.view_width, global.view_height, false);
+draw_set_color(c_white);
+
+draw_set_halign(fa_center);
+draw_text(tileset_x + 54, 8, "MARKERS");
 
 //button drawing
 button_update();
+update_text_message(global.view_width,global.view_height - 22);
 
 
 //debug
@@ -329,16 +351,15 @@ if (debug_on) {
 	draw_text(5,17 * 6,"Camera X: " + string(global.cam_pos_x));
 	draw_text(5,17 * 7,"Camera Y: " + string(global.cam_pos_y));
 	draw_text(5,17 * 9,"Cursor Mode: " + string(obj_cursor.cursor_mode));
-	draw_text(5,17 * 11,"Menu X" + string(menu_pos_x));
-	draw_text(5,17 * 12,"Menu Y" + string(menu_pos_y));
-	draw_text(5,17 * 13,"Menu width: " + string(menu_width));
-	draw_text(5,17 * 14,"Menu height: " + string(menu_height));
-	draw_text(5,17 * 16,"Selected Col Hue: " + string(selected_color_hue));
-	draw_text(5,17 * 17,"Selected Col Sat: " + string(selected_color_sat));
-	draw_text(5,17 * 18,"Selected Col Val: " + string(selected_color_val));
-	draw_text(5,17 * 20,"Tooltip width: " + string(tooltip_button.button_width));
-	draw_text(5,17 * 21,"Tooltip height: " + string(tooltip_button.button_height));
-	draw_text(5,17 * 23,"Cursor X: " + string(obj_cursor.goal_x));
-	draw_text(5,17 * 24,"Cursor Y: " + string(obj_cursor.goal_y));
+	draw_text(5,17 * 10,"Menu Status: " + string(current_menu));
+	draw_text(5,17 * 12,"Menu X" + string(menu_pos_x));
+	draw_text(5,17 * 13,"Menu Y" + string(menu_pos_y));
+	draw_text(5,17 * 14,"Menu width: " + string(menu_width));
+	draw_text(5,17 * 15,"Menu height: " + string(menu_height));
+	draw_text(5,17 * 17,"Selected Col Hue: " + string(selected_color_hue));
+	draw_text(5,17 * 18,"Selected Col Sat: " + string(selected_color_sat));
+	draw_text(5,17 * 19,"Selected Col Val: " + string(selected_color_val));
+	draw_text(5,17 * 21,"Cursor X: " + string(obj_cursor.goal_x));
+	draw_text(5,17 * 22,"Cursor Y: " + string(obj_cursor.goal_y));
 	
 }

@@ -115,6 +115,22 @@ if (cursor_mode == curs_mode.on_grid) {
 			draw_set_alpha(1);
 			
 			break; }
+			
+		case tool.marker_tool: {
+			goal_cursor_alpha = 1;
+			icon_sprite = spr_cursor_middle;
+			
+			if (tile.main == ID.filled) {
+				goal_icon_alpha = 1;
+			}
+			if (tile.main == ID.empty || obj_gameController.placed_tile) {
+				goal_icon_alpha = 0;
+			}
+	
+			//drawing the icon
+			if (mouse_check_button(mb_right)) goal_icon_frame = 4;
+			else goal_icon_frame = 0;
+			break; }
 		
 	}
 	

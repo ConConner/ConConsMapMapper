@@ -1,1 +1,0 @@
-add_text_message("WOW THIS IS COOL", 3);

@@ -99,3 +99,22 @@ function load_map(file_name) {
 	} else add_text_message("load cancelled", 3, c_red)
 	
 }
+	
+
+function reload_markers() {
+	
+	//deleting old sprite
+	marker_sprite = sprite_add(marker_url, 20, false, false, 0, 0);
+}
+
+function draw_marker_set(_x, _y) {
+	
+	var _subimg = sprite_get_number(marker_sprite)
+	
+	for (var i = 0; i < _subimg; i++) {
+		
+		draw_sprite(marker_sprite, i, _x, _y + 40 * i - (40 * tiles_per_page * tile_page))
+		
+	}
+	
+}

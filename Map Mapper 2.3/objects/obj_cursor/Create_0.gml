@@ -31,6 +31,7 @@ cursor_mode = curs_mode.on_grid;
 enum curs_mode {
 	on_grid,
 	on_menu,
+	on_tileset,
 	on_button,
 	off_anything,
 	drag_to_move,

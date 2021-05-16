@@ -241,6 +241,9 @@ if (obj_cursor.cursor_mode == curs_mode.on_grid) {
 			
 			break; }
 		
+		case tool.marker_tool: {
+			
+		}
 	}
 }
 
@@ -303,6 +306,9 @@ background_alpha = lerp(background_alpha, background_goal_alpha, 0.15);
 		if (menu_width < menu_goal_width + 1) menu_width = menu_goal_width;
 		if (menu_height < menu_goal_height + 1) menu_height = menu_goal_height;
 	}
+	
+//reaching goal pos
+tileset_x = lerp(tileset_x, tileset_goal_x, 0.30);
 
 #endregion
 

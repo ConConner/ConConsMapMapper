@@ -3,7 +3,7 @@
 
 //declaring globals
 //grid globals
-global.grid_width = 32;			//amount of cells horizontally /			in the usable tile grid
+global.grid_width = 64;			//amount of cells horizontally /			in the usable tile grid
 global.grid_height = 32;		//							   / vertically	
 
 //maximum possible map size without any errors: 1476 x 1476
@@ -88,6 +88,13 @@ old_roomCount = 0;
 
 click_xx = 0;
 click_yy = 0;
+
+marker_url = "https://cdn.discordapp.com/attachments/800903643824914453/843241137228480512/mm_basic_markers.png";
+marker_sprite = noone;
+tileset_goal_x = global.view_width + 10;
+tileset_x = tileset_goal_x;
+tiles_per_page = 0;
+tile_page = 0;
 
 connection_xx = 0;
 connection_yy = 0;
@@ -231,7 +238,6 @@ button_create = function(_x, _y, _spr, _menu_level) constructor {
 global.button_list = ds_list_create();
 #endregion
 
-
 #region buttons
 
 //main Buttons
@@ -263,7 +269,13 @@ yellow_door_button.disable();
 
 #endregion
 
+
+//MARKERS
+//marker list
+global.marker_list = ds_list_create();
+
+
 //creating the cursor
 instance_create_layer(mouse_x,mouse_y,"Cursor",obj_cursor);
 
-cool_sprite = noone;
+reload_markers();
