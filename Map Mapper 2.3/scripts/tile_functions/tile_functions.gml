@@ -62,7 +62,7 @@ function add_tiles() {
 	
 }
 	
-function autotile(xx,yy) {
+function autotile(xx, yy) {
 
 	var tile = ds_grid_get(global.tile_grid,xx,yy);
 	if (xx != 0) var tile_left = ds_grid_get(global.tile_grid,xx - 1,yy);

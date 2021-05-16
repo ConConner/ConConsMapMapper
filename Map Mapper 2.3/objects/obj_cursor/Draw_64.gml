@@ -132,6 +132,23 @@ if (cursor_mode == curs_mode.on_grid) {
 			else goal_icon_frame = 0;
 			break; }
 		
+		case tool.hammer: {
+			goal_cursor_alpha = 1;
+			
+			var _subimg = tile.subimg;
+			if (_subimg == 10 || _subimg == 6 || _subimg == 5 || _subimg == 9 || _subimg == 12 || _subimg == 3) {
+				icon_sprite = spr_cursor_static;
+				goal_icon_alpha = 1;
+				icon_frame = 4;
+				goal_icon_frame = 4;
+			} else if (_subimg >= 16) {
+				icon_sprite = spr_cursor_static;
+				goal_icon_alpha = 1;
+				icon_frame = 5;
+				goal_icon_frame = 4;
+			} else goal_icon_alpha = 0;
+			
+			break; }
 	}
 	
 } else {
@@ -184,7 +201,7 @@ if (_button != 0) {
 				
 			#region menu buttons
 			case obj_gameController.pen_tool_button: {
-				draw_text(_left + 2, _top + 69, "PEN");
+				draw_text(_left + 2, _top + 69, "PEN TOOL");
 				break; }
 			case obj_gameController.eyedropper_tool_button: {
 				draw_text(_left + 2, _top + 69, "color picker (ALT)"); 
@@ -193,13 +210,16 @@ if (_button != 0) {
 				draw_text(_left + 2, _top + 69, "color brush");
 				break; }
 			case obj_gameController.door_tool_button: {
-				draw_text(_left + 2, _top + 69, "connections");
+				draw_text(_left + 2, _top + 69, "connection tool");
 				break; }
 			case obj_gameController.marker_tool_button: {
-				draw_text(_left + 2, _top + 69, "markers");
+				draw_text(_left + 2, _top + 69, "marker tool");
 				break; }
 			case obj_gameController.selection_tool_button: {
 				draw_text(_left + 2, _top + 69, "selection tool");
+				break; }
+			case obj_gameController.hammer_tool_button: {
+				draw_text(_left + 2, _top + 69, "hammer tool");
 				break; }
 			case obj_gameController.save_button: {
 				draw_text(_left + 2, _top + 69, "save map");

@@ -1,13 +1,7 @@
 ---GENERAL INFORMATION---
 ConCon's Map Mapper 1.0
 
-Test-PC hardware: AMD Ryzen 5 2600
-		  NVIDIA Geforce RTX 2070
-		  2 x 8GB Corsair Vengange			 
- 
-		  Files saved on a HDD
-
-LAST UPDATED 22.12.2020 
+LAST UPDATED 10.01.2021 
 	    (DD.MM.YYYY)
 
 ------------CHANGELOG---------------
@@ -22,7 +16,14 @@ Release 1.0 (XX.XX.XXXX)
 + new color selection (custom colors)
 + new camera movement options
   [space + drag][arrow keys][scrolling]
-
++ color picker tool
++ color brush tool
++ new connections tool
++ new marker system
+  [allowing custom markers]
++ new selection tool
++ new hammer tool
+- debug menu
 
 
 
@@ -52,4 +53,20 @@ Beta 1.0 (22.12.2020)
 
 
 
+------------------------------------
+ICON EXPLANATION
+------------------------------------
+(#) changed something that already exists
+(+) added something new
+(-) removed something that existed
+
+
+
+
 * FPS may vary with different hardware
+
+Test-PC hardware: AMD Ryzen 5 2600
+		  NVIDIA Geforce RTX 2070
+		  2 x 8GB Corsair Vengange			 
+ 
+		  Files saved on an HDD

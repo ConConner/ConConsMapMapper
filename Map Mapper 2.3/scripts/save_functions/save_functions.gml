@@ -35,6 +35,8 @@ function save_map(file_name) {
 			file_text_writeln(_file_id);
 			file_text_write_real(_file_id, _grid_height); //grid height
 			file_text_writeln(_file_id);
+			file_text_write_string(_file_id, marker_url); //marker url
+			file_text_writeln(_file_id);
 	
 			file_text_write_string(_file_id, _string); //JSON string
 	
@@ -55,18 +57,21 @@ function load_map(file_name) {
 	
 		//opening the file and reading values
 		var _file_id = file_text_open_read(file_name);
-	
+		
 		var _version = file_text_read_string(_file_id); //reading version number
 		file_text_readln(_file_id);
-		var _grid_width = file_text_read_real(_file_id); //reading grid width
-		file_text_readln(_file_id);
-		var _grid_height = file_text_read_real(_file_id); //reading grid height
-		file_text_readln(_file_id);
-	
-		var _json_string = file_text_readln(_file_id);
-		file_text_close(_file_id)
 	
 		if (_version == current_version) { //checking if the file is valid
+			
+			var _grid_width = file_text_read_real(_file_id); //reading grid width
+			file_text_readln(_file_id);
+			var _grid_height = file_text_read_real(_file_id); //reading grid height
+			file_text_readln(_file_id);
+			var _marker_url = file_text_read_string(_file_id); //reading marker url
+			file_text_readln(_file_id);
+	
+			var _json_string = file_text_readln(_file_id);
+			file_text_close(_file_id)
 		
 			//converting the JSON string into an array
 			_converted_array = json_parse(_json_string);
@@ -85,6 +90,10 @@ function load_map(file_name) {
 				
 				}
 			}
+			
+			//reloading the markers
+			marker_url = _marker_url
+			reload_markers();
 		
 			//confirmation message
 			add_text_message("map loaded successfully", 3, c_lime)
@@ -102,19 +111,38 @@ function load_map(file_name) {
 	
 
 function reload_markers() {
-	
-	//deleting old sprite
-	marker_sprite = sprite_add(marker_url, 20, false, false, 0, 0);
+	checking_sprite = sprite_add(marker_url, 1, false, false, 0, 0);
 }
 
 function draw_marker_set(_x, _y) {
 	
-	var _subimg = sprite_get_number(marker_sprite)
-	
-	for (var i = 0; i < _subimg; i++) {
+	for (var i = 0; i < tile_amount; i++) {
+		
+		if (selected_marker == i) {
+			draw_nine_slice(spr_edge_nineslice, _x - 2, _y + 40 * i - (40 * tiles_per_page * tile_page) - 2, _x + 34, _y + 40 * i - (40 * tiles_per_page * tile_page) + 34);
+		}
 		
 		draw_sprite(marker_sprite, i, _x, _y + 40 * i - (40 * tiles_per_page * tile_page))
 		
 	}
+	
+}
+
+function get_selected_marker(_x, _y) {
+	
+	var _return = noone;
+	
+	for (var i = 0; i < obj_gameController.tile_amount; i++) {
+		
+		var _x1 = _x
+		var _y1 = _y + 40 * i - (40 * obj_gameController.tiles_per_page * obj_gameController.tile_page)
+		
+		if (point_in_rectangle(mouse_x, mouse_y, _x1, _y1, _x1 + 32, _y1 + 32)) {
+			_return = i;
+		}
+		
+	}
+	
+	return(_return);
 	
 }

@@ -93,7 +93,25 @@ if (cursor_mode == curs_mode.on_grid) {
 				selection_box_w = tile_size - 4;
 			}
 	
-			if (tile.main == ID.empty || obj_gameController.placed_tile) {
+			if (tile.main == ID.empty) {
+				selection_box_h = tile_size - 8;
+				selection_box_w = tile_size - 8;
+			}
+			
+			break; }
+			
+		case tool.hammer: {
+			
+			goal_x = global.xx * tile_size - global.cam_pos_x;
+			goal_y = global.yy * tile_size - global.cam_pos_y;
+		
+			var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
+			var _subimg = tile.subimg;
+			
+			if (_subimg == 10 || _subimg == 6 || _subimg == 5 || _subimg == 9 || _subimg == 12 || _subimg == 3 || _subimg >= 16) {
+				selection_box_h = tile_size - 4;
+				selection_box_w = tile_size - 4;
+			} else {
 				selection_box_h = tile_size - 8;
 				selection_box_w = tile_size - 8;
 			}
@@ -128,6 +146,19 @@ if (cursor_mode == curs_mode.on_tileset) {
 	selection_box_h = 4;
 	selection_box_w = 4;
 	
+	var _selected = get_selected_marker(obj_gameController.tileset_x + 32, 64);
+	var _pos_x = obj_gameController.tileset_x + 32;
+	var _pos_y = 64 + 40 * _selected - (40 * obj_gameController.tiles_per_page * obj_gameController.tile_page)
+	
+	if (_selected != noone && point_in_rectangle(mouse_x, mouse_y, global.view_width - 96, 64, global.view_width, global.view_height - 64)) {
+		
+		goal_x = _pos_x;
+		goal_y = _pos_y;
+		selection_box_h = tile_size + 8;
+		selection_box_w = tile_size + 8;
+		
+		if (obj_gameController.mLeftPressed) obj_gameController.selected_marker = _selected;
+	}
 }
 
 

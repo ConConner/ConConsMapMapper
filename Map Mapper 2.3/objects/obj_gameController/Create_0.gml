@@ -89,13 +89,20 @@ old_roomCount = 0;
 click_xx = 0;
 click_yy = 0;
 
-marker_url = "https://cdn.discordapp.com/attachments/800903643824914453/843241137228480512/mm_basic_markers.png";
-marker_sprite = noone;
+	//marker vars
+marker_url = default_markers;
+marker_sprite = sprite_add(marker_url, default_tile_amount, false, false, 0, 0);
+checking_sprite = noone;
 tileset_goal_x = global.view_width + 10;
 tileset_x = tileset_goal_x;
+tile_amount = default_tile_amount;
 tiles_per_page = 0;
+max_pages = 0;
 tile_page = 0;
 
+selected_marker = 0;
+
+	//connection vars
 connection_xx = 0;
 connection_yy = 0;
 connection_xx2 = 0;
@@ -250,7 +257,8 @@ eyedropper_tool_button = make_button(16 + 72 * 1, -10, spr_eyedropper_tool, menu
 color_brush_tool_button = make_button(16 + 72 * 2, -10, spr_color_brush, menu_state.ig_menu);
 door_tool_button = make_button(16 + 72 * 3, -10, spr_door_tool, menu_state.ig_menu);
 marker_tool_button = make_button(16 + 72 * 4, -10, spr_marker_tool, menu_state.ig_menu);
-selection_tool_button = make_button(16 + 72 * 5, -10, spr_selection_tool, menu_state.ig_menu);
+selection_tool_button = make_button(16 + 72 * 6, -10, spr_selection_tool, menu_state.ig_menu);
+hammer_tool_button = make_button(16 + 72 * 5, -10, spr_hammer_tool, menu_state.ig_menu);
 save_button = make_button(global.window_width - 80 - 72, -10, spr_save, menu_state.ig_menu);
 load_button = make_button(global.window_width - 80, -10, spr_load, menu_state.ig_menu);
 
@@ -270,12 +278,5 @@ yellow_door_button.disable();
 #endregion
 
 
-//MARKERS
-//marker list
-global.marker_list = ds_list_create();
-
-
 //creating the cursor
 instance_create_layer(mouse_x,mouse_y,"Cursor",obj_cursor);
-
-reload_markers();

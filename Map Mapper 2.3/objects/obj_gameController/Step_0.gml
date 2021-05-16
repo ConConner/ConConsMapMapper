@@ -52,12 +52,14 @@ if (current_menu == menu_state.nothing) {
 	if (kDown) global.cam_pos_y += border_margin / 2 / 5;
 
 	//scroll controls
-	if (!kShift) {
-		if (mWheelUp) global.cam_pos_y -= border_margin / 4;
-		if (mWheelDown) global.cam_pos_y += border_margin / 4;
-	} else {
-		if (mWheelUp) global.cam_pos_x -= border_margin / 4;
-		if (mWheelDown) global.cam_pos_x += border_margin / 4;
+	if (obj_cursor.cursor_mode == curs_mode.on_grid) {
+		if (!kShift) {
+			if (mWheelUp) global.cam_pos_y -= border_margin / 4;
+			if (mWheelDown) global.cam_pos_y += border_margin / 4;
+		} else {
+			if (mWheelUp) global.cam_pos_x -= border_margin / 4;
+			if (mWheelDown) global.cam_pos_x += border_margin / 4;
+		}
 	}
 
 	//mouse controls
@@ -242,8 +244,36 @@ if (obj_cursor.cursor_mode == curs_mode.on_grid) {
 			break; }
 		
 		case tool.marker_tool: {
+			//if (_tile.main == ID.filled) {
+				if (mLeft) _tile.mrk = selected_marker;
+				if (mRight) _tile.mrk = marker.empty;
+			//}
+			break; }
 			
-		}
+		case tool.hammer: {
+			
+			var _subimg = _tile.subimg;
+			if (mLeftPressed) {
+				
+				//hammering something
+				if (_subimg == 10) _tile.subimg = 16;
+				if (_subimg == 6) _tile.subimg = 17;
+				if (_subimg == 5) _tile.subimg = 18;
+				if (_subimg == 9) _tile.subimg = 19;
+				if (_subimg == 12) _tile.subimg = 20;
+				if (_subimg == 3) _tile.subimg = 21;
+				
+				//unhammering something
+				if (_subimg == 16) _tile.subimg = 10;
+				if (_subimg == 17) _tile.subimg = 6;
+				if (_subimg == 18) _tile.subimg = 5;
+				if (_subimg == 19) _tile.subimg = 9;
+				if (_subimg == 20) _tile.subimg = 12;
+				if (_subimg == 21) _tile.subimg = 3;
+				
+			}
+			
+			break; }
 	}
 }
 
@@ -491,6 +521,9 @@ if (mLeftPressed) {
 				break; }
 			case selection_tool_button: {
 				current_tool = tool.selector;
+				break; }
+			case hammer_tool_button: {
+				current_tool = tool.hammer;
 				break; }
 			case save_button: {
 				

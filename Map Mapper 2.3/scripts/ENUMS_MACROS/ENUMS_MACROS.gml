@@ -15,20 +15,12 @@ enum tool {
 	door_tool,
 	marker_tool,
 	selector,
-	eyedropper
+	eyedropper,
+	hammer
 }
 
 enum marker {
-	empty = 0,
-	circle = 1,
-	dot = 2,
-	exclamation = 3,
-	up = 8,
-	down = 9,
-	left = 6,
-	right = 7,
-	boss = 5,
-	start = 4
+	empty = -4,
 }
 
 enum hatch {
@@ -55,3 +47,6 @@ enum text {
 #macro tile_size 32 
 #macro border_margin 64
 #macro extension ".mf"
+
+#macro default_markers "https://cdn.discordapp.com/attachments/800903643824914453/843241137228480512/mm_basic_markers.png"
+#macro default_tile_amount 20

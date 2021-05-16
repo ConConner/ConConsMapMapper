@@ -78,7 +78,7 @@ function load_grid() {
 				
 			}
 			
-			//door drawing
+			#region door drawing
 			if (tile.door[0,0] == hatch.filled) {
 				draw_sprite_ext(spr_doorTiles, 0, pos_x, pos_y, 1, 1, 0, c_white, 1) //up
 				var _col = tile.door[0,1];
@@ -102,6 +102,13 @@ function load_grid() {
 				var _col = tile.door[3,1];
 				draw_rectangle_color(pos_x, pos_y + 12, pos_x + 3, pos_y + 19, _col, _col, _col, _col, false);
 			}
+			#endregion
+			
+			#region marker drawing
+			if (tile.mrk != marker.empty && sprite_exists(marker_sprite)) {
+				draw_sprite(marker_sprite, tile.mrk, pos_x, pos_y);
+			}
+			#endregion
 		}
 	}
 		

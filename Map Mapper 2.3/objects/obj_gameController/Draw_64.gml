@@ -260,6 +260,12 @@ switch (current_menu) {
 		if (current_tool == tool.selector) selection_tool_button.image_index = 1;
 		else selection_tool_button.image_index = 0;
 		
+		hammer_tool_button.goal_alpha = 1;
+		hammer_tool_button.goal_y = menu_pos_y + menu_height - 98;
+		if (menu_height > menu_goal_height - 2) hammer_tool_button.activate();
+		if (current_tool == tool.hammer) hammer_tool_button.image_index = 1;
+		else hammer_tool_button.image_index = 0;
+		
 		save_button.goal_alpha = 1;
 		save_button.goal_y = menu_pos_y + menu_height - 98;
 		if (menu_height > menu_goal_height - 2) save_button.activate();
@@ -297,29 +303,45 @@ switch (current_menu) {
 		
 }
 
-//drawing a the tileset
+#region drawing a the tileset
 //calculating amount of tiles per page
 space_per_page = global.view_height - 32 - 64;
 tiles_per_page = floor(space_per_page / 40);
+max_pages = ceil(tile_amount / tiles_per_page - 1)
 
+//switching tile pages
+if (obj_cursor.cursor_mode == curs_mode.on_tileset) {
+	if (mWheelDown) tile_page++;
+	if (mWheelUp) tile_page--;
+}
+tile_page = clamp(tile_page, 0, max_pages);
+
+//setting alpha for nineslice
 image_alpha = 1;
 
+//setting tileset coordinates
 if (current_menu == menu_state.nothing && current_tool == tool.marker_tool) {
 	tileset_goal_x = global.view_width - 96;
 } else {
 	tileset_goal_x = global.view_width + 10;
 }
 
+//drawing the background nineslice and tileset
 draw_nine_slice(spr_menu_nineslice, tileset_x, -32, global.view_width + 32, global.view_height + 32)
 if (sprite_exists(marker_sprite)) draw_marker_set(tileset_x + 32, 64);
 
+//drawing squares to hide the overshooting tiles
 draw_set_color(c_black);
-draw_rectangle(tileset_x + 10, 0, global.view_width, 64, false);
-draw_rectangle(tileset_x + 10, global.view_height - 64, global.view_width, global.view_height, false);
+draw_rectangle(tileset_x + 10, 0, global.view_width, 62, false);
+draw_rectangle(tileset_x + 10, global.view_height - 62, global.view_width, global.view_height, false);
 draw_set_color(c_white);
 
+//text
 draw_set_halign(fa_center);
 draw_text(tileset_x + 54, 8, "MARKERS");
+draw_text(tileset_x + 54, global.view_height - 32, "PAGE " + string(tile_page + 1) + "/" + string(max_pages + 1));
+
+#endregion
 
 //button drawing
 button_update();
@@ -361,5 +383,6 @@ if (debug_on) {
 	draw_text(5,17 * 19,"Selected Col Val: " + string(selected_color_val));
 	draw_text(5,17 * 21,"Cursor X: " + string(obj_cursor.goal_x));
 	draw_text(5,17 * 22,"Cursor Y: " + string(obj_cursor.goal_y));
+	draw_text(5,17 * 24,"Selected Marker: " + string(selected_marker));
 	
 }
