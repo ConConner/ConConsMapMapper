@@ -185,6 +185,88 @@ global.text_grid = ds_grid_create(max_text_amount,4);
 ds_grid_set_region(global.text_grid, 0, 0, max_text_amount, 4, 0);
 
 
+//general functions
+//opening the menu
+open_menu = function() {
+	current_menu = menu_state.ig_menu;
+	menu_goal_pos_x = -32;
+	menu_pos_x = -32;
+	menu_goal_pos_y = -10;
+	menu_pos_y = -10;
+	menu_goal_height = 0;
+	menu_height = 0;
+}
+
+//bring up save dialog and save map
+save_room = function(){
+	var fname = get_save_filename("Map File (.mf)|*"+extension,"");
+	save_map(fname);
+}
+
+//bring up load dialog and load map
+load_room = function() {
+	var fname = get_open_filename("Map File (.mf)|*"+extension,"");
+	load_map(fname);	
+}
+
+//open color menu
+open_color_menu = function() {
+	current_menu = menu_state.color_menu;
+	//creating the selection boxes
+	hue_selection = make_button(0, 0, spr_cursor_selector, menu_state.color_menu);
+	value_selection = make_button(0,0,spr_cursor_selector, menu_state.color_menu);
+	rgb_code_selection = make_button(0,0,spr_cursor_selector, menu_state.color_menu);
+				
+	//confirm, decline
+	color_decline_button = make_button(0,0,spr_menu_decline, menu_state.color_menu);
+	color_decline_button.goal_alpha = 0;
+	color_decline_button.image_alpha = 0;
+	color_confirm_button = make_button(0,0,spr_menu_confirm, menu_state.color_menu);
+	color_confirm_button.goal_alpha = 0;
+	color_confirm_button.image_alpha = 0;
+				
+	//setting the selected color to the current color
+	selected_color_hue = color_get_hue(global.selected_color);
+	selected_color_sat = color_get_saturation(global.selected_color);
+	selected_color_val = color_get_value(global.selected_color);
+	selected_rgb_hex = get_hex_rgb(global.selected_color);
+}
+
+color_confirmed = function() {
+	
+	close_menu = true;
+	//removing all the menu buttons
+	remove_button(hue_selection);
+	remove_button(value_selection);
+	remove_button(rgb_code_selection);
+	remove_button(color_decline_button);
+	remove_button(color_confirm_button);
+				
+	//setting new colour
+	global.selected_color = make_color_hsv(selected_color_hue, selected_color_sat, selected_color_val);
+				
+	//text message
+	add_text_message("applied color", 1.5, c_lime);
+}
+
+color_declined = function() {
+	close_menu = true;
+	//removing all the menu buttons
+	remove_button(hue_selection);
+	remove_button(value_selection);
+	remove_button(rgb_code_selection);
+	remove_button(color_decline_button);
+	remove_button(color_confirm_button);
+				
+	//resetting colour to old color
+	selected_color_hue = color_get_hue(global.selected_color);
+	selected_color_sat = color_get_saturation(global.selected_color);
+	selected_color_val = color_get_value(global.selected_color);
+				
+	//text message
+	add_text_message("color discarded", 1.5, c_white);
+}
+
 //BUTTONS
 //button struct
 button_create = function(_x, _y, _spr, _menu_level) constructor {
