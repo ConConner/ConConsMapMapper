@@ -335,7 +335,7 @@ if (kEscPressed) {
 }
 
 //keybind to accept color
-if (kEnterPressed && current_menu == menu_state.color_menu) color_confirmed()
+if (kEnterPressed && current_menu == menu_state.color_menu) color_confirmed();
 
 //keybind to quickly save/load or get to color menu
 if (kCtrl && current_menu != menu_state.color_menu) {
