@@ -15,7 +15,7 @@ global.window_height = window_get_height();
 #macro window_half_height  (global.window_height / 2)
 
 
-//getting key input
+//getting key input for special keys
 kUp = keyboard_check(vk_up);
 kDown = keyboard_check(vk_down);
 kLeft = keyboard_check(vk_left);
@@ -28,7 +28,17 @@ kSpacePressed = keyboard_check_pressed(vk_space);
 kAlt = keyboard_check(vk_alt);
 kAltReleased = keyboard_check_released(vk_alt);
 kAltPressed = keyboard_check_pressed(vk_alt);
-	//mouse input
+kEscPressed = keyboard_check_pressed(vk_escape);
+kEnterPressed = keyboard_check_pressed(vk_enter);
+//key input for letter keys
+kLetterP = keyboard_check(ord("P"));
+kLetterB = keyboard_check(ord("B"));
+kLetterC = keyboard_check(ord("C"));
+kLetterM = keyboard_check(ord("M"))
+kLetterH = keyboard_check(ord("H"));
+kLetterS = keyboard_check(ord("S"));
+kLetterL = keyboard_check(ord("L"));
+//mouse input
 mLeft = mouse_check_button(mb_left);
 mRight = mouse_check_button(mb_right);
 mRightPressed = mouse_check_button_pressed(mb_right);
@@ -308,6 +318,35 @@ if (kAltPressed) old_tool = current_tool;
 if (kAlt && !adding_connection) current_tool = tool.eyedropper;
 if (kAltReleased) current_tool = old_tool;
 
+
+//keybinds to quickly switch between tools
+if (kLetterP) current_tool = tool.pen;
+if (kLetterB) current_tool = tool.color_brush;
+if (kLetterC && !kCtrl) current_tool = tool.door_tool;
+if (kLetterM) current_tool = tool.marker_tool;
+if (kLetterH) current_tool = tool.hammer;
+if (kLetterS && !kCtrl) current_tool = tool.selector;
+
+//keybind to quickly toggle menu or discard color
+if (kEscPressed) {
+	if (current_menu == menu_state.nothing) open_menu();
+	else if (current_menu == menu_state.ig_menu) close_menu = true;
+	else if (current_menu == menu_state.color_menu) color_declined();
+}
+
+//keybind to accept color
+if (kEnterPressed && current_menu == menu_state.color_menu) color_confirmed();
+
+//keybind to quickly save/load or get to color menu
+if (kCtrl && current_menu != menu_state.color_menu) {
+	if (kLetterS) save_room();
+	else if (kLetterL) load_room();
+	//only open color menu, if we are tile creation
+	else if (kLetterC && current_menu == menu_state.nothing) {
+		open_color_menu();
+	}
+}
+
 #endregion
 
 
@@ -426,28 +465,7 @@ if (mLeftPressed) {
 			
 			case color_button: {
 			
-				//this code gets run basically once, like a create event
-				current_menu = menu_state.color_menu;
-			
-				//creating the selection boxes
-				hue_selection = make_button(0, 0, spr_cursor_selector, menu_state.color_menu);
-				value_selection = make_button(0,0,spr_cursor_selector, menu_state.color_menu);
-				rgb_code_selection = make_button(0,0,spr_cursor_selector, menu_state.color_menu);
-				
-				//confirm, decline
-				color_decline_button = make_button(0,0,spr_menu_decline, menu_state.color_menu);
-				color_decline_button.goal_alpha = 0;
-				color_decline_button.image_alpha = 0;
-				color_confirm_button = make_button(0,0,spr_menu_confirm, menu_state.color_menu);
-				color_confirm_button.goal_alpha = 0;
-				color_confirm_button.image_alpha = 0;
-				
-				//setting the selected color to the current color
-				selected_color_hue = color_get_hue(global.selected_color);
-				selected_color_sat = color_get_saturation(global.selected_color);
-				selected_color_val = color_get_value(global.selected_color);
-				selected_rgb_hex = get_hex_rgb(global.selected_color);
-				
+				open_color_menu();
 				break; }
 			case rgb_code_selection: {
 			
@@ -458,50 +476,18 @@ if (mLeftPressed) {
 				break; }
 			case color_decline_button: {
 				
-				close_menu = true;
-				//removing all the menu buttons
-				remove_button(hue_selection);
-				remove_button(value_selection);
-				remove_button(rgb_code_selection);
-				remove_button(color_decline_button);
-				remove_button(color_confirm_button);
-				
-				//resetting colour to old color
-				selected_color_hue = color_get_hue(global.selected_color);
-				selected_color_sat = color_get_saturation(global.selected_color);
-				selected_color_val = color_get_value(global.selected_color);
-				
-				//text message
-				add_text_message("color discarded", 1.5, c_white);
+				color_declined();
 				
 				break; }
 			case color_confirm_button: {
 				
-				close_menu = true;
-				//removing all the menu buttons
-				remove_button(hue_selection);
-				remove_button(value_selection);
-				remove_button(rgb_code_selection);
-				remove_button(color_decline_button);
-				remove_button(color_confirm_button);
-				
-				//setting new colour
-				global.selected_color = make_color_hsv(selected_color_hue, selected_color_sat, selected_color_val);
-				
-				//text message
-				add_text_message("applied color", 1.5, c_lime);
+				color_confirmed();
 				
 				break; }
 				
 			case igmenu_button: {
 			
-				current_menu = menu_state.ig_menu;
-				menu_goal_pos_x = -32;
-				menu_pos_x = -32;
-				menu_goal_pos_y = -10;
-				menu_pos_y = -10;
-				menu_goal_height = 0;
-				menu_height = 0;
+				open_menu();
 			
 				break; }
 			case pen_tool_button: {
@@ -527,14 +513,12 @@ if (mLeftPressed) {
 				break; }
 			case save_button: {
 				
-				var fname = get_save_filename("Map File (.mf)|*"+extension,"");
-				save_map(fname);
+				save_room();
 				
 				break; }
 			case load_button: {
 				
-				var fname = get_open_filename("Map File (.mf)|*"+extension,"");
-				load_map(fname);
+				load_room();
 				
 				break; }
 			case tooltip_button: {
