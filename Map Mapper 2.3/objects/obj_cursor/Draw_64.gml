@@ -180,7 +180,7 @@ if (_button != 0) {
 		switch (_button) {
 		
 			case obj_gameController.color_button: {
-				draw_text(_left + 2, _top - 22, "COLOR MENU");
+				draw_text(_left + 2, _top - 45, "COLOR MENU\n(CTRL+C)");
 				break; }
 				
 			case obj_gameController.rgb_code_selection: {
@@ -196,30 +196,30 @@ if (_button != 0) {
 				break; }
 				
 			case obj_gameController.igmenu_button: {
-				draw_text(_left + 2, _top + 44, "MENU");
+				draw_text(_left + 2, _top + 44, "MENU (ESC)");
 				break; }
 				
 			#region menu buttons
 			case obj_gameController.pen_tool_button: {
-				draw_text(_left + 2, _top + 69, "PEN TOOL");
+				draw_text(_left + 2, _top + 69, "PEN TOOL (P)");
 				break; }
 			case obj_gameController.eyedropper_tool_button: {
 				draw_text(_left + 2, _top + 69, "color picker (ALT)"); 
 				break; }
 			case obj_gameController.color_brush_tool_button: {
-				draw_text(_left + 2, _top + 69, "color brush");
+				draw_text(_left + 2, _top + 69, "color brush (B)");
 				break; }
 			case obj_gameController.door_tool_button: {
-				draw_text(_left + 2, _top + 69, "connection tool");
+				draw_text(_left + 2, _top + 69, "connection tool (C)");
 				break; }
 			case obj_gameController.marker_tool_button: {
-				draw_text(_left + 2, _top + 69, "marker tool");
+				draw_text(_left + 2, _top + 69, "marker tool (M)");
 				break; }
 			case obj_gameController.selection_tool_button: {
-				draw_text(_left + 2, _top + 69, "selection tool");
+				draw_text(_left + 2, _top + 69, "selection tool (S)");
 				break; }
 			case obj_gameController.hammer_tool_button: {
-				draw_text(_left + 2, _top + 69, "hammer tool");
+				draw_text(_left + 2, _top + 69, "hammer tool (H)");
 				break; }
 			case obj_gameController.save_button: {
 				draw_text(_left + 2, _top + 69, "save map");
