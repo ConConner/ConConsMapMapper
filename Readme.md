@@ -33,3 +33,8 @@ The Hammer Tool allows you to change the shape of tiles, to either create Sloped
 Currently broken
 
 You can Save and Load your current Rooms, by clicking on the save and load icons in the menu.
+
+
+## Official MapMapper Discord
+
+https://discord.gg/n6ZCB3JkNb
