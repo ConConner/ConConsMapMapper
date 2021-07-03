@@ -1,15 +1,37 @@
 ---GENERAL INFORMATION---
-ConCon's Map Mapper 1.0
+ConCon's Map Mapper B 2.1
 
-LAST UPDATED 10.01.2021 
+LAST UPDATED 23.05.2021 
 	    (DD.MM.YYYY)
+
+
+-------------README-----------------
+WINDOWS ONLY (no other platforms planned yet)
+
+For help and reporting bugs write me a message on Discord or write an E-Mail to contendohelp@gmail.com
+
+Discord: Conner#4315
+Official Discord server: https://discord.gg/n6ZCB3JkNb
+
+This project is open source, find the code here: https://github.com/ConConner/ConConsMapMapper
+
+Thanks to every Contributor!
+
+
 
 ------------CHANGELOG---------------
 ------------------------------------
-Release 1.0 (XX.XX.XXXX)
+Beta 2.1 (XX.XX.XXXX)
+------------------------------------
++ NEW hammer tool
++ added hotkeys
++ added DISCORD button
+
+
+------------------------------------
+Beta 2.0 (23.05.2021)
 ------------------------------------
 # base system rework
- # improved perfomance [ ~ 1000 fps*]
 # reworked room system
 # improved saving and loading
 + new cursor system
@@ -20,10 +42,9 @@ Release 1.0 (XX.XX.XXXX)
 + color brush tool
 + new connections tool
 + new marker system
-  [allowing custom markers]
-+ new selection tool
-+ new hammer tool
-- debug menu
+  [Allowing custom markers.]
+  [Possible right now, but ]
+  [not through the mapper  ]
 
 
 
@@ -59,7 +80,6 @@ ICON EXPLANATION
 (#) changed something that already exists
 (+) added something new
 (-) removed something that existed
-
 
 
 

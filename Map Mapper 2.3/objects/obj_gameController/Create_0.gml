@@ -1,9 +1,10 @@
 //mapper information
-#macro current_version "1.0"
+#macro current_version "B2.0"
+#macro save_system_version "1.0" //this version is referencing the version of the save system. NOT the mapper version
 
 //declaring globals
 //grid globals
-global.grid_width = 64;			//amount of cells horizontally /			in the usable tile grid
+global.grid_width = 32;			//amount of cells horizontally /			in the usable tile grid
 global.grid_height = 32;		//							   / vertically	
 
 //maximum possible map size without any errors: 1476 x 1476
@@ -13,26 +14,8 @@ global.grid_height = 32;		//							   / vertically
 global.xx = floor(mouse_x/32);			//the x position of the mouse on the grid
 global.yy = floor(mouse_y/32);			//the y position of the mouse on the grid
 
-#region tile globals
 global.roomCount = 0;
 
-	//wheel variables
-	  //color wheel
-	  global.max_color_scale = 0.6;
-	  global.min_color_scale = 0;
-	  global.color_wheel_radius = 400 * global.max_color_scale;
-	  global.color_wheel_min_radius = 8 * global.max_color_scale;
-	  global.color_wheel_alpha = 0.8
-	  
-	  //door/marker wheel
-	  global.max_door_scale = 1;
-	  global.min_door_scale = 0;
-	  global.marker_wheel_radius = 200 * global.max_door_scale;
-	  global.marker_wheel_min_radius = 39 * global.max_door_scale;
-	  global.door_wheel_radius = 400 * global.max_door_scale;
-	  global.door_wheel_min_radius = 224 * global.max_door_scale;
-	  global.door_wheel_alpha = 0.8;
-#endregion
 
 
 #region CAMERA SETUP
@@ -341,10 +324,11 @@ door_tool_button = make_button(16 + 72 * 3, -10, spr_door_tool, menu_state.ig_me
 marker_tool_button = make_button(16 + 72 * 4, -10, spr_marker_tool, menu_state.ig_menu);
 selection_tool_button = make_button(16 + 72 * 6, -10, spr_selection_tool, menu_state.ig_menu);
 hammer_tool_button = make_button(16 + 72 * 5, -10, spr_hammer_tool, menu_state.ig_menu);
-save_button = make_button(global.window_width - 80 - 72, -10, spr_save, menu_state.ig_menu);
-load_button = make_button(global.window_width - 80, -10, spr_load, menu_state.ig_menu);
+save_button = make_button(global.view_width - 80 - 72, -10, spr_save, menu_state.ig_menu);
+load_button = make_button(global.view_width - 80, -10, spr_load, menu_state.ig_menu);
 
-tooltip_button = make_button(32, global.window_height - 32, spr_cursor_selector, menu_state.ig_menu);
+tooltip_button = make_button(32, global.view_height - 55, spr_cursor_selector, menu_state.ig_menu);
+discord_button = make_button(global.view_width - 80, global.view_height - 80, spr_discord_button, menu_state.ig_menu);
 
 //door color buttons
 blue_door_button = make_button(16, 400, spr_door_colors, menu_state.nothing);

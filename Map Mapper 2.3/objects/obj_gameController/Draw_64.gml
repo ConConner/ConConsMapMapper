@@ -218,8 +218,8 @@ switch (current_menu) {
 			
 			//drawing tooltip section
 			draw_set_color(c_white);
-			draw_checkbox(32, global.window_height - 32, show_tooltips);
-			draw_text(32 + 27, global.window_height - 32, "tooltips");
+			draw_checkbox(32, global.window_height - 55, show_tooltips);
+			draw_text(32 + 27, global.window_height - 55, "tooltips");
 			
 		}
 		
@@ -277,6 +277,9 @@ switch (current_menu) {
 		tooltip_button.activate();
 		tooltip_button.button_height = 23;
 		tooltip_button.button_width = 105;
+		
+		discord_button.goal_alpha = 1;
+		discord_button.activate();
 		#endregion
 		
 		if (close_menu) { //closing process
@@ -386,3 +389,4 @@ if (debug_on) {
 	draw_text(5,17 * 24,"Selected Marker: " + string(selected_marker));
 	
 }
+

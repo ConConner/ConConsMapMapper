@@ -329,7 +329,11 @@ if (kLetterS && !kCtrl) current_tool = tool.selector;
 
 //keybind to quickly toggle menu or discard color
 if (kEscPressed) {
-	if (current_menu == menu_state.nothing) open_menu();
+	if (current_menu == menu_state.nothing) {
+		canBuild = false;
+		in_menu = true;
+		open_menu();
+	}
 	else if (current_menu == menu_state.ig_menu) close_menu = true;
 	else if (current_menu == menu_state.color_menu) color_declined();
 }
@@ -343,6 +347,8 @@ if (kCtrl && current_menu != menu_state.color_menu) {
 	else if (kLetterL) load_room();
 	//only open color menu, if we are tile creation
 	else if (kLetterC && current_menu == menu_state.nothing) {
+		canBuild = false;
+		in_menu = true;
 		open_color_menu();
 	}
 }
@@ -523,6 +529,9 @@ if (mLeftPressed) {
 				break; }
 			case tooltip_button: {
 				show_tooltips = !show_tooltips;
+				break; }
+			case discord_button: {
+				url_open("https://discord.gg/n6ZCB3JkNb");
 				break; }
 				
 			case blue_door_button: {

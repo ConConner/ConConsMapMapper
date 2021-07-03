@@ -29,7 +29,7 @@ function save_map(file_name) {
 			var _string = json_stringify(_converted_array);
 			var _file_id = file_text_open_write(file_name)
 	
-			file_text_write_string(_file_id, current_version); //version number
+			file_text_write_string(_file_id, save_system_version); //version number
 			file_text_writeln(_file_id);
 			file_text_write_real(_file_id, _grid_width); //grid width
 			file_text_writeln(_file_id);
@@ -61,7 +61,7 @@ function load_map(file_name) {
 		var _version = file_text_read_string(_file_id); //reading version number
 		file_text_readln(_file_id);
 	
-		if (_version == current_version) { //checking if the file is valid
+		if (_version == save_system_version) { //checking if the file is valid
 			
 			var _grid_width = file_text_read_real(_file_id); //reading grid width
 			file_text_readln(_file_id);
