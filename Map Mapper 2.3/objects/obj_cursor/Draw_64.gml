@@ -227,6 +227,10 @@ if (_button != 0) {
 			case obj_gameController.load_button: {
 				draw_text(_left - 17, _top + 69, "load map");
 				break; }
+				
+			case obj_gameController.discord_button: {
+			draw_text(_left, _top - 45, "Join the\ndiscord!");
+			break; }
 			#endregion
 		
 		}

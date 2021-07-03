@@ -1,4 +1,5 @@
-function set_up_grid() {
+//tile grid functions
+function set_up_grid() { //this loops through the tile grid and refills every 0 with an empty tile. Use this after resizing the grid.
 	for (var i = 0; i < global.grid_width; i++) {
 		
 		for (var j = 0; j < global.grid_height; j++) {
@@ -14,7 +15,7 @@ function set_up_grid() {
 }
 
 
-function draw_grid(w, h, thickness, inc) {
+function draw_grid(w, h, thickness, inc) { //draws the visual grid_background
 	
 	for (var i = 0; i < h / inc + 1; i ++)	//horizontal lines
 	{
@@ -42,7 +43,7 @@ function draw_grid(w, h, thickness, inc) {
 }
 
 
-function load_grid() {
+function load_grid() { //draws the contents on the grid
 	
 	//getting camera position
 	var cam_x = global.cam_pos_x;
@@ -64,58 +65,60 @@ function load_grid() {
 			var pos_y = draw_y * tile_size - global.cam_pos_y;
 			
 			var tile = ds_grid_get(global.tile_grid, draw_x, draw_y);
-			var col = tile.col
+			if (tile != 0) {
+				var col = tile.col
 			
-			// normal tile drawing
-			if (tile.main == ID.filled) { 
+				// normal tile drawing
+				if (tile.main == ID.filled) { 
 				
-				//drawing the inside of the tile
-				draw_rectangle_color(pos_x, pos_y, pos_x + tile_size - 1, pos_y + tile_size - 1, col, col, col, col, false);
+					//drawing the inside of the tile
+					draw_rectangle_color(pos_x, pos_y, pos_x + tile_size - 1, pos_y + tile_size - 1, col, col, col, col, false);
 				
-				//drawing outline
-				draw_sprite(spr_mapTiles, tile.subimg, pos_x, pos_y);
+					//drawing outline
+					draw_sprite(spr_mapTiles, tile.subimg, pos_x, pos_y);
 				
 				
-			}
+				}
 			
-			#region door drawing
-			if (tile.door[0,0] == hatch.filled) {
-				draw_sprite_ext(spr_doorTiles, 0, pos_x, pos_y, 1, 1, 0, c_white, 1) //up
-				var _col = tile.door[0,1];
-				draw_rectangle_color(pos_x + 12, pos_y, pos_x + 19, pos_y + 3, _col, _col, _col, _col, false);
-			}
+				#region door drawing
+				if (tile.door[0,0] == hatch.filled) {
+					draw_sprite_ext(spr_doorTiles, 0, pos_x, pos_y, 1, 1, 0, c_white, 1) //up
+					var _col = tile.door[0,1];
+					draw_rectangle_color(pos_x + 12, pos_y, pos_x + 19, pos_y + 3, _col, _col, _col, _col, false);
+				}
 			
-			if (tile.door[1,0] == hatch.filled) {
-				draw_sprite_ext(spr_doorTiles, 1, pos_x, pos_y, 1, 1, 0, c_white, 1) //right
-				var _col = tile.door[1,1];
-				draw_rectangle_color(pos_x + 28, pos_y + 12, pos_x + 31, pos_y + 19, _col, _col, _col, _col, false);
-			}
+				if (tile.door[1,0] == hatch.filled) {
+					draw_sprite_ext(spr_doorTiles, 1, pos_x, pos_y, 1, 1, 0, c_white, 1) //right
+					var _col = tile.door[1,1];
+					draw_rectangle_color(pos_x + 28, pos_y + 12, pos_x + 31, pos_y + 19, _col, _col, _col, _col, false);
+				}
 			
-			if (tile.door[2,0] == hatch.filled) {
-				draw_sprite_ext(spr_doorTiles, 2, pos_x, pos_y, 1, 1, 0, c_white, 1) //down
-				var _col = tile.door[2,1];
-				draw_rectangle_color(pos_x + 12, pos_y + 28, pos_x + 19, pos_y + 31, _col, _col, _col, _col, false);
-			}
+				if (tile.door[2,0] == hatch.filled) {
+					draw_sprite_ext(spr_doorTiles, 2, pos_x, pos_y, 1, 1, 0, c_white, 1) //down
+					var _col = tile.door[2,1];
+					draw_rectangle_color(pos_x + 12, pos_y + 28, pos_x + 19, pos_y + 31, _col, _col, _col, _col, false);
+				}
 			
-			if (tile.door[3,0] == hatch.filled) {
-				draw_sprite_ext(spr_doorTiles, 3, pos_x, pos_y, 1, 1, 0, c_white, 1) //left
-				var _col = tile.door[3,1];
-				draw_rectangle_color(pos_x, pos_y + 12, pos_x + 3, pos_y + 19, _col, _col, _col, _col, false);
-			}
-			#endregion
+				if (tile.door[3,0] == hatch.filled) {
+					draw_sprite_ext(spr_doorTiles, 3, pos_x, pos_y, 1, 1, 0, c_white, 1) //left
+					var _col = tile.door[3,1];
+					draw_rectangle_color(pos_x, pos_y + 12, pos_x + 3, pos_y + 19, _col, _col, _col, _col, false);
+				}
+				#endregion
 			
-			#region marker drawing
-			if (tile.mrk != marker.empty && sprite_exists(marker_sprite)) {
-				draw_sprite(marker_sprite, tile.mrk, pos_x, pos_y);
+				#region marker drawing
+				if (tile.mrk != marker.empty && sprite_exists(marker_sprite)) {
+					draw_sprite(marker_sprite, tile.mrk, pos_x, pos_y);
+				}
+				#endregion
 			}
-			#endregion
 		}
 	}
 		
 }
 	
 	
-function clear_cell(cell_struct) {
+function clear_cell(cell_struct) { //clears a tile cell on the grid
 	
 		cell_struct.main = ID.empty;
 		cell_struct.rm_nmb = 0;
@@ -126,8 +129,24 @@ function clear_cell(cell_struct) {
 	
 }
 	
+
+function shift_grid_x(grid, amount) { //shifts a grid by amount cells in x direction
+	var _grid_width = ds_grid_width(grid);
+	var _grid_height = ds_grid_height(grid);
+	ds_grid_set_grid_region(grid, grid, 0, 0, _grid_width - amount, _grid_height, amount, 0);
+	ds_grid_set_region(grid, 0, 0, amount, _grid_height, 0);
+}
+
+function shift_grid_y(grid, amount) { //shifts a grid by amount cells in x direction
+	var _grid_width = ds_grid_width(grid);
+	var _grid_height = ds_grid_height(grid);
+	ds_grid_set_grid_region(grid, grid, 0, 0, _grid_width, _grid_height - amount, 0, amount);
+	ds_grid_set_region(grid, 0, 0, _grid_width, amount, 0);
+}
 	
-function add_text_message(msg, lifetime, col) {
+
+//text messages
+function add_text_message(msg, lifetime, col) { //adds a new text message to the list
 	
 	grid_shift_x_up(global.text_grid);
 	
@@ -144,7 +163,7 @@ function add_text_message(msg, lifetime, col) {
 }
 
 
-function grid_shift_x_up(grid) {
+function grid_shift_x_up(grid) { //shifting the messages up
 	
 	var grid_length = ds_grid_width(grid)
 	for (var i = 0; i < grid_length; i++) {
@@ -182,7 +201,7 @@ function grid_shift_x_up(grid) {
 }
 	
 	
-function update_text_message(_x, _y) {
+function update_text_message(_x, _y) { //updates the text messages
 	
 	draw_set_halign(fa_right);
 	

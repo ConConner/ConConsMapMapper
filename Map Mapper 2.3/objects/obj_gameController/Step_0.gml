@@ -52,6 +52,58 @@ mWheelDown = mouse_wheel_down();
 #endregion
 
 
+#region grid resize
+//auto grid resize
+//the grid will automatically resize if you place a block in a range of 3 blocks on an edge
+if (placed_tile) {
+	if (global.xx >= global.grid_width - 3) { //adding on the right side
+		global.grid_width += global.xx - global.grid_width + 4;
+	}
+	
+	if (global.yy >= global.grid_height - 3) { //adding on the bottom side
+		global.grid_height += global.yy - global.grid_height + 4;
+	}
+	
+	if (global.xx <= 2) { //adding on the left side
+		var _amount = 3 - global.xx;
+		//adjusting camera
+		global.cam_pos_x += tile_size * _amount;
+		global.xx += _amount;
+		
+		global.grid_width += _amount;
+		ds_grid_resize(global.tile_grid, global.grid_width, global.grid_height);
+		shift_grid_x(global.tile_grid, _amount);
+		set_up_grid();
+	}
+	
+	if (global.yy <= 2) { //adding on the left side
+		var _amount = 3 - global.yy;
+		//adjusting camera
+		global.cam_pos_y += tile_size * _amount;
+		global.yy += _amount;
+		
+		global.grid_height += _amount;
+		ds_grid_resize(global.tile_grid, global.grid_width, global.grid_height);
+		shift_grid_y(global.tile_grid, _amount);
+		set_up_grid();
+	}
+}
+
+//clamping the grid sizes
+clamp(global.grid_width, min_grid_width, max_grid_width);
+clamp(global.grid_height, min_grid_height, max_grid_height);
+
+//resizing the grid if grid dimensions change
+if (old_grid_width != global.grid_width || old_grid_height != global.grid_height) {
+	old_grid_width = global.grid_width;
+	old_grid_height = global.grid_height;
+	
+	ds_grid_resize(global.tile_grid, global.grid_width, global.grid_height);
+	set_up_grid();
+}
+#endregion
+
+
 #region camera
 if (current_menu == menu_state.nothing) {
 	//cam controls
@@ -75,6 +127,7 @@ if (current_menu == menu_state.nothing) {
 	//mouse controls
 	if ((kSpace || mMiddle) && current_menu == menu_state.nothing) {
 		canBuild = false;
+		placed_tile = false;
 		moving_with_mouse = true;
 	
 		if (mLeftPressed || mMiddlePressed) {
@@ -107,7 +160,7 @@ global.cam_pos_y = clamp(global.cam_pos_y, 0 - global.view_height / 2, global.gr
 
 #region tools
 
-//Building with mouse
+//acting on tools
 if (obj_cursor.cursor_mode == curs_mode.on_grid) {
 	
 	var _tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
@@ -123,6 +176,8 @@ if (obj_cursor.cursor_mode == curs_mode.on_grid) {
 			old_roomCount = global.roomCount;
 			placed_tile = false;
 			}
+			
+			if (!mLeft && !mRight) placed_tile = false;
 			
 			if (mRightReleased) deleted_tile = false;
 			

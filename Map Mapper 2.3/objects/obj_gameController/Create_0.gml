@@ -4,8 +4,15 @@
 
 //declaring globals
 //grid globals
-global.grid_width = 32;			//amount of cells horizontally /			in the usable tile grid
-global.grid_height = 32;		//							   / vertically	
+global.grid_width = 20;			//amount of cells horizontally /			in the usable tile grid
+global.grid_height = 20;		//							   / vertically	
+old_grid_width = global.grid_width;
+old_grid_height = global.grid_height;
+
+min_grid_width = 20;
+min_grid_height = 20;
+max_grid_width = 500;
+max_grid_height = 500;
 
 //maximum possible map size without any errors: 1476 x 1476
 //stack overflow before 2000 x 2000
@@ -59,16 +66,12 @@ selecting_tile = false;
 cam_lock = false;
 click_moved = false;
 moving_with_mouse = false;
-
 adjust_cursor = false;
 adding_connection = false;
-
-
 debug_on = false;
 
 //var = X
 old_roomCount = 0;
-
 click_xx = 0;
 click_yy = 0;
 
@@ -82,7 +85,6 @@ tile_amount = default_tile_amount;
 tiles_per_page = 0;
 max_pages = 0;
 tile_page = 0;
-
 selected_marker = 0;
 
 	//connection vars
@@ -106,7 +108,6 @@ old_tool = current_tool;
 in_menu = false;
 
 show_tooltips = true;
-
 close_menu = false;
 
 menu_pos_x = global.view_width / 2;
@@ -132,11 +133,6 @@ selected_color_sat = color_get_saturation(global.selected_color);
 selected_color_val = color_get_value(global.selected_color);
 selected_rgb_hex = get_hex_rgb(global.selected_color);
 
-//other
-selected_map = "unsaved";
-
-//creating surface
-door_surface = noone;
 
 
 #region setting up the data structures
