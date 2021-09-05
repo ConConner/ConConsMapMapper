@@ -20,7 +20,7 @@ function draw_grid(w, h, thickness, inc) { //draws the visual grid_background
 	for (var i = 0; i < h / inc + 1; i ++)	//horizontal lines
 	{
 		
-		var pos_x = max(0 - global.cam_pos_x, 0);
+		var pos_x = 0 - global.cam_pos_x;
 		var pos_y = i * inc - global.cam_pos_y;
 		
 		draw_set_alpha(0.4);
@@ -33,7 +33,7 @@ function draw_grid(w, h, thickness, inc) { //draws the visual grid_background
 	{
 		
 		var pos_x = i * inc - global.cam_pos_x;
-		var pos_y = max(0 - global.cam_pos_y, 0);
+		var pos_y = 0 - global.cam_pos_y;
 		
 		draw_set_alpha(0.4);
 		draw_line_width(pos_x, pos_y, pos_x, min(h - global.cam_pos_y, global.view_height), thickness);
@@ -130,20 +130,54 @@ function clear_cell(cell_struct) { //clears a tile cell on the grid
 }
 	
 
-function shift_grid_x(grid, amount) { //shifts a grid by amount cells in x direction
+function shift_grid_x_pos(grid, amount) { //shifts a grid by amount cells in x direction
 	var _grid_width = ds_grid_width(grid);
 	var _grid_height = ds_grid_height(grid);
 	ds_grid_set_grid_region(grid, grid, 0, 0, _grid_width - amount, _grid_height, amount, 0);
 	ds_grid_set_region(grid, 0, 0, amount, _grid_height, 0);
 }
 
-function shift_grid_y(grid, amount) { //shifts a grid by amount cells in x direction
+function shift_grid_y_pos(grid, amount) { //shifts a grid by amount cells in x direction
 	var _grid_width = ds_grid_width(grid);
 	var _grid_height = ds_grid_height(grid);
 	ds_grid_set_grid_region(grid, grid, 0, 0, _grid_width, _grid_height - amount, 0, amount);
 	ds_grid_set_region(grid, 0, 0, _grid_width, amount, 0);
 }
 	
+function shift_grid_x_neg(grid, amount) { //shifts a grid by amount cells in negative x direction
+	var _grid_width = ds_grid_width(grid);
+	var _grid_height = ds_grid_height(grid);
+	ds_grid_set_grid_region(grid, grid, amount, 0, _grid_width, _grid_height, 0, 0);
+	ds_grid_set_region(grid, _grid_width - amount, 0, _grid_width, _grid_height, 0);
+}
+
+function shift_grid_y_neg(grid, amount) { //shifts a grid by amount cells in negative x direction
+	var _grid_width = ds_grid_width(grid);
+	var _grid_height = ds_grid_height(grid);
+	ds_grid_set_grid_region(grid, grid, 0, amount, _grid_width, _grid_height, 0, 0);
+	ds_grid_set_region(grid, 0, _grid_height - amount, _grid_width, _grid_height, 0);
+}
+	
+
+//getting amount of empty grid cells
+function loop_grid_til_empty_right() { //loops the grid from the right side and returns the amount of empty coloumns - 3
+	var _grid_width = global.grid_width;
+	var _grid_height = global.grid_height;
+	
+	for (var i = 0; i < _grid_width; i++) {
+		for (var j = 0; j < _grid_height; j++) {
+			var pos_x = (i - _grid_width + 1) * -1;
+			var pos_y = j;
+			var _tile = ds_grid_get(global.tile_grid, pos_x, pos_y);
+			
+			if (_tile.main != ID.empty) {
+				return (i - 3)
+			}
+		}	
+	}
+	
+	return (1);
+}
 
 //text messages
 function add_text_message(msg, lifetime, col) { //adds a new text message to the list

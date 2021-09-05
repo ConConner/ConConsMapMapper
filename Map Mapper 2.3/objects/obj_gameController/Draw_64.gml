@@ -1,6 +1,6 @@
 draw_set_color(c_white);
 draw_set_font(fnt_simple_text);
-display_set_gui_size(800,800);
+display_set_gui_size(global.view_width,global.view_height);
 draw_set_halign(fa_left)
 
 

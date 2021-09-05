@@ -1,4 +1,4 @@
-view_width = 800;
+view_width = 1422;
 view_height = 800;
 
 cam_x_goal = -1;

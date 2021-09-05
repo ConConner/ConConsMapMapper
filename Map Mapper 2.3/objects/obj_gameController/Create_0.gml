@@ -24,7 +24,6 @@ global.yy = floor(mouse_y/32);			//the y position of the mouse on the grid
 global.roomCount = 0;
 
 
-
 #region CAMERA SETUP
 
 //display vars
@@ -42,8 +41,8 @@ old_window_height = global.window_height;
 global.window_scale = 1;
 
 //camera vars
-global.view_width = 800;
-global.view_height = 800;
+global.view_width = obj_camera.view_width;
+global.view_height = obj_camera.view_height;
 
 global.cam_pos_x = 0;
 global.cam_pos_y = 0;
@@ -59,10 +58,9 @@ start_cam_y = 0;
 
 //boolean
 canBuild = true;
-choosing_tile_addition = false;
 placed_tile = false;
 deleted_tile = false;
-selecting_tile = false;
+deleted_tile_frame = false;
 cam_lock = false;
 click_moved = false;
 moving_with_mouse = false;

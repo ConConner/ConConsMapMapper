@@ -72,7 +72,7 @@ if (placed_tile) {
 		
 		global.grid_width += _amount;
 		ds_grid_resize(global.tile_grid, global.grid_width, global.grid_height);
-		shift_grid_x(global.tile_grid, _amount);
+		shift_grid_x_pos(global.tile_grid, _amount);
 		set_up_grid();
 	}
 	
@@ -84,14 +84,28 @@ if (placed_tile) {
 		
 		global.grid_height += _amount;
 		ds_grid_resize(global.tile_grid, global.grid_width, global.grid_height);
-		shift_grid_y(global.tile_grid, _amount);
+		shift_grid_y_pos(global.tile_grid, _amount);
 		set_up_grid();
 	}
 }
 
+//the grid will automatically get as small as possible if you remove a tile 4 tiles away from the border
+if (deleted_tile) {
+	if (global.xx >= global.grid_width - 4) {
+		//figuring out how many tiles in the grid to remove
+		var _amount = loop_grid_til_empty_right();
+		global.grid_width -= _amount;
+		
+		deleted_tile = false;
+	}
+}
+
 //clamping the grid sizes
-clamp(global.grid_width, min_grid_width, max_grid_width);
-clamp(global.grid_height, min_grid_height, max_grid_height);
+global.grid_width = clamp(global.grid_width, min_grid_width, max_grid_width);
+global.grid_height = clamp(global.grid_height, min_grid_height, max_grid_height);
+
+//clamping the cursor coordinates
+//clamp(global.xx, -infinity, )
 
 //resizing the grid if grid dimensions change
 if (old_grid_width != global.grid_width || old_grid_height != global.grid_height) {

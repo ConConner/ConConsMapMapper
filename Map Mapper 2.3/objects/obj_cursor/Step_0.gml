@@ -1,5 +1,9 @@
 //adjusting cursor sizes
+global.xx = clamp(global.xx, 0, global.grid_width - 1);
+global.yy = clamp(global.yy, 0, global.grid_height - 1);
+
 if (cursor_mode == curs_mode.on_grid) {
+	var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
 	
 	switch (obj_gameController.current_tool) {
 		
@@ -7,7 +11,6 @@ if (cursor_mode == curs_mode.on_grid) {
 			goal_x = global.xx * tile_size - global.cam_pos_x;
 			goal_y = global.yy * tile_size - global.cam_pos_y;
 		
-			var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
 			if (tile.main == ID.filled) {
 				selection_box_h = tile_size + 8;
 				selection_box_w = tile_size + 8;
@@ -32,7 +35,6 @@ if (cursor_mode == curs_mode.on_grid) {
 			goal_x = global.xx * tile_size - global.cam_pos_x;
 			goal_y = global.yy * tile_size - global.cam_pos_y;
 		
-			var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
 			if (tile.main == ID.filled) {
 				selection_box_h = tile_size - 4;
 				selection_box_w = tile_size - 4;
@@ -51,7 +53,6 @@ if (cursor_mode == curs_mode.on_grid) {
 				goal_y = global.yy * tile_size - global.cam_pos_y;
 			}
 		
-			var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
 			if (tile.main == ID.filled) {
 				selection_box_h = tile_size + 8;
 				selection_box_w = tile_size + 8;
@@ -87,7 +88,6 @@ if (cursor_mode == curs_mode.on_grid) {
 			goal_x = global.xx * tile_size - global.cam_pos_x;
 			goal_y = global.yy * tile_size - global.cam_pos_y;
 		
-			var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
 			if (tile.main == ID.filled) {
 				selection_box_h = tile_size - 4;
 				selection_box_w = tile_size - 4;
@@ -105,7 +105,6 @@ if (cursor_mode == curs_mode.on_grid) {
 			goal_x = global.xx * tile_size - global.cam_pos_x;
 			goal_y = global.yy * tile_size - global.cam_pos_y;
 		
-			var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
 			var _subimg = tile.subimg;
 			
 			if (_subimg == 10 || _subimg == 6 || _subimg == 5 || _subimg == 9 || _subimg == 12 || _subimg == 3 || _subimg >= 16) {
