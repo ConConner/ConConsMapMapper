@@ -44,6 +44,9 @@ global.window_scale = 1;
 global.view_width = obj_camera.view_width;
 global.view_height = obj_camera.view_height;
 
+global.grid_view_width = global.grid_width * tile_size;
+global.grid_view_height = global.grid_height * tile_size;
+
 global.cam_pos_x = 0;
 global.cam_pos_y = 0;
 global.cam_goal_x = 0;

@@ -45,8 +45,8 @@ if (window_has_focus() && obj_gameController.cam_lock != true) {
 }
 
 
-x = clamp(x,0+view_width/2,room_width-view_width/2);
-y = clamp(y,0+view_height/2,room_height-view_height/2);
+x = clamp(x,0+view_width/2,global.grid_view_width-view_width/4);
+y = clamp(y,0+view_height/2,global.grid_view_height-view_height/4);
 
 xx = x;
 yy = y;
@@ -54,8 +54,8 @@ yy = y;
 
 //camlock
 if (obj_gameController.cam_lock && cam_x_goal != -1) {
-	cam_x_goal = clamp(cam_x_goal,0+view_width/2,room_width-view_width/2);
-	cam_y_goal = clamp(cam_y_goal,0+view_height/2,room_width-view_height/2);
+	cam_x_goal = clamp(cam_x_goal,0+view_width/2,global.grid_view_width-view_width/4);
+	cam_y_goal = clamp(cam_y_goal,0+view_height/2,global.grid_view_height-view_height/4);
 	
 	x = lerp(x,cam_x_goal,0.2);
 	y = lerp(y,cam_y_goal,0.2);

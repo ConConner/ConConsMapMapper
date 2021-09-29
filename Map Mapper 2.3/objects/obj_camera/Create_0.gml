@@ -1,5 +1,5 @@
-view_width = 1422;
-view_height = 800;
+view_width = 1920;
+view_height = 1080;
 
 cam_x_goal = -1;
 cam_y_goal = -1;

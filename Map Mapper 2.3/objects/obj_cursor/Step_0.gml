@@ -1,7 +1,4 @@
 //adjusting cursor sizes
-global.xx = clamp(global.xx, 0, global.grid_width - 1);
-global.yy = clamp(global.yy, 0, global.grid_height - 1);
-
 if (cursor_mode == curs_mode.on_grid) {
 	var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
 	
