@@ -11,6 +11,8 @@ real_xx = floor((global.mouse_pos_x + global.cam_pos_x) / tile_size);
 real_yy = floor((global.mouse_pos_y + global.cam_pos_y) / tile_size);
 
 //view and window sizes
+global.view_width = obj_camera.view_width;
+global.view_height = obj_camera.view_height;
 #macro view_half_w = (global.view_width / 2)
 #macro view_half_h = (global.view_height / 2)
 
@@ -20,7 +22,7 @@ global.window_height = window_get_height();
 #macro window_half_height  (global.window_height / 2)
 
 
-//getting key input for special keys
+	#region getting key input for special keys
 kUp = keyboard_check(vk_up);
 kDown = keyboard_check(vk_down);
 kLeft = keyboard_check(vk_left);
@@ -54,6 +56,8 @@ mMiddle = mouse_check_button(mb_middle);
 mMiddlePressed = mouse_check_button_pressed(mb_middle);
 mWheelUp = mouse_wheel_up();
 mWheelDown = mouse_wheel_down();
+#endregion
+
 #endregion
 
 
@@ -517,6 +521,12 @@ green_door_button.image_index = 2;
 yellow_door_button.image_index = 3;
 #endregion
 
+//updating button positions to accommodate
+color_button.setpos(tile_size / 2, global.view_height - tile_size / 2 - sprite_get_height(spr_color_button));
+discord_button.setpos(global.view_width - 80, global.view_height - 80);
+save_button.goal_x = global.view_width - 80 - 72;
+load_button.goal_x = global.view_width - 80
+
 
 #endregion
 
@@ -637,3 +647,5 @@ if (debug_on) {
 }
 
 #endregion
+
+if kSpacePressed show_grid = !show_grid;

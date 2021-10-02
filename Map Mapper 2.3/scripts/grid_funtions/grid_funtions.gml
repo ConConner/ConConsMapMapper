@@ -20,10 +20,9 @@ function draw_grid(w, h, thickness, inc) { //draws the visual grid_background
 	for (var i = 0; i < h / inc + 1; i ++)	//horizontal lines
 	{
 		
-		var pos_x = 0 - global.cam_pos_x;
+		var pos_x = -global.cam_pos_x;
 		var pos_y = i * inc - global.cam_pos_y;
 		
-		draw_set_alpha(0.4);
 		draw_line_width(pos_x , pos_y, min(w - global.cam_pos_x, global.view_width), pos_y, thickness);
 
 	}
@@ -33,13 +32,24 @@ function draw_grid(w, h, thickness, inc) { //draws the visual grid_background
 	{
 		
 		var pos_x = i * inc - global.cam_pos_x;
-		var pos_y = 0 - global.cam_pos_y;
+		var pos_y = - global.cam_pos_y;
 		
-		draw_set_alpha(0.4);
 		draw_line_width(pos_x, pos_y, pos_x, min(h - global.cam_pos_y, global.view_height), thickness);
 	}
 
 
+}
+
+function draw_grid_outline(w, h, thickness) { //draws only the outline of the grid
+	
+	var top = - global.cam_pos_y;
+	var left = - global.cam_pos_x;
+	
+	draw_line_width(left, top, left + w, top, thickness);
+	draw_line_width(left, top, left, top + h, thickness);
+	draw_line_width(left + w, top, left + w, top + h, thickness);
+	draw_line_width(left, top + h, left + w, top + h, thickness);
+	
 }
 
 
@@ -157,27 +167,7 @@ function shift_grid_y_neg(grid, amount) { //shifts a grid by amount cells in neg
 	ds_grid_set_grid_region(grid, grid, 0, amount, _grid_width, _grid_height, 0, 0);
 	ds_grid_set_region(grid, 0, _grid_height - amount, _grid_width, _grid_height, 0);
 }
-	
 
-//getting amount of empty grid cells
-function loop_grid_til_empty_right() { //loops the grid from the right side and returns the amount of empty coloumns - 3
-	var _grid_width = global.grid_width;
-	var _grid_height = global.grid_height;
-	
-	for (var i = 0; i < _grid_width; i++) {
-		for (var j = 0; j < _grid_height; j++) {
-			var pos_x = (i - _grid_width + 1) * -1;
-			var pos_y = j;
-			var _tile = ds_grid_get(global.tile_grid, pos_x, pos_y);
-			
-			if (_tile.main != ID.empty) {
-				return (i - 3)
-			}
-		}	
-	}
-	
-	return (1);
-}
 
 //text messages
 function add_text_message(msg, lifetime, col) { //adds a new text message to the list

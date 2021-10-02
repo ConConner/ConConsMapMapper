@@ -23,6 +23,7 @@ Thanks to every Contributor!
 ------------------------------------
 Beta 2.1 (XX.XX.XXXX)
 ------------------------------------
+# grid can be toggled
 + the window is now resizeable
 + NEW hammer tool
 + added hotkeys

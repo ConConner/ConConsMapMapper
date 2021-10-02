@@ -34,8 +34,8 @@ global.display_height = display_get_height();
 //window vars
 global.window_width = window_get_width();
 global.window_height = window_get_height();
-old_window_width = global.window_width;
-old_window_height = global.window_height;
+global.old_window_width = global.window_width;
+global.old_window_height = global.window_height;
 
 global.window_scale = 1;
 
@@ -57,6 +57,10 @@ start_cam_x = 0;
 start_cam_y = 0;
 
 #endregion
+
+//user vars
+show_grid = true;
+show_tooltips = true;
 
 //boolean
 canBuild = true;
@@ -107,7 +111,6 @@ current_tool = tool.pen;
 old_tool = current_tool;
 in_menu = false;
 
-show_tooltips = true;
 close_menu = false;
 
 menu_pos_x = global.view_width / 2;
@@ -267,6 +270,12 @@ button_create = function(_x, _y, _spr, _menu_level) constructor {
 	button_enabled = true;
 	
 	//functions
+	static setpos = function(newx, newy) {
+		x = newx;
+		y = newy;
+		goal_x = newx;
+		goal_y = newy;
+	}
 	static jmp = function() { //sets the button x/y coordinates to the goal position
 		x = goal_x;
 		y = goal_y;
@@ -309,7 +318,7 @@ global.button_list = ds_list_create();
 #region buttons
 
 //main Buttons
-color_button = make_button(tile_size / 2, (global.view_height - tile_size / 2) - sprite_get_height(spr_color_button), spr_color_button, menu_state.nothing);
+color_button = make_button(tile_size / 2, global.view_height - tile_size / 2 - sprite_get_height(spr_color_button), spr_color_button, menu_state.nothing);
 igmenu_button = make_button(tile_size / 2, 4, spr_open_igmenu, menu_state.nothing);
 
 //ig menu buttons
@@ -327,13 +336,13 @@ tooltip_button = make_button(32, global.view_height - 55, spr_cursor_selector, m
 discord_button = make_button(global.view_width - 80, global.view_height - 80, spr_discord_button, menu_state.ig_menu);
 
 //door color buttons
-blue_door_button = make_button(16, 400, spr_door_colors, menu_state.nothing);
+blue_door_button = make_button(16, global.window_height / 2 - 128, spr_door_colors, menu_state.nothing);
 blue_door_button.disable();
-red_door_button = make_button(16, 400, spr_door_colors, menu_state.nothing);
+red_door_button = make_button(16, global.view_height / 2 - 64, spr_door_colors, menu_state.nothing);
 red_door_button.disable();
-green_door_button = make_button(16, 400, spr_door_colors, menu_state.nothing);
+green_door_button = make_button(16, global.view_height / 2, spr_door_colors, menu_state.nothing);
 green_door_button.disable();
-yellow_door_button = make_button(16, 400, spr_door_colors, menu_state.nothing);
+yellow_door_button = make_button(16, global.view_height / 2 + 64, spr_door_colors, menu_state.nothing);
 yellow_door_button.disable();
 
 

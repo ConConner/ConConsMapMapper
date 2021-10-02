@@ -23,7 +23,7 @@ switch (current_menu) {
 		image_alpha = 1;
 		
 		if (!close_menu) {
-			menu_goal_width = global.view_width - tile_size;
+			menu_goal_width = 800 - tile_size;
 			menu_goal_height = 350;
 		}
 		menu_pos_x = (global.view_width / 2) - (menu_width / 2);

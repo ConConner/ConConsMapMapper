@@ -1,5 +1,5 @@
-view_width = get_integer("Window width (Min. 800)", 800);
-view_height = get_integer("Window height (Min. 800)", 800);
+view_width = 800;
+view_height = 800;
 
 cam_x_goal = -1;
 cam_y_goal = -1;

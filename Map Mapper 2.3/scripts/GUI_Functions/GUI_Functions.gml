@@ -129,3 +129,20 @@ function draw_checkbox(_x, _y, _value) {
 	draw_sprite(spr_checkbox, _value, _x, _y);
 
 }
+	
+
+function resize_window(new_width, new_height) {
+	
+	//capping width and height
+	var invalid = false;
+	if (new_width < 800 || new_width > global.display_width) invalid = true;
+	if (new_width < 800 || new_width > global.display_width) invalid = true;
+	
+	new_width = clamp(new_width, 800, global.display_width);
+	new_height = clamp(new_height, 800, global.display_height);
+	
+	view_width = new_width;
+	view_height = new_height;
+	window_set_size(view_width*window_scale,view_height*window_scale);
+	surface_resize(application_surface,view_width*window_scale,view_height*window_scale);
+}

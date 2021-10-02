@@ -47,4 +47,13 @@ if (!obj_gameController.cam_lock) {
 }
 
 
+//resizing the window
+if (global.window_height != global.old_window_height) || (global.window_width != global.old_window_width) {
+	
+	global.old_window_height = global.window_height;
+	global.old_window_width = global.window_width;
+	
+	resize_window(global.window_width, global.window_height);
+}
+
 camera_set_view_size(view,view_width,view_height);
