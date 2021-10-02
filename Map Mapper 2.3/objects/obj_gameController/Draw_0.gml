@@ -17,6 +17,38 @@ else {
 }
 draw_set_alpha(1);
 
+
+#region taking a screenshot of the map
+function take_screenshot() {
+	
+	//setting up the surface
+	var temp_surf = surface_create(global.grid_view_width, global.grid_view_height);
+	surface_set_target(temp_surf);
+	draw_clear_alpha(c_black, 0);
+	
+	//drawing the contents
+	if (show_grid) {
+		draw_rectangle_color(0, 0, global.grid_view_width, global.grid_view_height, c_black, c_black, c_black, c_black, false);
+		draw_set_alpha(0.4);
+		draw_grid_whole(global.grid_width * tile_size, global.grid_height * tile_size, 1, tile_size);
+	}	
+	
+	draw_set_alpha(1);
+	load_grid_whole();
+	
+	//saving screenshot
+	var _file = get_save_filename("screenshot|*.png", "");
+	surface_save(temp_surf, _file);
+	
+	surface_reset_target();
+	surface_free(temp_surf);
+	
+}
+
+if (keyboard_check_pressed(ord("Q"))) take_screenshot();
+#endregion
+
+
 draw_set_color(c_white);
 load_grid();
 

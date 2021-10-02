@@ -40,6 +40,31 @@ function draw_grid(w, h, thickness, inc) { //draws the visual grid_background
 
 }
 
+function draw_grid_whole(w, h, thickness, inc) { //draws the visual grid_background all at once (even if not in view)
+	
+	for (var i = 0; i < h / inc + 1; i ++)	//horizontal lines
+	{
+		
+		var pos_x = 0;
+		var pos_y = i * inc;
+		
+		draw_line_width(pos_x , pos_y, w, pos_y, thickness);
+
+	}
+
+
+	for (var i = 0; i < w / inc + 1; i ++)	//vertical lines
+	{
+		
+		var pos_x = i * inc;
+		var pos_y = 0;
+		
+		draw_line_width(pos_x, pos_y, pos_x, h, thickness);
+	}
+
+
+}
+
 function draw_grid_outline(w, h, thickness) { //draws only the outline of the grid
 	
 	var top = - global.cam_pos_y;
@@ -63,7 +88,7 @@ function load_grid() { //draws the contents on the grid
 	var min_x = max(0,floor( cam_x / tile_size ) -1);
 	var min_y = max(0,floor( cam_y / tile_size ) -1);
 	var max_x = min(global.grid_width,floor( min_x + ( cam_w / tile_size ) ) +2);
-	var max_y = min(global.grid_height,floor( min_y + ( cam_h / tile_size ) ) +2);
+	var max_y = min(global.grid_height,ceil( min_y + ( cam_h / tile_size ) ) +2);
 	
 	
 	//looping through the grid and drawing tiles
@@ -166,7 +191,111 @@ function load_grid() { //draws the contents on the grid
 	}
 		
 }
+
+function load_grid_whole() { //draws the contents on the grid all at once (even if not in view)
 	
+	
+	//looping through the grid and drawing tiles
+	for (var draw_x = 0; draw_x < global.grid_width; draw_x++) {
+	
+		for (var draw_y = 0; draw_y < global.grid_height; draw_y++) {
+			
+			var pos_x = draw_x * tile_size;
+			var pos_y = draw_y * tile_size;
+			
+			var tile = ds_grid_get(global.tile_grid, draw_x, draw_y);
+			if (tile != 0) {
+				var col = tile.col
+			
+				// normal tile drawing
+				if (tile.main == ID.filled) { 
+				
+					//drawing the inside of the tile
+					if (tile.subimg < 16) draw_rectangle_color(pos_x, pos_y, pos_x + tile_size - 1, pos_y + tile_size - 1, col, col, col, col, false);
+					else {
+						switch (tile.subimg) { //drawing inside of hammered tiles
+							case (16): {
+								draw_triangle_color(pos_x, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y, col, col, col, false);
+								break; }
+								
+							case (17): {
+								draw_triangle_color(pos_x - 1, pos_y, pos_x - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y + tile_size - 1, col, col, col, false);
+								break; }
+								
+							case (18): {
+								draw_triangle_color(pos_x - 1, pos_y - 1, pos_x - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y - 1, col, col, col, false);
+								break; }
+								
+							case (19): {
+								draw_triangle_color(pos_x, pos_y - 1, pos_x + tile_size - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y - 1, col, col, col, false);
+								break;}
+								
+							case (20): {
+								draw_rectangle_color(pos_x, pos_y + 11, pos_x + tile_size - 1, pos_y + 19, col, col, col, col, false);
+								
+								//drawing edges if no more tunnel tiles
+								var tile_left = ds_grid_get(global.tile_grid, draw_x - 1, draw_y);
+								var tile_right = ds_grid_get(global.tile_grid, draw_x + 1, draw_y);
+								if (tile_left.subimg != 20) draw_sprite(spr_mapTiles, 22, pos_x, pos_y);
+								if (tile_right.subimg != 20) draw_sprite(spr_mapTiles, 22, pos_x + tile_size - 2, pos_y);
+								
+								break; }
+								
+							case (21): {
+								draw_rectangle_color(pos_x + 11, pos_y, pos_x + 19, pos_y + tile_size - 1, col, col, col, col, false);
+								
+								//drawing edges if no more tunnel tiles
+								var tile_up = ds_grid_get(global.tile_grid, draw_x, draw_y - 1);
+								var tile_down = ds_grid_get(global.tile_grid, draw_x, draw_y + 1);
+								if (tile_up.subimg != 21) draw_sprite(spr_mapTiles, 23, pos_x, pos_y);
+								if (tile_down.subimg != 21) draw_sprite(spr_mapTiles, 23, pos_x, pos_y + tile_size - 2);
+								
+								break; }
+						}
+					}
+				
+					//drawing outline
+					draw_sprite(spr_mapTiles, tile.subimg, pos_x, pos_y);
+				}
+				
+			
+				#region door drawing
+				if (tile.door[0,0] == hatch.filled) {
+					draw_sprite_ext(spr_doorTiles, 0, pos_x, pos_y, 1, 1, 0, c_white, 1) //up
+					var _col = tile.door[0,1];
+					draw_rectangle_color(pos_x + 12, pos_y, pos_x + 19, pos_y + 3, _col, _col, _col, _col, false);
+				}
+			
+				if (tile.door[1,0] == hatch.filled) {
+					draw_sprite_ext(spr_doorTiles, 1, pos_x, pos_y, 1, 1, 0, c_white, 1) //right
+					var _col = tile.door[1,1];
+					draw_rectangle_color(pos_x + 28, pos_y + 12, pos_x + 31, pos_y + 19, _col, _col, _col, _col, false);
+				}
+			
+				if (tile.door[2,0] == hatch.filled) {
+					draw_sprite_ext(spr_doorTiles, 2, pos_x, pos_y, 1, 1, 0, c_white, 1) //down
+					var _col = tile.door[2,1];
+					draw_rectangle_color(pos_x + 12, pos_y + 28, pos_x + 19, pos_y + 31, _col, _col, _col, _col, false);
+				}
+			
+				if (tile.door[3,0] == hatch.filled) {
+					draw_sprite_ext(spr_doorTiles, 3, pos_x, pos_y, 1, 1, 0, c_white, 1) //left
+					var _col = tile.door[3,1];
+					draw_rectangle_color(pos_x, pos_y + 12, pos_x + 3, pos_y + 19, _col, _col, _col, _col, false);
+				}
+				#endregion
+			
+				#region marker drawing
+				if (tile.mrk != marker.empty && sprite_exists(marker_sprite)) {
+					draw_sprite(marker_sprite, tile.mrk, pos_x, pos_y);
+				}
+				#endregion
+			}
+		}
+	}
+		
+}
+
 	
 function clear_cell(cell_struct) { //clears a tile cell on the grid
 	

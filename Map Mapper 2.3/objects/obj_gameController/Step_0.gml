@@ -15,6 +15,8 @@ global.view_width = obj_camera.view_width;
 global.view_height = obj_camera.view_height;
 #macro view_half_w = (global.view_width / 2)
 #macro view_half_h = (global.view_height / 2)
+global.grid_view_width = global.grid_width * tile_size;
+global.grid_view_height = global.grid_height * tile_size;
 
 global.window_width = window_get_width();
 global.window_height = window_get_height();

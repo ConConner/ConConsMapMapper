@@ -81,7 +81,7 @@ click_yy = 0;
 
 	//marker vars
 marker_url = default_markers;
-marker_sprite = sprite_add(marker_url, default_tile_amount, false, false, 0, 0);
+marker_sprite = spr_default_markers;
 checking_sprite = noone;
 tileset_goal_x = global.view_width + 10;
 tileset_x = tileset_goal_x;

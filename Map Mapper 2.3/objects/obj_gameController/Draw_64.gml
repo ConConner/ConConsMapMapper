@@ -306,9 +306,9 @@ switch (current_menu) {
 		
 }
 
-#region drawing a the tileset
+#region drawing the tileset
 //calculating amount of tiles per page
-space_per_page = global.view_height - 32 - 64;
+space_per_page = global.view_height - 96;
 tiles_per_page = floor(space_per_page / 40);
 max_pages = ceil(tile_amount / tiles_per_page - 1)
 
@@ -349,7 +349,6 @@ draw_text(tileset_x + 54, global.view_height - 32, "PAGE " + string(tile_page + 
 //button drawing
 button_update();
 update_text_message(global.view_width,global.view_height - 22);
-
 
 //debug
 if (debug_on) {

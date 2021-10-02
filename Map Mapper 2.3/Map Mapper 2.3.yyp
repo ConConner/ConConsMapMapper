@@ -2,6 +2,7 @@
   "resources": [
     {"id":{"name":"spr_open_igmenu","path":"sprites/spr_open_igmenu/spr_open_igmenu.yy",},"order":5,},
     {"id":{"name":"spr_color_brush","path":"sprites/spr_color_brush/spr_color_brush.yy",},"order":2,},
+    {"id":{"name":"spr_default_markers","path":"sprites/spr_default_markers/spr_default_markers.yy",},"order":0,},
     {"id":{"name":"spr_color_button","path":"sprites/spr_color_button/spr_color_button.yy",},"order":1,},
     {"id":{"name":"spr_cam","path":"sprites/spr_cam/spr_cam.yy",},"order":0,},
     {"id":{"name":"spr_marker","path":"sprites/spr_marker/spr_marker.yy",},"order":2,},
@@ -34,7 +35,6 @@
     {"id":{"name":"spr_eyedropper_tool","path":"sprites/spr_eyedropper_tool/spr_eyedropper_tool.yy",},"order":1,},
     {"id":{"name":"spr_edge_nineslice","path":"sprites/spr_edge_nineslice/spr_edge_nineslice.yy",},"order":1,},
     {"id":{"name":"color_functions","path":"scripts/color_functions/color_functions.yy",},"order":7,},
-    {"id":{"name":"mouse_functions","path":"scripts/mouse_functions/mouse_functions.yy",},"order":6,},
     {"id":{"name":"obj_gameController","path":"objects/obj_gameController/obj_gameController.yy",},"order":0,},
     {"id":{"name":"spr_door_colors","path":"sprites/spr_door_colors/spr_door_colors.yy",},"order":6,},
     {"id":{"name":"GUI_Functions","path":"scripts/GUI_Functions/GUI_Functions.yy",},"order":4,},
@@ -67,10 +67,10 @@
   "Folders": [
     {"folderPath":"folders/Sprites.yy","order":0,"resourceVersion":"1.0","name":"Sprites","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Sprites/map_tiles.yy","order":2,"resourceVersion":"1.0","name":"map_tiles","tags":[],"resourceType":"GMFolder",},
-    {"folderPath":"folders/Scripts.yy","order":2,"resourceVersion":"1.0","name":"Scripts","tags":[],"resourceType":"GMFolder",},
-    {"folderPath":"folders/Shaders.yy","order":3,"resourceVersion":"1.0","name":"Shaders","tags":[],"resourceType":"GMFolder",},
-    {"folderPath":"folders/Fonts.yy","order":4,"resourceVersion":"1.0","name":"Fonts","tags":[],"resourceType":"GMFolder",},
-    {"folderPath":"folders/Objects.yy","order":5,"resourceVersion":"1.0","name":"Objects","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Scripts.yy","order":3,"resourceVersion":"1.0","name":"Scripts","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Shaders.yy","order":4,"resourceVersion":"1.0","name":"Shaders","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Fonts.yy","order":5,"resourceVersion":"1.0","name":"Fonts","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Objects.yy","order":6,"resourceVersion":"1.0","name":"Objects","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Rooms.yy","order":7,"resourceVersion":"1.0","name":"Rooms","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Extensions.yy","order":8,"resourceVersion":"1.0","name":"Extensions","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Sprites/cursor_gfx.yy","order":1,"resourceVersion":"1.0","name":"cursor_gfx","tags":[],"resourceType":"GMFolder",},
@@ -78,6 +78,7 @@
     {"folderPath":"folders/Sprites/UI/buttons.yy","order":3,"resourceVersion":"1.0","name":"buttons","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Sprites/UI/interactive.yy","order":4,"resourceVersion":"1.0","name":"interactive","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Sprites/UI/buttons/tools.yy","order":7,"resourceVersion":"1.0","name":"tools","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Sprites/marker.yy","order":4,"resourceVersion":"1.0","name":"marker","tags":[],"resourceType":"GMFolder",},
   ],
   "AudioGroups": [
     {"targets":-1,"resourceVersion":"1.3","name":"audiogroup_default","resourceType":"GMAudioGroup",},
