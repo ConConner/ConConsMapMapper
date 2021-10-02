@@ -137,7 +137,7 @@ function get_selected_marker(_x, _y) {
 		var _x1 = _x
 		var _y1 = _y + 40 * i - (40 * obj_gameController.tiles_per_page * obj_gameController.tile_page)
 		
-		if (point_in_rectangle(mouse_x, mouse_y, _x1, _y1, _x1 + 32, _y1 + 32)) {
+		if (point_in_rectangle(global.mouse_pos_x, global.mouse_pos_y, _x1, _y1, _x1 + 32, _y1 + 32)) {
 			_return = i;
 		}
 		

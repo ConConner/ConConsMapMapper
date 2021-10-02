@@ -1,6 +1,6 @@
 enum ID {
-	empty = 0,
-	filled = 1
+	empty,
+	filled
 }
 
 enum menu_state {
@@ -26,14 +26,6 @@ enum marker {
 enum hatch {
 	empty,
 	filled
-}
-	
-enum dir {
-	left,
-	right,
-	up,
-	down,
-	none
 }
 
 enum text {

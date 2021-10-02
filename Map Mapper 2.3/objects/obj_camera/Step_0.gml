@@ -16,27 +16,6 @@ var _minspd = 0;
 var _storespd = 0;
 
 if (window_has_focus() && obj_gameController.cam_lock != true) {
-	
-	//mouse movement
-	if (kCtrl) {
-		if (xx >= view_width - border_margin) {
-			_storespd = clamp(spd * (xx - (view_width - border_margin)) / 5,_minspd,_maxspd);
-			x += _storespd
-		}
-		if (xx <= border_margin) {
-			_storespd = clamp(spd * (xx*-1 + border_margin) / 5,_minspd,_maxspd);
-			x -= _storespd
-		}
-		if (yy >= view_height - border_margin) {
-			_storespd = clamp(spd * (yy - (view_height - border_margin)) / 5,_minspd,_maxspd);
-			y += _storespd
-		}
-		if (yy <= border_margin) {
-			_storespd = clamp(spd * (yy*-1 + border_margin) / 5,_minspd,_maxspd);
-			y -= _storespd
-		}
-	}
-	
 	//arrow keys
 	if (kUp) y -= spd * border_margin / 2 / 5;
 	if (kDown) y += spd * border_margin / 2 / 5;
@@ -45,11 +24,8 @@ if (window_has_focus() && obj_gameController.cam_lock != true) {
 }
 
 
-x = clamp(x,0+view_width/2,global.grid_view_width-view_width/4);
-y = clamp(y,0+view_height/2,global.grid_view_height-view_height/4);
-
-xx = x;
-yy = y;
+xx = clamp(x,0+view_width/2,global.grid_view_width-view_width/4);
+yy = clamp(y,0+view_height/2,global.grid_view_height-view_height/4);
 
 
 //camlock
@@ -72,4 +48,3 @@ if (!obj_gameController.cam_lock) {
 
 
 camera_set_view_size(view,view_width,view_height);
-camera_set_view_pos(view,x-view_width/2,y-view_width/2);

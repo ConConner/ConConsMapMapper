@@ -10,16 +10,15 @@ old_grid_width = global.grid_width;
 old_grid_height = global.grid_height;
 
 min_grid_width = 20;
-min_grid_height = 20;
-max_grid_width = 500;
-max_grid_height = 500;
+min_grid_height = 20;		//maximum possible map size without any errors: 1476 x 1476
+max_grid_width = 500;		//stack overflow before 2000 x 2000
+max_grid_height = 500;		//these sizes cant be saved...
 
-//maximum possible map size without any errors: 1476 x 1476
-//stack overflow before 2000 x 2000
-//these sizes cant be saved...
 
-global.xx = floor(mouse_x/32);			//the x position of the mouse on the grid
-global.yy = floor(mouse_y/32);			//the y position of the mouse on the grid
+global.mouse_pos_x = device_mouse_x_to_gui(0);			//mouse position relative to the GUI
+global.mouse_pos_y = device_mouse_y_to_gui(0);			//
+global.xx = floor(global.mouse_pos_x/32);			//the x position of the mouse on the grid
+global.yy = floor(global.mouse_pos_y/32);			//the y position of the mouse on the grid
 
 global.roomCount = 0;
 
@@ -342,4 +341,4 @@ yellow_door_button.disable();
 
 
 //creating the cursor
-instance_create_layer(mouse_x,mouse_y,"Cursor",obj_cursor);
+instance_create_layer(global.mouse_pos_x,global.mouse_pos_y,"Cursor",obj_cursor);

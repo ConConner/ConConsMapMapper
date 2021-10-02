@@ -1,9 +1,14 @@
 #region setting up
 //getting mouse coordinates on grid
-global.xx = clamp(floor((mouse_x + global.cam_pos_x) / tile_size), 0, global.grid_width - 1);
-global.yy = clamp(floor((mouse_y + global.cam_pos_y) / tile_size), 0, global.grid_height - 1);
-real_xx = floor((mouse_x + global.cam_pos_x) / tile_size);
-real_yy = floor((mouse_y + global.cam_pos_y) / tile_size);
+
+	//GLOBAL MOUSE COORDINATES
+	global.mouse_pos_x = device_mouse_x_to_gui(0);
+	global.mouse_pos_y = device_mouse_y_to_gui(0);
+
+global.xx = clamp(floor((global.mouse_pos_x + global.cam_pos_x) / tile_size), 0, global.grid_width - 1);
+global.yy = clamp(floor((global.mouse_pos_y + global.cam_pos_y) / tile_size), 0, global.grid_height - 1);
+real_xx = floor((global.mouse_pos_x + global.cam_pos_x) / tile_size);
+real_yy = floor((global.mouse_pos_y + global.cam_pos_y) / tile_size);
 
 //view and window sizes
 #macro view_half_w = (global.view_width / 2)
@@ -89,17 +94,6 @@ if (placed_tile) {
 	}
 }
 
-//the grid will automatically get as small as possible if you remove a tile 4 tiles away from the border
-if (deleted_tile) {
-	if (global.xx >= global.grid_width - 4) {
-		//figuring out how many tiles in the grid to remove
-		var _amount = loop_grid_til_empty_right();
-		global.grid_width -= _amount;
-		
-		deleted_tile = false;
-	}
-}
-
 //clamping the grid sizes
 global.grid_width = clamp(global.grid_width, min_grid_width, max_grid_width);
 global.grid_height = clamp(global.grid_height, min_grid_height, max_grid_height);
@@ -145,15 +139,15 @@ if (current_menu == menu_state.nothing) {
 		moving_with_mouse = true;
 	
 		if (mLeftPressed || mMiddlePressed) {
-			start_mouse_x = mouse_x;
-			start_mouse_y = mouse_y;
+			start_mouse_x = global.mouse_pos_x;
+			start_mouse_y = global.mouse_pos_y;
 			start_cam_x = global.cam_pos_x;
 			start_cam_y = global.cam_pos_y;
 		}
 	
 		if (mLeft || mMiddle) {
-			var _xshift = mouse_x - start_mouse_x;
-			var _yshift = mouse_y - start_mouse_y;
+			var _xshift = global.mouse_pos_x - start_mouse_x;
+			var _yshift = global.mouse_pos_y - start_mouse_y;
 		
 			global.cam_pos_x = start_cam_x - _xshift;
 			global.cam_pos_y = start_cam_y - _yshift;
@@ -200,7 +194,7 @@ if (obj_cursor.cursor_mode == curs_mode.on_grid) {
 		case tool.eyedropper: {
 			
 			if (mLeftPressed) {
-				get_pixel_color(mouse_x, mouse_y);
+				get_pixel_color(global.mouse_pos_x, global.mouse_pos_y);
 				current_tool = tool.pen;
 				add_text_message("copied color", 1.5, c_lime);
 				
@@ -465,7 +459,7 @@ if (!color_button.active && current_menu == menu_state.nothing) {
 	//button middle coords
 	var _pointX = color_button.x + (sprite_get_width(color_button.sprite_index) / 2);
 	var _pointY = color_button.y + (sprite_get_height(color_button.sprite_index) / 2);
-	var m_distance = point_distance(_pointX, _pointY, mouse_x, mouse_y);
+	var m_distance = point_distance(_pointX, _pointY, global.mouse_pos_x, global.mouse_pos_y);
 	color_button.goal_alpha = clamp((0.0035157 * power(m_distance,2) + 10) / 100, 0, 1);
 	
 } else if (current_menu == menu_state.nothing) {
@@ -480,7 +474,7 @@ if (!igmenu_button.active && current_menu == menu_state.nothing) {
 	//button middle coords
 	var _pointX = igmenu_button.x + (sprite_get_width(igmenu_button.sprite_index) / 2);
 	var _pointY = igmenu_button.y + (sprite_get_height(igmenu_button.sprite_index) / 2);
-	var m_distance = point_distance(_pointX, _pointY, mouse_x, mouse_y);
+	var m_distance = point_distance(_pointX, _pointY, global.mouse_pos_x, global.mouse_pos_y);
 	igmenu_button.goal_alpha = clamp((0.0135157 * power(m_distance,2) + 10) / 100, 0, 1);
 	
 } else if (current_menu == menu_state.nothing) {
@@ -643,4 +637,3 @@ if (debug_on) {
 }
 
 #endregion
-

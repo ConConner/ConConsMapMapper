@@ -1,6 +1,8 @@
 function approach(val1, val2, amount) {		//approach val1 to val2 with amount
 	if (val1 > val2) return val1 - amount;
 	if (val1 < val2) return val1 + amount;
+	if (val1 < val2) && (val1 + amount >= val2) return val2;
+	if (val1 > val2) && (val1 - amount >= val2) return val2;
 	else return val1;
 }
 

@@ -297,7 +297,7 @@ switch (current_menu) {
 		}
 		
 		//closing if clicking anywhere else
-		if (mLeftPressed && mouse_y > menu_pos_y + menu_goal_height && button_check() == 0) close_menu = true;
+		if (mLeftPressed && global.mouse_pos_y > menu_pos_y + menu_goal_height && button_check() == 0) close_menu = true;
 		
 		break; }
 		
@@ -365,14 +365,14 @@ if (debug_on) {
 	if (_fps > 100) draw_set_colour(c_lime);
 	else draw_set_colour(c_red);
 	draw_set_halign(fa_right)
-	draw_text(800,0,_fps);
+	draw_text(global.view_width,0,_fps);
 	draw_set_halign(fa_left)
 	draw_set_colour(c_ltgrey);
 	
 	
 	//showing debug vars
-	draw_text(5,17 * 3,"Mouse XX: " + string(global.xx) + ";    X: " + string(mouse_x));
-	draw_text(5,17 * 4,"Mouse YY: " + string(global.yy) + ";    Y: " + string(mouse_y));
+	draw_text(5,17 * 3,"Mouse XX: " + string(global.xx) + ";    X: " + string(global.mouse_pos_x));
+	draw_text(5,17 * 4,"Mouse YY: " + string(global.yy) + ";    Y: " + string(global.mouse_pos_y));
 	draw_text(5,17 * 6,"Camera X: " + string(global.cam_pos_x));
 	draw_text(5,17 * 7,"Camera Y: " + string(global.cam_pos_y));
 	draw_text(5,17 * 9,"Cursor Mode: " + string(obj_cursor.cursor_mode));
