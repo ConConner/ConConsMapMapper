@@ -360,6 +360,9 @@ if (debug_on) {
 	draw_text(0,0,"DEBUG MODE");
 	draw_set_colour(c_white);
 	
+	//debug button view
+	visualize_buttons();
+	
 	//fps view
 	var _fps = round(fps_real);
 	if (_fps > 100) draw_set_colour(c_lime);

@@ -336,13 +336,13 @@ tooltip_button = make_button(32, global.view_height - 55, spr_cursor_selector, m
 discord_button = make_button(global.view_width - 80, global.view_height - 80, spr_discord_button, menu_state.ig_menu);
 
 //door color buttons
-blue_door_button = make_button(16, global.window_height / 2 - 128, spr_door_colors, menu_state.nothing);
+blue_door_button = make_button(16, global.view_height / 2 - 130, spr_door_colors, menu_state.nothing);
 blue_door_button.disable();
-red_door_button = make_button(16, global.view_height / 2 - 64, spr_door_colors, menu_state.nothing);
+red_door_button = make_button(16, global.view_height / 2 - 65, spr_door_colors, menu_state.nothing);
 red_door_button.disable();
 green_door_button = make_button(16, global.view_height / 2, spr_door_colors, menu_state.nothing);
 green_door_button.disable();
-yellow_door_button = make_button(16, global.view_height / 2 + 64, spr_door_colors, menu_state.nothing);
+yellow_door_button = make_button(16, global.view_height / 2 + 65, spr_door_colors, menu_state.nothing);
 yellow_door_button.disable();
 
 

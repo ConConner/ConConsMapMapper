@@ -488,7 +488,7 @@ if (!igmenu_button.active && current_menu == menu_state.nothing) {
 }
 
 #region door color buttons
-if ((current_tool == tool.door_tool) || (old_tool == tool.door_tool && kAlt)) {
+if ((current_tool == tool.door_tool) || (old_tool == tool.door_tool && kAlt)) && (current_menu != menu_state.color_menu) {
 	blue_door_button.enable();
 	blue_door_button.activate();
 	blue_door_button.goal_alpha = 1;
@@ -504,9 +504,13 @@ if ((current_tool == tool.door_tool) || (old_tool == tool.door_tool && kAlt)) {
 	
 } else {
 	blue_door_button.disable();
+	blue_door_button.deactivate();
 	red_door_button.disable();
+	red_door_button.deactivate();
 	green_door_button.disable();
+	green_door_button.deactivate();
 	yellow_door_button.disable();
+	yellow_door_button.deactivate();
 	
 }
 
@@ -526,6 +530,7 @@ color_button.setpos(tile_size / 2, global.view_height - tile_size / 2 - sprite_g
 discord_button.setpos(global.view_width - 80, global.view_height - 80);
 save_button.goal_x = global.view_width - 80 - 72;
 load_button.goal_x = global.view_width - 80
+tooltip_button.setpos(32, global.view_height - 55);
 
 
 #endregion

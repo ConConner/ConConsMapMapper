@@ -82,13 +82,53 @@ function load_grid() { //draws the contents on the grid
 				if (tile.main == ID.filled) { 
 				
 					//drawing the inside of the tile
-					draw_rectangle_color(pos_x, pos_y, pos_x + tile_size - 1, pos_y + tile_size - 1, col, col, col, col, false);
+					if (tile.subimg < 16) draw_rectangle_color(pos_x, pos_y, pos_x + tile_size - 1, pos_y + tile_size - 1, col, col, col, col, false);
+					else {
+						switch (tile.subimg) { //drawing inside of hammered tiles
+							case (16): {
+								draw_triangle_color(pos_x, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y, col, col, col, false);
+								break; }
+								
+							case (17): {
+								draw_triangle_color(pos_x - 1, pos_y, pos_x - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y + tile_size - 1, col, col, col, false);
+								break; }
+								
+							case (18): {
+								draw_triangle_color(pos_x - 1, pos_y - 1, pos_x - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y - 1, col, col, col, false);
+								break; }
+								
+							case (19): {
+								draw_triangle_color(pos_x, pos_y - 1, pos_x + tile_size - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y - 1, col, col, col, false);
+								break;}
+								
+							case (20): {
+								draw_rectangle_color(pos_x, pos_y + 11, pos_x + tile_size - 1, pos_y + 19, col, col, col, col, false);
+								
+								//drawing edges if no more tunnel tiles
+								var tile_left = ds_grid_get(global.tile_grid, draw_x - 1, draw_y);
+								var tile_right = ds_grid_get(global.tile_grid, draw_x + 1, draw_y);
+								if (tile_left.subimg != 20) draw_sprite(spr_mapTiles, 22, pos_x, pos_y);
+								if (tile_right.subimg != 20) draw_sprite(spr_mapTiles, 22, pos_x + tile_size - 2, pos_y);
+								
+								break; }
+								
+							case (21): {
+								draw_rectangle_color(pos_x + 11, pos_y, pos_x + 19, pos_y + tile_size - 1, col, col, col, col, false);
+								
+								//drawing edges if no more tunnel tiles
+								var tile_up = ds_grid_get(global.tile_grid, draw_x, draw_y - 1);
+								var tile_down = ds_grid_get(global.tile_grid, draw_x, draw_y + 1);
+								if (tile_up.subimg != 21) draw_sprite(spr_mapTiles, 23, pos_x, pos_y);
+								if (tile_down.subimg != 21) draw_sprite(spr_mapTiles, 23, pos_x, pos_y + tile_size - 2);
+								
+								break; }
+						}
+					}
 				
 					//drawing outline
 					draw_sprite(spr_mapTiles, tile.subimg, pos_x, pos_y);
-				
-				
 				}
+				
 			
 				#region door drawing
 				if (tile.door[0,0] == hatch.filled) {

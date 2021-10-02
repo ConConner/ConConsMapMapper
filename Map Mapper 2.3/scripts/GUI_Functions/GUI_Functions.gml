@@ -124,6 +124,21 @@ function remove_button(_button) {
 }
 	
 
+function visualize_buttons() { //draws outlines at every button position
+	
+	for(var i = 0; i < ds_list_size(global.button_list); i++) {
+		
+		var _id = ds_list_find_value(global.button_list, i);
+		if (_id != 0) {
+			
+			draw_rectangle_color(_id.x, _id.y, _id.x + _id.button_width, _id.y + _id.button_height, c_aqua, c_aqua, c_aqua, c_aqua, true);
+			
+		}
+	}
+	
+}
+
+
 function draw_checkbox(_x, _y, _value) {
 
 	draw_sprite(spr_checkbox, _value, _x, _y);
