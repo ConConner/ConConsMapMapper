@@ -432,3 +432,67 @@ function update_text_message(_x, _y) { //updates the text messages
 	draw_set_halign(fa_left);
 	
 }
+	
+	
+function setup_tool_tips() {
+	
+	pen_tool_tip[0] = "The pen allows you to add and remove";
+	pen_tool_tip[1] = "map tiles.";
+	pen_tool_tip[2] = "";
+	pen_tool_tip[3] = "Left click on an empty tile to add a";
+	pen_tool_tip[4] = "map tile. Right click on an existing";
+	pen_tool_tip[5] = "map tile to remove it and all the";
+	pen_tool_tip[6] = "contents on it.";
+	pen_tool_tip[7] = "Left click and drag off of an exiting";
+	pen_tool_tip[8] = "map tile to edit an already completed";
+	pen_tool_tip[9] = "room.";
+	
+	color_picker_tool_tip[0] = "The color picker selects the color you";
+	color_picker_tool_tip[1] = "are hovering over with the mouse.";
+	color_picker_tool_tip[2] = "";
+	color_picker_tool_tip[3] = "Left click anywhere on the grid to select";
+	color_picker_tool_tip[4] = "the color you are hovering over as your";
+	color_picker_tool_tip[5] = "usable color. The pen tool will be auto";
+	color_picker_tool_tip[6] = "selected after selecting a color.";
+	
+	color_brush_tool_tip[0] = "The color brush allows you to change the";
+	color_brush_tool_tip[1] = "color of an existing room or replace an";
+	color_brush_tool_tip[2] = "existing color with a new one.";
+	color_brush_tool_tip[3] = "";
+	color_brush_tool_tip[4] = "Left click on a room to replace the color";
+	color_brush_tool_tip[5] = "of it with your currently selected color.";
+	color_brush_tool_tip[6] = "Right click on a tile with a color to";
+	color_brush_tool_tip[7] = "replace every tile with the same color with";
+	color_brush_tool_tip[8] = "your currently selected color.";
+	
+	door_tool_tip[0] = "The connection tool can create a connection";
+	door_tool_tip[1] = "between two disconnected rooms. However, it";
+	door_tool_tip[2] = "can also create a connection inside of a room.";
+	door_tool_tip[3] = "";
+	door_tool_tip[4] = "Left click and drag over two tiles to create";
+	door_tool_tip[5] = "a connection between these two tiles. The";
+	door_tool_tip[6] = "connection color will be your currently selected";
+	door_tool_tip[7] = "color. Right click and drag over two tiles to";
+	door_tool_tip[8] = "remove an existing connection between them.";
+	door_tool_tip[9] = "If unsure, the cursor will always show possible";
+	door_tool_tip[10] = "locations for connections.";
+	
+	marker_tool_tip[0] = "The marker tool allows you to place down one";
+	marker_tool_tip[1] = "marker per cell on the grid. It does not have";
+	marker_tool_tip[2] = "to have a map tile below it!";
+	marker_tool_tip[3] = "";
+	marker_tool_tip[4] = "Select a marker in the marker set on the right";
+	marker_tool_tip[5] = "of the screen and place it on any grid cell";
+	marker_tool_tip[6] = "with a left click. A right click will delete";
+	marker_tool_tip[7] = "a marker from a grid cell.";
+	
+	hammer_tool_tip[0] = "The hammer tool allows you to change the";
+	hammer_tool_tip[1] = "appearence of specific map tiles. You can";
+	hammer_tool_tip[2] = "make sloped tiles or tunnel tiles.";
+	hammer_tool_tip[3] = "";
+	hammer_tool_tip[4] = "Left click on a normal tile to change it's";
+	hammer_tool_tip[5] = "appearence. Left click on a changed tile to";
+	hammer_tool_tip[6] = "reverse the process.";
+	
+	selection_tool_tip[0] = "U N F I N I S H E D!";
+}

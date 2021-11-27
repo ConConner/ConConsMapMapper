@@ -184,37 +184,54 @@ switch (current_menu) {
 			//tool information and more text
 			menu_drawing_goal_alpha = 1;
 			draw_set_alpha(menu_drawing_alpha);
-			draw_set_color(c_ltgrey);
 			
 			if (show_tooltips) {
 				
+				#macro text_offset 160
+				draw_set_color(c_red);
 				draw_text(32, text_offset - 30, "Tool information:");
-				#macro text_offset 258
+				var _text_array = ["You should not see this!!!"];
+				
 				switch (current_tool) {
 				
 					case tool.pen: {
-						draw_text(32, text_offset, "The pen tool is probably going to be your\nmost used tool. It is used to add and remove\nmap-tiles and also to add onto existing tiles.");
-						draw_text(32, text_offset, "\n\n\n\nLeft click and drag to start a new room.\nRight click and drag to remove existing tiles.");
-						draw_text(32, text_offset, "\n\n\n\n\n\nAn existing room can be expanded by\ndragging off of an existing room.");
+						_text_array = pen_tool_tip;
 						break; }
 					case tool.eyedropper: {
-						draw_text(32, text_offset, "The color picker allows you to click on an\nalready existing map-tile to copy the color\nof it as your primary color.");
+						_text_array = color_picker_tool_tip;
 						break; }
 					case tool.color_brush: {
-						draw_text(32, text_offset, "With the color brush you can change the\ncolor of all map tiles of the selected tiles room.");
-						draw_text(32, text_offset, "\n\nIt is also possible to change all map tiles,\nwith the same color, to a new color.");
-						draw_text(32, text_offset, "\n\n\n\n\nLeft click to change the color of the selected room.\nright click to change all tiles with the same color.");
+						_text_array = color_brush_tool_tip;
 						break; }
 					case tool.door_tool: {
-						draw_text(32, text_offset, "With the connection tool you can create\nconnections between or in rooms. The connections\nhave colors as well, just like your tiles.");
-						draw_text(32, text_offset, "\n\n\nThey use the color you have currently selected\nbut you can also quickly swap between four\npresets.");
-						draw_text(32, text_offset, "\n\n\n\n\n\n\nDrag over two tiles to create a connection between\nthem. Dragging with a right click deletes the connection.");
-						draw_text(32, text_offset, "\n\n\n\n\n\n\n\n\nif you are unsure, where you can create a connection,\nthe cursor will show arrows, pointing into possible locations.");
-					}
+						_text_array = door_tool_tip;
+						break; }
+					case tool.marker_tool: {
+						_text_array = marker_tool_tip;
+						break; }
+					case tool.hammer: {
+						_text_array = hammer_tool_tip;
+						break; }
+					case tool.selector: {
+						_text_array = selection_tool_tip;
+						break; }
 				
 				}
 				
+				//generating the text to draw
+				var _len = array_length(_text_array);
+				var _string = "";
+				for (var i = 0; i < _len; i++) {
+					_string = _string + string(_text_array[i]) + "\n";
+				}
+				
+				//drawing generated text
+				draw_set_color(c_ltgrey);
+				draw_text(32, text_offset, _string);
+				
 			}
+			
+			
 			
 			//drawing tooltip section
 			draw_set_color(c_white);

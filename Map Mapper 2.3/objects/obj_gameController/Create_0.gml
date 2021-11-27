@@ -166,6 +166,9 @@ set_up_grid()
 global.text_grid = ds_grid_create(max_text_amount,4);
 ds_grid_set_region(global.text_grid, 0, 0, max_text_amount, 4, 0);
 
+//tooltip setup
+setup_tool_tips();
+
 
 //general functions
 //opening the menu
