@@ -13,15 +13,15 @@ real_yy = floor((global.mouse_pos_y + global.cam_pos_y) / tile_size);
 //view and window sizes
 global.view_width = obj_camera.view_width;
 global.view_height = obj_camera.view_height;
-#macro view_half_w = (global.view_width / 2)
-#macro view_half_h = (global.view_height / 2)
+global.view_half_w = (global.view_width / 2)
+global.view_half_h = (global.view_height / 2)
 global.grid_view_width = global.grid_width * tile_size;
 global.grid_view_height = global.grid_height * tile_size;
 
 global.window_width = window_get_width();
 global.window_height = window_get_height();
-#macro window_half_width  (global.window_width / 2)
-#macro window_half_height  (global.window_height / 2)
+global.window_half_width = (global.window_width / 2)
+global.window_half_height = (global.window_height / 2)
 
 
 	#region getting key input for special keys
@@ -181,14 +181,13 @@ if (obj_cursor.cursor_mode == curs_mode.on_grid) {
 	switch (current_tool) {
 		
 		case tool.pen: {
-			if (mLeft) add_tiles();
-			if (mRight) add_tiles();
+			if (mLeft || mRight) add_tiles();
 			
 			if (mLeftReleased) {
-			add_tiles();
-			global.roomCount = old_roomCount + 1;
-			old_roomCount = global.roomCount;
-			placed_tile = false;
+				add_tiles();
+				global.roomCount = old_roomCount + 1;
+				old_roomCount = global.roomCount;
+				placed_tile = false;
 			}
 			
 			if (!mLeft && !mRight) placed_tile = false;
@@ -386,7 +385,6 @@ if (placed_tile || deleted_tile) {
 if (kAltPressed) old_tool = current_tool;
 if (kAlt && !adding_connection) current_tool = tool.eyedropper;
 if (kAltReleased) current_tool = old_tool;
-
 
 //keybinds to quickly switch between tools
 if (kLetterP) current_tool = tool.pen;

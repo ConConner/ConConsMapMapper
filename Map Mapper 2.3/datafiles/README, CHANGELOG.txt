@@ -6,7 +6,7 @@ LAST UPDATED 23.05.2021
 
 
 -------------README-----------------
-WINDOWS ONLY (no other platforms planned yet)
+WINDOWS ONLY (no other platforms planned)
 
 For help and reporting bugs write me a message on Discord or write an E-Mail to contendohelp@gmail.com
 
@@ -29,6 +29,9 @@ Beta 2.1 (XX.XX.XXXX)
 + NEW hammer tool
 + added hotkeys
 + added DISCORD button
++ added .png export
+* combined README and CHANGELOG
+* restructured CHANGELOG
 
 
 ------------------------------------
@@ -83,6 +86,7 @@ ICON EXPLANATION
 (#) changed something that already exists
 (+) added something new
 (-) removed something that existed
+(*) changes outside of MapMapper
 
 
 

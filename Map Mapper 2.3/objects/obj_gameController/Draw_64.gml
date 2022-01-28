@@ -325,7 +325,7 @@ switch (current_menu) {
 
 #region drawing the tileset
 //calculating amount of tiles per page
-space_per_page = global.view_height - 96;
+space_per_page = global.view_height - 124;
 tiles_per_page = floor(space_per_page / 40);
 max_pages = ceil(tile_amount / tiles_per_page - 1)
 
@@ -359,7 +359,9 @@ draw_set_color(c_white);
 //text
 draw_set_halign(fa_center);
 draw_text(tileset_x + 54, 8, "MARKERS");
-draw_text(tileset_x + 54, global.view_height - 32, "PAGE " + string(tile_page + 1) + "/" + string(max_pages + 1));
+draw_set_halign(fa_left);
+draw_text(tileset_x + 14, global.view_height - 32, "PAGE " + string(tile_page + 1) + "/" + string(max_pages + 1));
+draw_set_halign(fa_center);
 
 #endregion
 

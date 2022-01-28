@@ -14,7 +14,7 @@ function add_tiles() {
 		if (canBuild) {
 
 			//editing rooms
-			if (tile.main = ID.filled) {
+			if (mLeft && tile.main = ID.filled) {
 				global.roomCount = tile.rm_nmb;
 			}
 	
@@ -145,5 +145,44 @@ function replace_same_color(_col, _col2) {
 			
 		}
 	}
+	
+}
+	
+	
+//Markers
+function reload_markers() {
+	checking_sprite = sprite_add(marker_url, 1, false, false, 0, 0);
+}
+
+function draw_marker_set(_x, _y, amount_w) {
+	
+	for (var i = 0; i < tile_amount; i++) {
+		
+		if (selected_marker == i) {
+			draw_nine_slice(spr_edge_nineslice, _x - 2, _y + 40 * i - (40 * tiles_per_page * tile_page) - 2, _x + 34, _y + 40 * i - (40 * tiles_per_page * tile_page) + 34);
+		}
+		
+		draw_sprite(marker_sprite, i, _x, _y + 40 * i - (40 * tiles_per_page * tile_page))
+		
+	}
+	
+}
+
+function get_selected_marker(_x, _y) {
+	
+	var _return = noone;
+	
+	for (var i = 0; i < obj_gameController.tile_amount; i++) {
+		
+		var _x1 = _x
+		var _y1 = _y + 40 * i - (40 * obj_gameController.tiles_per_page * obj_gameController.tile_page)
+		
+		if (point_in_rectangle(global.mouse_pos_x, global.mouse_pos_y, _x1, _y1, _x1 + 32, _y1 + 32)) {
+			_return = i;
+		}
+		
+	}
+	
+	return(_return);
 	
 }

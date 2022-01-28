@@ -1,5 +1,5 @@
 //mapper information
-#macro current_version "B2.0"
+#macro current_version "B2.1"
 #macro save_system_version "1.0" //this version is referencing the version of the save system. NOT the mapper version
 
 //declaring globals
@@ -10,9 +10,9 @@ old_grid_width = global.grid_width;
 old_grid_height = global.grid_height;
 
 min_grid_width = 20;
-min_grid_height = 20;		//maximum possible map size without any errors: 1476 x 1476
-max_grid_width = 500;		//stack overflow before 2000 x 2000
-max_grid_height = 500;		//these sizes cant be saved...
+min_grid_height = 20;
+max_grid_width = 500;
+max_grid_height = 500;
 
 
 global.mouse_pos_x = device_mouse_x_to_gui(0);			//mouse position relative to the GUI
@@ -28,8 +28,8 @@ global.roomCount = 0;
 //display vars
 global.display_width = display_get_width();
 global.display_height = display_get_height();
-#macro display_half_w (global.display_width / 2)
-#macro display_half_h (global.display_height / 2)
+global.display_half_w = (global.display_width / 2)
+global.display_half_h = (global.display_height / 2)
 
 //window vars
 global.window_width = window_get_width();
