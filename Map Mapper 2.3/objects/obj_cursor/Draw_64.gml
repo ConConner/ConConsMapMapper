@@ -222,7 +222,7 @@ if (_button != 0) {
 				draw_text(_left + 2, _top + 69, "hammer tool (H)");
 				break; }
 			case obj_gameController.save_button: {
-				draw_text(_left + 2, _top + 69, "save map");
+				draw_text(_left + 2, _top + 69, "save menu");
 				break; }
 			case obj_gameController.load_button: {
 				draw_text(_left - 17, _top + 69, "load map");

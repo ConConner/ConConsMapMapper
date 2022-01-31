@@ -157,6 +157,117 @@ switch (current_menu) {
 		
 		break; }
 		
+	case menu_state.save_menu: {
+		
+		//darkening the background
+		draw_set_alpha(background_alpha);
+		draw_set_color(c_black);
+		draw_rectangle(0,0,global.view_width,global.view_height,false);
+		draw_set_color(c_white);
+		
+		//drawing nineslice background
+		draw_set_alpha(1)
+		image_alpha = 1;
+		
+		if (!close_menu) {
+			menu_goal_width = 800 - tile_size;
+			menu_goal_height = 350;
+		}
+		menu_pos_x = (global.view_width / 2) - (menu_width / 2);
+		menu_pos_y = (global.view_height / 2) - (menu_height / 2);
+		
+		background_goal_alpha = 0.6;
+		
+		draw_nine_slice(spr_menu_nineslice, menu_pos_x, menu_pos_y, menu_pos_x + menu_width, menu_pos_y + menu_height);
+		
+		if (menu_width > menu_goal_width - 20 && menu_height > menu_goal_height - 20) { //this happens after the menu background is done
+			
+			menu_drawing_goal_alpha = 1;
+			image_alpha = menu_drawing_alpha;
+			draw_set_alpha(menu_drawing_alpha);
+			
+			var _mouseX = device_mouse_x_to_gui(0);
+			var _mouseY = device_mouse_y_to_gui(0);
+			
+			//contents of the menu
+			draw_set_halign(fa_center);
+			draw_text(menu_pos_x + menu_width / 2, menu_pos_y + 17, "SAVE MENU");
+			draw_set_halign(fa_left);
+			
+			//drawing info box outline
+			var box1_x = menu_pos_x + 35
+			var box2_x = menu_pos_x + menu_width / 2 - 115
+			var box3_x = menu_pos_x + menu_width - 265
+			var box_y = menu_pos_y + 55
+			draw_nine_slice(spr_edge_nineslice, box1_x, box_y, box1_x + 230, box_y + 250);
+			draw_nine_slice(spr_edge_nineslice, box2_x, box_y, box2_x + 230, box_y + 250);
+			draw_nine_slice(spr_edge_nineslice, box3_x, box_y, box3_x + 230, box_y + 250);
+			
+			//drawing button graphics
+			draw_set_font(fnt_simple_text_2x); //different export buttons
+			draw_text_button(menu_pos_x + 40, menu_pos_y + 60, 220, 50, "map file");
+			draw_text_button(menu_pos_x + menu_width / 2 - 110, menu_pos_y + 60, 220, 50, "png");
+			draw_text_button(menu_pos_x + menu_width - 260, menu_pos_y + 60, 220, 50, "SMART");
+			draw_set_font(fnt_simple_text);
+			
+			//drawing info text
+			draw_set_color(c_aqua);
+			draw_text(box1_x + 6, box_y + 60, "info:");
+			draw_text(box2_x + 6, box_y + 60, "info:");
+			draw_text(box3_x + 6, box_y + 60, "info:");
+			draw_set_color(c_ltgrey);
+			draw_text_ext(box1_x + 6, box_y + 85, "exports the map as a file, which can be shared and read back into the program.", 22, 220);
+			draw_text_ext(box2_x + 6, box_y + 85, "exports the map as a transparent image.\ncannot be read back into the program!", 22, 220);
+			draw_text_ext(box3_x + 6, box_y + 85, "exports the map as a SMART compatible file.\n(can not be read back into the program at the moment!)", 22, 220);
+			
+			
+			#region updating buttons
+			save_confirm_button.goal_x = menu_pos_x + menu_width - 2.75*tile_size;
+			save_confirm_button.goal_y = menu_pos_y - tile_size / 2;
+			save_confirm_button.goal_alpha = menu_drawing_alpha
+			save_confirm_button.jmp();
+			
+			save_mf_button.goal_x = box1_x + 5;
+			save_mf_button.goal_y = box_y + 5;
+			save_mf_button.button_width = 220;
+			save_mf_button.button_height = 50;
+			save_png_button.goal_x = box2_x + 5;
+			save_png_button.goal_y = box_y + 5;
+			save_png_button.button_width = 220;
+			save_png_button.button_height = 50;
+			save_xml_button.goal_x = box3_x + 5;
+			save_xml_button.goal_y = box_y + 5;
+			save_xml_button.button_width = 220;
+			save_xml_button.button_height = 50;
+			#endregion
+			
+		}
+			
+		if (close_menu) { //closing process
+			menu_drawing_goal_alpha = 0;
+			background_goal_alpha = 0;
+			
+			if (menu_drawing_alpha <= 0.01) { //this happens after the button fadeout
+				menu_goal_width = 32;
+				menu_goal_height = 32;
+				
+				if (menu_width < menu_goal_width + 3 && menu_height < menu_goal_height + 3) { //this happens after the animation finished
+					
+					//going back to main menu
+					close_menu = false;
+					canBuild = false;
+					in_menu = true;
+					
+					//ending menu
+					current_menu = menu_state.ig_menu;
+				}
+			}
+			
+			
+		}
+		
+		break; }
+		
 	case menu_state.ig_menu: {
 		
 		//darkening the background
@@ -323,7 +434,7 @@ switch (current_menu) {
 		
 }
 
-#region drawing the tileset
+#region drawing the marker-tileset
 //calculating amount of tiles per page
 space_per_page = global.view_height - 124;
 tiles_per_page = floor(space_per_page / 40);
@@ -410,4 +521,3 @@ if (debug_on) {
 	draw_text(5,17 * 24,"Selected Marker: " + string(selected_marker));
 	
 }
-

@@ -27,9 +27,10 @@ Beta 2.1 (XX.XX.XXXX)
 # base markers now included in the program
 + the window is now resizeable
 + NEW hammer tool
-+ added hotkeys
-+ added DISCORD button
-+ added .png export
++ SMART (Super Metroid Auto Repoint Tool) .xml export
++ .png export
++ hotkeys
++ DISCORD button
 * combined README and CHANGELOG
 * restructured CHANGELOG
 

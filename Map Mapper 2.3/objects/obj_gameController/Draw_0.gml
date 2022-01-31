@@ -18,8 +18,7 @@ else {
 draw_set_alpha(1);
 
 
-#region taking a screenshot of the map
-function take_screenshot() {
+function take_screenshot(_file) {
 	
 	//setting up the surface
 	var temp_surf = surface_create(global.grid_view_width, global.grid_view_height);
@@ -37,16 +36,12 @@ function take_screenshot() {
 	load_grid_whole();
 	
 	//saving screenshot
-	var _file = get_save_filename("screenshot|*.png", "");
 	surface_save(temp_surf, _file);
 	
 	surface_reset_target();
 	surface_free(temp_surf);
 	
 }
-
-if (keyboard_check_pressed(ord("Q"))) take_screenshot();
-#endregion
 
 
 draw_set_color(c_white);

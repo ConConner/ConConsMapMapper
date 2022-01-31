@@ -182,21 +182,55 @@ open_menu = function() {
 	menu_height = 0;
 }
 
-//bring up save dialog and save map
-save_room = function(){
-	var fname = get_save_filename("Map File (.mf)|*"+extension,"");
+//save menu
+save_menu = function() {
+
+	current_menu = menu_state.save_menu;
+	menu_drawing_goal_alpha = 0;
+	menu_drawing_alpha = 0;
+
+	//export buttons
+	save_mf_button = make_button(0, 0, spr_cursor_selector, menu_state.save_menu);
+	save_png_button = make_button(0, 0, spr_cursor_selector, menu_state.save_menu);
+	save_xml_button = make_button(0, 0, spr_cursor_selector, menu_state.save_menu);
+
+	//confirm
+	save_confirm_button = make_button(0, 0, spr_menu_decline, menu_state.save_menu);
+	save_confirm_button.goal_alpha = 0;
+	save_confirm_button.image_alpha = 0;
+}
+save_confirmed = function() {
+	
+	close_menu = true;
+	//removing all menu buttons
+	remove_button(save_confirm_button);
+	remove_button(save_mf_button);
+	remove_button(save_png_button);
+	remove_button(save_xml_button);
+}
+save_mf_exporting = function() {
+	var fname = get_save_filename("Map File (.mf)|*"+".mf","");
 	save_map(fname);
+}
+save_png_exporting = function() {
+	var fname = get_save_filename("Image (.png)|*"+".png","");
+	take_screenshot(fname);
+}
+save_xml_exporting = function() {
+	var fname = get_save_filename("SMART (.xml)|*"+".xml","");
+	save_map_smart(fname);
 }
 
 //bring up load dialog and load map
 load_room = function() {
-	var fname = get_open_filename("Map File (.mf)|*"+extension,"");
+	var fname = get_open_filename("Map File (.mf)|*"+".mf","");
 	load_map(fname);	
 }
 
-//open color menu
+//color menu
 open_color_menu = function() {
 	current_menu = menu_state.color_menu;
+	
 	//creating the selection boxes
 	hue_selection = make_button(0, 0, spr_cursor_selector, menu_state.color_menu);
 	value_selection = make_button(0,0,spr_cursor_selector, menu_state.color_menu);
@@ -216,7 +250,6 @@ open_color_menu = function() {
 	selected_color_val = color_get_value(global.selected_color);
 	selected_rgb_hex = get_hex_rgb(global.selected_color);
 }
-
 color_confirmed = function() {
 	
 	close_menu = true;
@@ -233,7 +266,6 @@ color_confirmed = function() {
 	//text message
 	add_text_message("applied color", 1.5, c_lime);
 }
-
 color_declined = function() {
 	close_menu = true;
 	//removing all the menu buttons
@@ -318,6 +350,7 @@ button_create = function(_x, _y, _spr, _menu_level) constructor {
 global.button_list = ds_list_create();
 #endregion
 
+
 #region buttons
 
 //main Buttons
@@ -338,6 +371,9 @@ load_button = make_button(global.view_width - 80, -10, spr_load, menu_state.ig_m
 tooltip_button = make_button(32, global.view_height - 55, spr_cursor_selector, menu_state.ig_menu);
 discord_button = make_button(global.view_width - 80, global.view_height - 80, spr_discord_button, menu_state.ig_menu);
 
+//save menu buttons
+
+
 //door color buttons
 blue_door_button = make_button(16, global.view_height / 2 - 130, spr_door_colors, menu_state.nothing);
 blue_door_button.disable();
@@ -347,7 +383,6 @@ green_door_button = make_button(16, global.view_height / 2, spr_door_colors, men
 green_door_button.disable();
 yellow_door_button = make_button(16, global.view_height / 2 + 65, spr_door_colors, menu_state.nothing);
 yellow_door_button.disable();
-
 
 #endregion
 

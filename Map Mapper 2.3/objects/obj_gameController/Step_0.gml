@@ -403,6 +403,7 @@ if (kEscPressed) {
 	}
 	else if (current_menu == menu_state.ig_menu) close_menu = true;
 	else if (current_menu == menu_state.color_menu) color_declined();
+	else if (current_menu == menu_state.save_menu) save_confirmed();
 }
 
 //keybind to accept color
@@ -410,8 +411,14 @@ if (kEnterPressed && current_menu == menu_state.color_menu) color_confirmed();
 
 //keybind to quickly save/load or get to color menu
 if (kCtrl && current_menu != menu_state.color_menu) {
-	if (kLetterS) save_room();
+	
+	if (kLetterS && current_menu != menu_state.save_menu) {
+		save_menu();
+		in_menu = true;
+		canBuild = false;
+	}
 	else if (kLetterL) load_room();
+	
 	//only open color menu, if we are tile creation
 	else if (kLetterC && current_menu == menu_state.nothing) {
 		canBuild = false;
@@ -597,7 +604,7 @@ if (mLeftPressed) {
 				break; }
 			case save_button: {
 				
-				save_room();
+				save_menu();
 				
 				break; }
 			case load_button: {
@@ -610,6 +617,19 @@ if (mLeftPressed) {
 				break; }
 			case discord_button: {
 				url_open("https://discord.gg/n6ZCB3JkNb");
+				break; }
+				
+			case save_confirm_button: {
+				save_confirmed();
+				break;}
+			case save_mf_button: {
+				save_mf_exporting();
+				break; }
+			case save_png_button: {
+				save_png_exporting();
+				break; }
+			case save_xml_button: {
+				save_xml_exporting();
 				break; }
 				
 			case blue_door_button: {
@@ -652,5 +672,3 @@ if (debug_on) {
 }
 
 #endregion
-
-if kSpacePressed show_grid = !show_grid;

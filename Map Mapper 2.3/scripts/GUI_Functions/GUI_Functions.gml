@@ -146,6 +146,27 @@ function draw_checkbox(_x, _y, _value) {
 }
 	
 
+function draw_text_button(_x, _y, _w, _h, _txt = "") { //draws a box with a centered text in it
+	
+	var old_halign = draw_get_halign();
+	var old_valign = draw_get_valign();
+	
+	//button outline
+	draw_nine_slice(spr_edge_nineslice, _x, _y, _x + _w, _y + _h);
+	
+	//text
+	var _halfw = _w / 2;
+	var _halfh = _h / 2;
+	draw_set_halign(fa_center);	//centering text
+	draw_set_valign(fa_middle);
+	
+	draw_text(_x + _halfw, _y + _halfh, _txt);
+	
+	draw_set_halign(old_halign);	//resetting aligns
+	draw_set_valign(old_valign);
+}
+	
+
 function resize_window(new_width, new_height) {
 	
 	//capping width and height
