@@ -1,4 +1,4 @@
-#region setting up
+ #region setting up
 //getting mouse coordinates on grid
 
 	//GLOBAL MOUSE COORDINATES
@@ -13,15 +13,11 @@ real_yy = floor((global.mouse_pos_y + global.cam_pos_y) / tile_size);
 //view and window sizes
 global.view_width = obj_camera.view_width;
 global.view_height = obj_camera.view_height;
-global.view_half_w = (global.view_width / 2)
-global.view_half_h = (global.view_height / 2)
 global.grid_view_width = global.grid_width * tile_size;
 global.grid_view_height = global.grid_height * tile_size;
 
 global.window_width = window_get_width();
 global.window_height = window_get_height();
-global.window_half_width = (global.window_width / 2)
-global.window_half_height = (global.window_height / 2)
 
 
 	#region getting key input for special keys
@@ -46,6 +42,7 @@ kLetterC = keyboard_check(ord("C"));
 kLetterM = keyboard_check(ord("M"))
 kLetterH = keyboard_check(ord("H"));
 kLetterS = keyboard_check(ord("S"));
+kLetterSPressed = keyboard_check_pressed(ord("S"));
 kLetterL = keyboard_check(ord("L"));
 //mouse input
 mLeft = mouse_check_button(mb_left);
@@ -382,10 +379,18 @@ if (placed_tile || deleted_tile) {
 	
 //quick tool swap
 //swaps between the latest tool and the color picker
-if (kAltPressed) old_tool = current_tool;
+if (kAltPressed) {
+	old_tool = current_tool;
+	on_old_tool = false;
+}
 if (kAlt && !adding_connection) current_tool = tool.eyedropper;
-if (kAltReleased) current_tool = old_tool;
+if (!kAlt && !on_old_tool) {
+	current_tool = old_tool;
+	on_old_tool = true;
+}
 
+
+#region keybinds
 //keybinds to quickly switch between tools
 if (kLetterP) current_tool = tool.pen;
 if (kLetterB) current_tool = tool.color_brush;
@@ -412,10 +417,15 @@ if (kEnterPressed && current_menu == menu_state.color_menu) color_confirmed();
 //keybind to quickly save/load or get to color menu
 if (kCtrl && current_menu != menu_state.color_menu) {
 	
-	if (kLetterS && current_menu != menu_state.save_menu) {
-		save_menu();
-		in_menu = true;
-		canBuild = false;
+	if (kLetterSPressed && current_menu != menu_state.save_menu) {
+		
+		if (global.map_dir == "") {
+			save_menu();
+			in_menu = true;
+			canBuild = false;
+		} else {
+			save_map(global.map_dir);
+		}
 	}
 	else if (kLetterL) load_room();
 	
@@ -426,6 +436,7 @@ if (kCtrl && current_menu != menu_state.color_menu) {
 		open_color_menu();
 	}
 }
+#endregion
 
 #endregion
 
@@ -535,9 +546,9 @@ yellow_door_button.image_index = 3;
 //updating button positions to accommodate
 color_button.setpos(tile_size / 2, global.view_height - tile_size / 2 - sprite_get_height(spr_color_button));
 discord_button.setpos(global.view_width - 80, global.view_height - 80);
+settings_button.goal_x = global.view_width - 80 - 72 * 2;
 save_button.goal_x = global.view_width - 80 - 72;
 load_button.goal_x = global.view_width - 80
-tooltip_button.setpos(32, global.view_height - 55);
 
 
 #endregion
@@ -612,13 +623,26 @@ if (mLeftPressed) {
 				load_room();
 				
 				break; }
-			case tooltip_button: {
-				show_tooltips = !show_tooltips;
-				break; }
 			case discord_button: {
 				url_open("https://discord.gg/n6ZCB3JkNb");
 				break; }
 				
+			case settings_button: {
+				open_settings_menu();
+				break; }
+			case settings_confirm_button: {
+				settings_confirmed();
+				break; }
+			case settings_decline_button: {
+				settings_declined();
+				break; }
+			case settings_toggle_tooltips: {
+				setting_show_tooltips = !setting_show_tooltips;
+				break; }
+			case settings_toggle_grid: {
+				setting_show_grid = !setting_show_grid;
+				break; }
+
 			case save_confirm_button: {
 				save_confirmed();
 				break;}

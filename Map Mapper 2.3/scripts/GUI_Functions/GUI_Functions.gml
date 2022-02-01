@@ -1,28 +1,3 @@
-function circle_menu(total_options,circle_x,circle_y,circle_radius,min_radius,dir_offset) {
-	
-	// Select option from circle menu
-	var option_angle_range = (360/total_options);
-	var dis = point_distance( circle_x , circle_y , global.mouse_pos_x , global.mouse_pos_y );
-	if( dis < circle_radius && dis > min_radius )
-	{
-	    var dir = point_direction( circle_x , circle_y , global.mouse_pos_x , global.mouse_pos_y ) + dir_offset;
-		if (dir > 360) dir -= 360
-		if (dir < 0) dir += 360
-	    return( floor( dir / option_angle_range ) );
-	}
-	else
-	{
-		if (dis > circle_radius) {
-			return( -1 )
-		}
-		
-		if (dis < min_radius) {
-			return( total_options );
-		}
-	}
-}
-
-
 function draw_nine_slice( spr, _x1, _y1, _x2, _y2) {
 	
 	var _size = sprite_get_width(spr) / 3;
@@ -139,10 +114,20 @@ function visualize_buttons() { //draws outlines at every button position
 }
 
 
-function draw_checkbox(_x, _y, _value) {
-
-	draw_sprite(spr_checkbox, _value, _x, _y);
-
+function draw_checkbox(_x, _y, _value, txt = "", size = 1, alpha = 1) {
+	
+	var w = sprite_get_width(spr_checkbox) * size;
+	var h = w;
+	var old_halign = draw_get_halign();
+	var old_valign = draw_get_valign();
+	
+	draw_sprite_ext(spr_checkbox, _value, _x, _y, size, size, 0, c_white, alpha);
+	
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_center);
+	draw_text(_x + w + 5, _y + h / 2, txt);
+	draw_set_halign(old_halign);
+	draw_set_valign(old_valign);
 }
 	
 

@@ -6,6 +6,7 @@ enum ID {
 enum menu_state {
 	nothing,
 	color_menu,
+	settings_menu,
 	save_menu,
 	ig_menu
 }

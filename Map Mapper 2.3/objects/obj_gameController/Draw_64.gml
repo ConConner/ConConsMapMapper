@@ -157,6 +157,95 @@ switch (current_menu) {
 		
 		break; }
 		
+	case menu_state.settings_menu: {
+		
+		//darkening the background
+		draw_set_alpha(background_alpha);
+		draw_set_color(c_black);
+		draw_rectangle(0,0,global.view_width,global.view_height,false);
+		draw_set_color(c_white);
+		
+		//drawing nineslice background
+		draw_set_alpha(1)
+		image_alpha = 1;
+		
+		if (!close_menu) {
+			menu_goal_width = 800 - tile_size;
+			menu_goal_height = 350;
+		}
+		menu_pos_x = (global.view_width / 2) - (menu_width / 2);
+		menu_pos_y = (global.view_height / 2) - (menu_height / 2);
+		
+		background_goal_alpha = 0.6;
+		
+		draw_nine_slice(spr_menu_nineslice, menu_pos_x, menu_pos_y, menu_pos_x + menu_width, menu_pos_y + menu_height);
+		
+		if (menu_width > menu_goal_width - 20 && menu_height > menu_goal_height - 20) { //this happens after the menu background is done
+			
+			menu_drawing_goal_alpha = 1;
+			image_alpha = menu_drawing_alpha;
+			draw_set_alpha(menu_drawing_alpha);
+			
+			var _mouseX = device_mouse_x_to_gui(0);
+			var _mouseY = device_mouse_y_to_gui(0);
+			
+			//contents of the menu
+			draw_set_halign(fa_center);
+			draw_text(menu_pos_x + menu_width / 2, menu_pos_y + 17, "SETTINGS MENU");
+			draw_set_halign(fa_left);
+			
+			//settings checkboxes
+			draw_checkbox(menu_pos_x + 35, menu_pos_y + 55, setting_show_tooltips, "tooltips",, menu_drawing_alpha);
+			draw_checkbox(menu_pos_x + 35, menu_pos_y + 88, setting_show_grid, "map grid",, menu_drawing_alpha);
+
+			#region updating buttons
+			settings_toggle_tooltips.goal_x = menu_pos_x + 35;
+			settings_toggle_tooltips.goal_y = menu_pos_y + 55;
+			settings_toggle_tooltips.button_width = 30 + string_width("tooltips");
+			settings_toggle_tooltips.button_height = 23;
+			
+			settings_toggle_grid.goal_x = menu_pos_x + 35;
+			settings_toggle_grid.goal_y = menu_pos_y + 88;
+			settings_toggle_grid.button_width = 30 + string_width("map grid");
+			settings_toggle_grid.button_height = 23;
+			
+			settings_decline_button.goal_x = menu_pos_x + menu_width - 1 - 3.5*tile_size;
+			settings_decline_button.goal_y = menu_pos_y - tile_size / 2;
+			settings_decline_button.goal_alpha = menu_drawing_alpha
+			settings_decline_button.jmp();
+			settings_confirm_button.goal_x = menu_pos_x + menu_width - 2*tile_size;
+			settings_confirm_button.goal_y = menu_pos_y - tile_size / 2;
+			settings_confirm_button.goal_alpha = menu_drawing_alpha
+			settings_confirm_button.jmp();
+			#endregion
+			
+		}
+			
+		if (close_menu) { //closing process
+			menu_drawing_goal_alpha = 0;
+			background_goal_alpha = 0;
+			
+			if (menu_drawing_alpha <= 0.01) { //this happens after the button fadeout
+				menu_goal_width = 32;
+				menu_goal_height = 32;
+				
+				if (menu_width < menu_goal_width + 3 && menu_height < menu_goal_height + 3) { //this happens after the animation finished
+					
+					//going back to main menu
+					close_menu = false;
+					canBuild = false;
+					in_menu = true;
+					
+					//ending menu
+					current_menu = menu_state.ig_menu;
+				}
+			}
+			
+			
+		}
+		
+		break; }
+		
 	case menu_state.save_menu: {
 		
 		//darkening the background
@@ -346,8 +435,6 @@ switch (current_menu) {
 			
 			//drawing tooltip section
 			draw_set_color(c_white);
-			draw_checkbox(32, global.window_height - 55, show_tooltips);
-			draw_text(32 + 27, global.window_height - 55, "tooltips");
 			
 		}
 		
@@ -394,6 +481,10 @@ switch (current_menu) {
 		if (current_tool == tool.hammer) hammer_tool_button.image_index = 1;
 		else hammer_tool_button.image_index = 0;
 		
+		settings_button.goal_alpha = 1;
+		settings_button.goal_y = menu_pos_y + menu_height - 98;
+		if (menu_height > menu_goal_height - 2) settings_button.activate();
+		
 		save_button.goal_alpha = 1;
 		save_button.goal_y = menu_pos_y + menu_height - 98;
 		if (menu_height > menu_goal_height - 2) save_button.activate();
@@ -401,10 +492,6 @@ switch (current_menu) {
 		load_button.goal_alpha = 1;
 		load_button.goal_y = menu_pos_y + menu_height - 98;
 		if (menu_height > menu_goal_height - 2) load_button.activate();
-		
-		tooltip_button.activate();
-		tooltip_button.button_height = 23;
-		tooltip_button.button_width = 105;
 		
 		discord_button.goal_alpha = 1;
 		discord_button.activate();
@@ -430,6 +517,40 @@ switch (current_menu) {
 		break; }
 		
 	case menu_state.nothing: {
+		
+		//drawing current color
+		var _x = color_button.x;
+		var _y = color_button.y;
+		var _w = color_button.button_width;
+		var _h = color_button.button_height;
+		var _a = color_button.image_alpha;
+		var _col = global.selected_color;
+		
+		draw_set_color(_col);
+		draw_set_alpha(_a);
+		//draw_rectangle(_x + _w / 2, _y + _h / 2, _x + _w - 1, _y + _h - (_h * 0.25), false);
+		//draw_rectangle(_x + _w / 2, _y + _h / 2, _x + _w - (_w * 0.25), _y + _h - 1, false);
+		//draw_circle(_x + _w - (_w * 0.25) - 1, _y + _h - (_h * 0.25) - 1, _w * 0.25, false);
+		//draw_primitive_begin(pr_trianglelist)
+		//draw_vertex(_x + 32, _y + 32);
+		//draw_vertex(_x + 63, _y + 32);
+		//draw_vertex(_x + 32, _y + 63);
+		
+		//draw_vertex(_x + 63, _y + 32);
+		//draw_vertex(_x + 32, _y + 63);
+		//draw_vertex(_x + 51, _y + 63);
+		
+		//draw_vertex(_x + 63, _y + 32);
+		//draw_vertex(_x + 32, _y + 63);
+		//draw_vertex(_x + 63, _y + 51);
+		
+		//draw_vertex(_x + 54, _y + 62);
+		//draw_vertex(_x + 62, _y + 54);
+		//draw_vertex(_x + 49, _y + 49);
+		draw_roundrect_ext(_x + 20, _y + 20, _x + _w - 1, _y + _h - 1, 32, 32, false);
+		//draw_primitive_end();
+		draw_set_color(c_white);
+		
 		break; }
 		
 }
@@ -513,11 +634,8 @@ if (debug_on) {
 	draw_text(5,17 * 13,"Menu Y" + string(menu_pos_y));
 	draw_text(5,17 * 14,"Menu width: " + string(menu_width));
 	draw_text(5,17 * 15,"Menu height: " + string(menu_height));
-	draw_text(5,17 * 17,"Selected Col Hue: " + string(selected_color_hue));
-	draw_text(5,17 * 18,"Selected Col Sat: " + string(selected_color_sat));
-	draw_text(5,17 * 19,"Selected Col Val: " + string(selected_color_val));
-	draw_text(5,17 * 21,"Cursor X: " + string(obj_cursor.goal_x));
-	draw_text(5,17 * 22,"Cursor Y: " + string(obj_cursor.goal_y));
-	draw_text(5,17 * 24,"Selected Marker: " + string(selected_marker));
+	draw_text(5,17 * 17,"Cursor X: " + string(obj_cursor.goal_x));
+	draw_text(5,17 * 18,"Cursor Y: " + string(obj_cursor.goal_y));
+	draw_text(5,17 * 20,"Room Counter: " + string(global.roomCount));
 	
 }

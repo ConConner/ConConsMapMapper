@@ -21,10 +21,10 @@ if (cursor_mode == curs_mode.on_grid) {
 			break; }
 	
 		case tool.eyedropper: {
-			goal_x = global.mouse_pos_x - tile_size / 2;
-			goal_y = global.mouse_pos_y - tile_size / 2;
-			selection_box_h = 4;
-			selection_box_w = 4;
+			goal_x = global.mouse_pos_x - tile_size / 2 + 5;
+			goal_y = global.mouse_pos_y - tile_size / 2 - 5;
+			selection_box_h = tile_size * 1.5;
+			selection_box_w = tile_size * 1.5;
 			
 			break; }
 			

@@ -48,7 +48,6 @@ function add_tiles() {
 				if (yy != 0) tile_up.subimg = autotile(xx,yy - 1);
 				if (yy != global.grid_height - 1) tile_down.subimg = autotile(xx,yy + 1);
 	
-				global.roomCount ++;
 				deleted_tile = true;
 			}
 		}
@@ -154,7 +153,7 @@ function reload_markers() {
 	checking_sprite = sprite_add(marker_url, 1, false, false, 0, 0);
 }
 
-function draw_marker_set(_x, _y, amount_w) {
+function draw_marker_set(_x, _y) {
 	
 	for (var i = 0; i < tile_amount; i++) {
 		

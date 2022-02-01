@@ -90,6 +90,8 @@ function load_grid() { //draws the contents on the grid
 	var max_x = min(global.grid_width,floor( min_x + ( cam_w / tile_size ) ) +2);
 	var max_y = min(global.grid_height,ceil( min_y + ( cam_h / tile_size ) ) +2);
 	
+	//hammer tile edge buffer
+	var _hammer_tiles = ds_list_create();
 	
 	//looping through the grid and drawing tiles
 	for (var draw_x = min_x; draw_x < max_x; draw_x++) {
@@ -132,8 +134,8 @@ function load_grid() { //draws the contents on the grid
 								//drawing edges if no more tunnel tiles
 								var tile_left = ds_grid_get(global.tile_grid, draw_x - 1, draw_y);
 								var tile_right = ds_grid_get(global.tile_grid, draw_x + 1, draw_y);
-								if (tile_left.subimg != 20) draw_sprite(spr_mapTiles, 22, pos_x, pos_y);
-								if (tile_right.subimg != 20) draw_sprite(spr_mapTiles, 22, pos_x + tile_size - 2, pos_y);
+								if (tile_left.subimg != 20) draw_sprite(spr_mapTiles, 22, pos_x - 2, pos_y);
+								if (tile_right.subimg != 20) ds_list_add(_hammer_tiles, [22, pos_x + tile_size, pos_y]);
 								
 								break; }
 								
@@ -143,8 +145,8 @@ function load_grid() { //draws the contents on the grid
 								//drawing edges if no more tunnel tiles
 								var tile_up = ds_grid_get(global.tile_grid, draw_x, draw_y - 1);
 								var tile_down = ds_grid_get(global.tile_grid, draw_x, draw_y + 1);
-								if (tile_up.subimg != 21) draw_sprite(spr_mapTiles, 23, pos_x, pos_y);
-								if (tile_down.subimg != 21) draw_sprite(spr_mapTiles, 23, pos_x, pos_y + tile_size - 2);
+								if (tile_up.subimg != 21) draw_sprite(spr_mapTiles, 23, pos_x, pos_y - 2);
+								if (tile_down.subimg != 21) ds_list_add(_hammer_tiles, [23, pos_x, pos_y + tile_size]);
 								
 								break; }
 						}
@@ -189,11 +191,20 @@ function load_grid() { //draws the contents on the grid
 			}
 		}
 	}
+	//adding missing hammer edges
+	for (var i = 0; i < ds_list_size(_hammer_tiles); i++) {
+		var _hammer_edge = ds_list_find_value(_hammer_tiles, i);
+		draw_sprite(spr_mapTiles, _hammer_edge[0], _hammer_edge[1], _hammer_edge[2]);
+	}
+	
+	ds_list_destroy(_hammer_tiles);
 		
 }
 
 function load_grid_whole() { //draws the contents on the grid all at once (even if not in view)
 	
+	//hammer tile edge buffer
+	var _hammer_tiles = ds_list_create();
 	
 	//looping through the grid and drawing tiles
 	for (var draw_x = 0; draw_x < global.grid_width; draw_x++) {
@@ -236,8 +247,8 @@ function load_grid_whole() { //draws the contents on the grid all at once (even 
 								//drawing edges if no more tunnel tiles
 								var tile_left = ds_grid_get(global.tile_grid, draw_x - 1, draw_y);
 								var tile_right = ds_grid_get(global.tile_grid, draw_x + 1, draw_y);
-								if (tile_left.subimg != 20) draw_sprite(spr_mapTiles, 22, pos_x, pos_y);
-								if (tile_right.subimg != 20) draw_sprite(spr_mapTiles, 22, pos_x + tile_size - 2, pos_y);
+								if (tile_left.subimg != 20) draw_sprite(spr_mapTiles, 22, pos_x - 2, pos_y);
+								if (tile_right.subimg != 20) ds_list_add(_hammer_tiles, [22, pos_x + tile_size, pos_y]);
 								
 								break; }
 								
@@ -247,8 +258,8 @@ function load_grid_whole() { //draws the contents on the grid all at once (even 
 								//drawing edges if no more tunnel tiles
 								var tile_up = ds_grid_get(global.tile_grid, draw_x, draw_y - 1);
 								var tile_down = ds_grid_get(global.tile_grid, draw_x, draw_y + 1);
-								if (tile_up.subimg != 21) draw_sprite(spr_mapTiles, 23, pos_x, pos_y);
-								if (tile_down.subimg != 21) draw_sprite(spr_mapTiles, 23, pos_x, pos_y + tile_size - 2);
+								if (tile_up.subimg != 21) draw_sprite(spr_mapTiles, 23, pos_x, pos_y - 2);
+								if (tile_down.subimg != 21) ds_list_add(_hammer_tiles, [23, pos_x, pos_y + tile_size]);
 								
 								break; }
 						}
@@ -293,7 +304,13 @@ function load_grid_whole() { //draws the contents on the grid all at once (even 
 			}
 		}
 	}
-		
+	//adding missing hammer edges
+	for (var i = 0; i < ds_list_size(_hammer_tiles); i++) {
+		var _hammer_edge = ds_list_find_value(_hammer_tiles, i);
+		draw_sprite(spr_mapTiles, _hammer_edge[0], _hammer_edge[1], _hammer_edge[2]);
+	}
+	
+	ds_list_destroy(_hammer_tiles);	
 }
 
 	

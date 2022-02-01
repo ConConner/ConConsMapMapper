@@ -178,26 +178,40 @@ if (_button != 0) {
 		var _top = cursor_y - goal_selection_h / 2;
 	
 		switch (_button) {
-		
-			case obj_gameController.color_button: {
-				draw_text(_left + 2, _top - 45, "COLOR MENU\n(CTRL+C)");
-				break; }
-				
-			case obj_gameController.rgb_code_selection: {
-				draw_text(_left - 4, _top - 14, "CLICK TO COPY");
-				break; }
-				
-			case obj_gameController.color_decline_button: {
-				draw_text(_left + 6, _top - 17, "CANCEL");
-				break; }
-				
-			case obj_gameController.color_confirm_button: {
-				draw_text(_left + 6, _top - 17, "SAVE");
-				break; }
-				
+			
 			case obj_gameController.igmenu_button: {
 				draw_text(_left + 2, _top + 44, "MENU (ESC)");
 				break; }
+			
+			#region color buttons
+			case obj_gameController.color_button: {
+				draw_text(_left + 2, _top - 45, "COLOR MENU\n(CTRL+C)");
+				break; }	
+			case obj_gameController.rgb_code_selection: {
+				draw_text(_left - 4, _top - 14, "CLICK TO COPY");
+				break; }	
+			case obj_gameController.color_decline_button: {
+				draw_text(_left + 6, _top - 17, "CANCEL");
+				break; }
+			case obj_gameController.color_confirm_button: {
+				draw_text(_left + 6, _top - 17, "SAVE");
+				break; }
+			#endregion
+				
+			#region settings buttons
+			case obj_gameController.settings_decline_button: {
+				draw_text(_left + 6, _top - 17, "CANCEL");
+				break; }
+			case obj_gameController.settings_confirm_button: {
+				draw_text(_left + 6, _top - 17, "SAVE");
+				break; }
+			#endregion
+			
+			#region save menu buttons
+			case obj_gameController.save_confirm_button: {
+				draw_text(_left + 6, _top - 17, "cancel");
+				break; }
+			#endregion
 				
 			#region menu buttons
 			case obj_gameController.pen_tool_button: {
@@ -220,6 +234,9 @@ if (_button != 0) {
 				break; }
 			case obj_gameController.hammer_tool_button: {
 				draw_text(_left + 2, _top + 69, "hammer tool (H)");
+				break; }
+			case obj_gameController.settings_button: {
+				draw_text(_left + 2, _top + 69, "settings");
 				break; }
 			case obj_gameController.save_button: {
 				draw_text(_left + 2, _top + 69, "save menu");

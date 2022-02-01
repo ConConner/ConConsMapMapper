@@ -20,27 +20,34 @@ draw_set_alpha(1);
 
 function take_screenshot(_file) {
 	
-	//setting up the surface
-	var temp_surf = surface_create(global.grid_view_width, global.grid_view_height);
-	surface_set_target(temp_surf);
-	draw_clear_alpha(c_black, 0);
+	//checking valid file
+	if (check_valid_dir(_file, "Image export")) {
 	
-	//drawing the contents
-	if (show_grid) {
-		draw_rectangle_color(0, 0, global.grid_view_width, global.grid_view_height, c_black, c_black, c_black, c_black, false);
-		draw_set_alpha(0.4);
-		draw_grid_whole(global.grid_width * tile_size, global.grid_height * tile_size, 1, tile_size);
-	}	
+		//setting up the surface
+		var temp_surf = surface_create(global.grid_view_width, global.grid_view_height);
+		surface_set_target(temp_surf);
+		draw_clear_alpha(c_black, 0);
 	
-	draw_set_alpha(1);
-	load_grid_whole();
+		//drawing the contents
+		if (show_grid) {
+			draw_rectangle_color(0, 0, global.grid_view_width, global.grid_view_height, c_black, c_black, c_black, c_black, false);
+			draw_set_alpha(0.4);
+			draw_grid_whole(global.grid_width * tile_size, global.grid_height * tile_size, 1, tile_size);
+		}	
 	
-	//saving screenshot
-	surface_save(temp_surf, _file);
+		draw_set_alpha(1);
+		load_grid_whole();
 	
-	surface_reset_target();
-	surface_free(temp_surf);
+		//saving screenshot
+		surface_save(temp_surf, _file);
 	
+		surface_reset_target();
+		surface_free(temp_surf);
+		
+		//confirmation message
+		add_text_message("map exported successfully", 3, c_lime);
+	
+	}
 }
 
 

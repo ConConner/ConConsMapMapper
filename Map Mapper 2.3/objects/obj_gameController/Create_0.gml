@@ -14,13 +14,15 @@ min_grid_height = 20;
 max_grid_width = 500;
 max_grid_height = 500;
 
-
+//mouse
 global.mouse_pos_x = device_mouse_x_to_gui(0);			//mouse position relative to the GUI
 global.mouse_pos_y = device_mouse_y_to_gui(0);			//
 global.xx = floor(global.mouse_pos_x/32);			//the x position of the mouse on the grid
 global.yy = floor(global.mouse_pos_y/32);			//the y position of the mouse on the grid
 
+//other
 global.roomCount = 0;
+global.map_dir = "";
 
 
 #region CAMERA SETUP
@@ -62,6 +64,10 @@ start_cam_y = 0;
 show_grid = true;
 show_tooltips = true;
 
+	//settings
+setting_show_grid = show_grid;
+setting_show_tooltips = show_tooltips;
+
 //boolean
 canBuild = true;
 placed_tile = false;
@@ -73,6 +79,7 @@ moving_with_mouse = false;
 adjust_cursor = false;
 adding_connection = false;
 debug_on = false;
+on_old_tool = false;
 
 //var = X
 old_roomCount = 0;
@@ -104,6 +111,14 @@ value_selection = 0;
 rgb_code_selection = 0;
 color_decline_button = 0;
 color_confirm_button = 0;
+save_confirm_button = 0;
+save_mf_button = 0;
+save_png_button = 0;
+save_xml_button = 0;
+settings_confirm_button = 0;
+settings_decline_button = 0;
+settings_toggle_grid = 0;
+settings_toggle_tooltips = 0;
 
 //menu vars
 current_menu = menu_state.nothing;
@@ -144,12 +159,12 @@ selected_rgb_hex = get_hex_rgb(global.selected_color);
 tile_info = function(_main, _rm_nmb, _col, _subimg, _mrk, _door) constructor {
 	
 	//different tile layers
-	main = _main;																					//stores if a tile is set or not
-	rm_nmb = _rm_nmb;																				//stores the room number of the tile
-	col = _col;																						//stores the tiles color
-	subimg = _subimg;																				//stores the main tile subimage
-	mrk = _mrk;																						//stores the subimage for the marker on that tile
-	door = _door																					//Doors are set up as [Door One[color ,rot] Door Two[color,rot]....
+	main = _main;												//stores if a tile is set or not
+	rm_nmb = _rm_nmb;											//stores the room number of the tile
+	col = _col;													//stores the tiles color
+	subimg = _subimg;											//stores the main tile subimage
+	mrk = _mrk;													//stores the subimage for the marker on that tile
+	door = _door												//Doors are set up as [Door One[color ,rot], Door Two[color,rot],....]
 	//Door 0 = up; Door 1 = down; Door 2 = down; Door 3 = left;
 	
 	
@@ -180,6 +195,55 @@ open_menu = function() {
 	menu_pos_y = -10;
 	menu_goal_height = 0;
 	menu_height = 0;
+}
+
+//open settings menu
+open_settings_menu = function() {
+	
+	current_menu = menu_state.settings_menu;
+				
+	//confirm, decline
+	settings_decline_button = make_button(0,0,spr_menu_decline, menu_state.settings_menu);
+	settings_decline_button.goal_alpha = 0;
+	settings_decline_button.image_alpha = 0;
+	settings_confirm_button = make_button(0,0,spr_menu_confirm, menu_state.settings_menu);
+	settings_confirm_button.goal_alpha = 0;
+	settings_confirm_button.image_alpha = 0;
+	
+	//settings buttons
+	settings_toggle_tooltips = make_button(0, 0, spr_cursor_selector, menu_state.settings_menu);
+	settings_toggle_grid = make_button(0, 0, spr_cursor_selector, menu_state.settings_menu);
+	
+	//set setting variables
+	setting_show_grid = show_grid;
+	setting_show_tooltips = show_tooltips;
+}
+settings_confirmed = function() {
+	close_menu = true;
+	
+	//removing buttons
+	remove_button(settings_decline_button);
+	remove_button(settings_confirm_button);
+	remove_button(settings_toggle_tooltips);
+	remove_button(settings_toggle_grid);
+	
+	//applying settings
+	show_grid = setting_show_grid;
+	show_tooltips = setting_show_tooltips;
+	
+	save_settings();
+	add_text_message("saved settings", 1.5, c_lime);
+}
+settings_declined = function() {
+	close_menu = true;
+	
+	//removing buttons
+	remove_button(settings_decline_button);
+	remove_button(settings_confirm_button);
+	remove_button(settings_toggle_tooltips);
+	remove_button(settings_toggle_grid);
+	
+	add_text_message("settings discarded", 1.5, c_white);
 }
 
 //save menu
@@ -224,7 +288,7 @@ save_xml_exporting = function() {
 //bring up load dialog and load map
 load_room = function() {
 	var fname = get_open_filename("Map File (.mf)|*"+".mf","");
-	load_map(fname);	
+	if (load_map(fname)) close_menu = true;
 }
 
 //color menu
@@ -365,10 +429,10 @@ door_tool_button = make_button(16 + 72 * 3, -10, spr_door_tool, menu_state.ig_me
 marker_tool_button = make_button(16 + 72 * 4, -10, spr_marker_tool, menu_state.ig_menu);
 selection_tool_button = make_button(16 + 72 * 6, -10, spr_selection_tool, menu_state.ig_menu);
 hammer_tool_button = make_button(16 + 72 * 5, -10, spr_hammer_tool, menu_state.ig_menu);
+settings_button = make_button(global.view_width - 80 - 72 * 2, -10, spr_settings, menu_state.ig_menu);
 save_button = make_button(global.view_width - 80 - 72, -10, spr_save, menu_state.ig_menu);
 load_button = make_button(global.view_width - 80, -10, spr_load, menu_state.ig_menu);
 
-tooltip_button = make_button(32, global.view_height - 55, spr_cursor_selector, menu_state.ig_menu);
 discord_button = make_button(global.view_width - 80, global.view_height - 80, spr_discord_button, menu_state.ig_menu);
 
 //save menu buttons
@@ -389,3 +453,6 @@ yellow_door_button.disable();
 
 //creating the cursor
 instance_create_layer(global.mouse_pos_x,global.mouse_pos_y,"Cursor",obj_cursor);
+
+//loading settings
+load_settings();

@@ -55,11 +55,14 @@ function save_map(file_name) { //saves the map in a file
 	
 		//confirmation message
 		add_text_message("map saved successfully", 3, c_lime);
+		
+		//changing global map directory
+		global.map_dir = file_name;
 	}
 	
 }
 
-function load_map(file_name) { //loads a map from a file
+function load_map(file_name) { //loads a map from a file; Returns true if successful
 	
 	if (check_valid_dir(file_name, "load")) {
 	
@@ -90,14 +93,18 @@ function load_map(file_name) { //loads a map from a file
 				global.grid_width = _grid_width;
 				global.grid_height = _grid_height;
 			}
-		
+			
+			var _room_count = 0; //while looping through grid, searching for highest room number
 			for (var i = 0; i < _grid_width; i++) {
 				for (var j = 0; j < _grid_height; j++) {
 				
 					ds_grid_set(global.tile_grid, i, j, _converted_array[i, j]);
-				
+					_room_count = max(_room_count, _converted_array[i, j].rm_nmb);
+					
 				}
 			}
+			global.roomCount = _room_count;
+			old_roomCount = _room_count;
 			
 			//reloading the markers
 			marker_url = _marker_url
@@ -105,14 +112,20 @@ function load_map(file_name) { //loads a map from a file
 		
 			//confirmation message
 			add_text_message("map loaded successfully", 3, c_lime);
+			
+			//changing global map directory
+			global.map_dir = file_name;
+			return (true);
 		
 		} 
 		else {
 		
 			add_text_message("The file is outdated!", 3, c_red);
+			return (false);
 		
 		}
 	}
+	return (false);
 }
 	
 function convert_map_smart() { //returns a grid with SMART compatible values
@@ -199,7 +212,7 @@ function convert_map_smart() { //returns a grid with SMART compatible values
 	
 function save_map_smart(file_name) { //saves a .xml file which can be directly imported into SMART
 	
-	if (check_valid_dir(file_name, "SMART save")) {
+	if (check_valid_dir(file_name, "SMART export")) {
 		
 		//creating the xml file
 		var _file = file_text_open_write(file_name);
@@ -250,4 +263,25 @@ function save_map_smart(file_name) { //saves a .xml file which can be directly i
 		
 		add_text_message("map exported successfully", 3, c_lime);
 	}
+}
+	
+function save_settings() {
+	
+	ini_open("MapMapper.settings");
+	
+	ini_write_real("general", "tooltips", show_tooltips);
+	ini_write_real("map_settings", "grid_visibility", show_grid);
+	
+	ini_close();
+}
+
+function load_settings() {
+	
+	ini_open("MapMapper.settings");
+	
+	//setting values
+	show_tooltips = ini_read_real("general", "tooltips", show_tooltips);
+	show_grid = ini_read_real("map_settings", "grid_visibility", show_grid);
+	
+	ini_close();
 }
