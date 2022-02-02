@@ -3,63 +3,110 @@ draw_set_alpha(1);
 draw_set_color(c_white);
 
 //drawing the grid
-draw_set_color(c_gray);
-draw_grid(global.grid_width * tile_size, global.grid_height * tile_size, 1, tile_size);
+if (show_grid) {
+	draw_set_color(c_gray);
+	draw_set_alpha(0.4);
+	draw_grid(global.grid_width * tile_size, global.grid_height * tile_size, 1, tile_size);
+	draw_set_alpha(1);
+	draw_grid_outline(global.grid_width * tile_size, global.grid_height * tile_size, 1);
+}
+else {
+	draw_set_color(c_gray);
+	draw_set_alpha(0.4);
+	draw_grid_outline(global.grid_width * tile_size, global.grid_height * tile_size, 1);
+}
 draw_set_alpha(1);
 
-draw_set_color(c_white);
-load_grid();
+#region drawing graphics for grid resize
+//getting vars
+var _x = global.cam_pos_x;
+var _y = global.cam_pos_y;
+var _w = sprite_get_width(spr_size_edit);
+var _h = sprite_get_height(spr_size_edit);
+var _grid_width = global.grid_width * tile_size;
+var _grid_height = global.grid_height * tile_size;
+#macro offset 32
 
-//drawing selected area
-if (selecting_tile) {
+//drawing + and - sprites
+draw_sprite(spr_size_edit, 0, global.window_width / 2 - _w / 2, -_y - tile_size - offset); //up
+draw_sprite(spr_size_edit, 1, global.window_width / 2 + _w / 2, -_y - tile_size - offset);
+
+draw_sprite(spr_size_edit, 0, -_x - tile_size - offset, global.window_height / 2 - _h / 2); //left
+draw_sprite(spr_size_edit, 1, -_x - tile_size - offset, global.window_height / 2 + _h / 2);
+
+draw_sprite(spr_size_edit, 0, global.window_width / 2 - _w / 2, -_y + _grid_height + offset); //down
+draw_sprite(spr_size_edit, 1, global.window_width / 2 + _w / 2, -_y + _grid_height + offset);
+
+draw_sprite(spr_size_edit, 0, -_x + _grid_width + offset, global.window_height / 2 - _h / 2); //right
+draw_sprite(spr_size_edit, 1, -_x + _grid_width + offset, global.window_height / 2 + _h / 2);
+
+#region button pos
+resize_neg_up_button.goal_x = global.window_width / 2 - _w / 2;
+resize_neg_up_button.goal_y = -_y - tile_size - offset;
+resize_neg_up_button.jmp();
+resize_pos_up_button.goal_x = global.window_width / 2 + _w / 2;
+resize_pos_up_button.goal_y = -_y - tile_size - offset;
+resize_pos_up_button.jmp();
+
+resize_neg_left_button.goal_x = -_x - tile_size - offset;
+resize_neg_left_button.goal_y = global.window_height / 2 - _h / 2;
+resize_neg_left_button.jmp();
+resize_pos_left_button.goal_x = -_x - tile_size - offset;
+resize_pos_left_button.goal_y = global.window_height / 2 + _h / 2;
+resize_pos_left_button.jmp();
+
+resize_neg_down_button.goal_x = global.window_width / 2 - _w / 2;
+resize_neg_down_button.goal_y = -_y + _grid_height + offset;
+resize_neg_down_button.jmp();
+resize_pos_down_button.goal_x = global.window_width / 2 + _w / 2;
+resize_pos_down_button.goal_y = -_y + _grid_height + offset;
+resize_pos_down_button.jmp();
+
+resize_neg_right_button.goal_x = -_x + _grid_width + offset;
+resize_neg_right_button.goal_y = global.window_height / 2 - _h / 2;
+resize_neg_right_button.jmp();
+resize_pos_right_button.goal_x = -_x + _grid_width + offset;
+resize_pos_right_button.goal_y = global.window_height / 2 + _h / 2;
+resize_pos_right_button.jmp();
+#endregion
+
+#endregion
+
+function take_screenshot(_file) {
 	
-	//resetting alpha
-	if (selected_edge != old_selected_edge) {
-		old_selected_edge = selected_edge;
-		selected_edge_cur_alpha = 0;
-		selected_edge_goal_alpha = 0.6;
-	}
+	//checking valid file
+	if (check_valid_dir(_file, "Image export")) {
 	
-	draw_set_colour(c_white);
+		//setting up the surface
+		var temp_surf = surface_create(global.grid_view_width, global.grid_view_height);
+		surface_set_target(temp_surf);
+		draw_clear_alpha(c_black, 0);
 	
-	var _top = tile_yy * tile_size - tile_size / 4;
-	var _left = tile_xx * tile_size - tile_size / 4;
-	var _w = tile_size * 1.5;
-	var _h = tile_size * 1.5;
+		//drawing the contents
+		if (show_grid) {
+			draw_rectangle_color(0, 0, global.grid_view_width, global.grid_view_height, c_black, c_black, c_black, c_black, false);
+			draw_set_alpha(0.4);
+			draw_grid_whole(global.grid_width * tile_size, global.grid_height * tile_size, 1, tile_size);
+		}	
 	
-	if (selected_edge != dir.none) {
+		draw_set_alpha(1);
+		load_grid_whole();
+	
+		//saving screenshot
+		surface_save(temp_surf, _file);
+	
+		surface_reset_target();
+		surface_free(temp_surf);
 		
-		
-		draw_set_alpha(selected_edge_cur_alpha);
-		
-		if (selected_edge == dir.left) {
-			draw_rectangle(_left,_top,_left + edge_size,_top + _h,false);
-		}
-		
-		if (selected_edge == dir.right) {
-			draw_rectangle(_left + _w - edge_size,_top,_left + _w,_top + _h,false);
-		}
-		
-		if (selected_edge == dir.up) {
-			draw_rectangle(_left,_top,_left + _w,_top + edge_size,false);
-		}
-		
-		if (selected_edge == dir.down) {
-			draw_rectangle(_left,_top + _h - edge_size,_left + _w,_top + _h,false);
-		}
-		
-		remove_marker_goal_alpha = 0.15;
-		if (choosing_tile_addition) remove_marker_goal_alpha = 0;
-		draw_set_alpha(remove_marker_cur_alpha);
-		draw_sprite(spr_exit_selection,0,_left + edge_size, _top + edge_size);
-	}
-	else {
-		remove_marker_goal_alpha = 0.7;
-		draw_set_alpha(remove_marker_cur_alpha);
-		draw_sprite(spr_exit_selection,0,_left + edge_size, _top + edge_size);
+		//confirmation message
+		add_text_message("map exported successfully", 3, c_lime);
+	
 	}
 }
 
+
+draw_set_color(c_white);
+load_grid();
 
 //end
 draw_set_alpha(1);

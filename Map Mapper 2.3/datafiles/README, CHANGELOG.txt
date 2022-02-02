@@ -6,7 +6,7 @@ LAST UPDATED 23.05.2021
 
 
 -------------README-----------------
-WINDOWS ONLY (no other platforms planned yet)
+WINDOWS ONLY (no other platforms planned)
 
 For help and reporting bugs write me a message on Discord or write an E-Mail to contendohelp@gmail.com
 
@@ -23,9 +23,18 @@ Thanks to every Contributor!
 ------------------------------------
 Beta 2.1 (XX.XX.XXXX)
 ------------------------------------
+# grid can be toggled
+# base markers now included in the program
++ the window is now resizeable
++ the grid is now resizeable
 + NEW hammer tool
-+ added hotkeys
-+ added DISCORD button
++ image export as .png
++ SMART .xml export
++ hotkeys
++ DISCORD button
++ current color now gets displayed
+* combined README and CHANGELOG
+* restructured CHANGELOG
 
 
 ------------------------------------
@@ -49,7 +58,7 @@ Beta 2.0 (23.05.2021)
 
 
 ------------------------------------
-Beta 1.1 (10.01.2020)
+Beta 1.1 (10.01.2021)
 ------------------------------------
 # fixed saving bug which only allowed saving in %localappdata%
 # improved performance [ ~ 700 fps*]
@@ -80,6 +89,7 @@ ICON EXPLANATION
 (#) changed something that already exists
 (+) added something new
 (-) removed something that existed
+(*) changes outside of MapMapper
 
 
 

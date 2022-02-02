@@ -1,5 +1,6 @@
 //adjusting cursor sizes
 if (cursor_mode == curs_mode.on_grid) {
+	var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
 	
 	switch (obj_gameController.current_tool) {
 		
@@ -7,7 +8,6 @@ if (cursor_mode == curs_mode.on_grid) {
 			goal_x = global.xx * tile_size - global.cam_pos_x;
 			goal_y = global.yy * tile_size - global.cam_pos_y;
 		
-			var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
 			if (tile.main == ID.filled) {
 				selection_box_h = tile_size + 8;
 				selection_box_w = tile_size + 8;
@@ -21,10 +21,10 @@ if (cursor_mode == curs_mode.on_grid) {
 			break; }
 	
 		case tool.eyedropper: {
-			goal_x = mouse_x - tile_size / 2;
-			goal_y = mouse_y - tile_size / 2;
-			selection_box_h = 4;
-			selection_box_w = 4;
+			goal_x = global.mouse_pos_x - tile_size / 2 + 5;
+			goal_y = global.mouse_pos_y - tile_size / 2 - 5;
+			selection_box_h = tile_size * 1.5;
+			selection_box_w = tile_size * 1.5;
 			
 			break; }
 			
@@ -32,7 +32,6 @@ if (cursor_mode == curs_mode.on_grid) {
 			goal_x = global.xx * tile_size - global.cam_pos_x;
 			goal_y = global.yy * tile_size - global.cam_pos_y;
 		
-			var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
 			if (tile.main == ID.filled) {
 				selection_box_h = tile_size - 4;
 				selection_box_w = tile_size - 4;
@@ -51,7 +50,6 @@ if (cursor_mode == curs_mode.on_grid) {
 				goal_y = global.yy * tile_size - global.cam_pos_y;
 			}
 		
-			var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
 			if (tile.main == ID.filled) {
 				selection_box_h = tile_size + 8;
 				selection_box_w = tile_size + 8;
@@ -87,7 +85,6 @@ if (cursor_mode == curs_mode.on_grid) {
 			goal_x = global.xx * tile_size - global.cam_pos_x;
 			goal_y = global.yy * tile_size - global.cam_pos_y;
 		
-			var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
 			if (tile.main == ID.filled) {
 				selection_box_h = tile_size - 4;
 				selection_box_w = tile_size - 4;
@@ -105,7 +102,6 @@ if (cursor_mode == curs_mode.on_grid) {
 			goal_x = global.xx * tile_size - global.cam_pos_x;
 			goal_y = global.yy * tile_size - global.cam_pos_y;
 		
-			var tile = ds_grid_get(global.tile_grid, global.xx, global.yy);
 			var _subimg = tile.subimg;
 			
 			if (_subimg == 10 || _subimg == 6 || _subimg == 5 || _subimg == 9 || _subimg == 12 || _subimg == 3 || _subimg >= 16) {
@@ -123,8 +119,10 @@ if (cursor_mode == curs_mode.on_grid) {
 
 if (cursor_mode == curs_mode.off_anything) {
 	
-	goal_x = mouse_x - tile_size / 2;
-	goal_y = mouse_y - tile_size / 2;
+	goal_x = global.mouse_pos_x - tile_size / 2;
+	cursor_x = goal_x;
+	goal_y = global.mouse_pos_y - tile_size / 2;
+	cursor_y = goal_y;
 	selection_box_h = 4;
 	selection_box_w = 4;
 	
@@ -132,8 +130,8 @@ if (cursor_mode == curs_mode.off_anything) {
 
 if (cursor_mode == curs_mode.drag_to_move) {
 	
-	goal_x = mouse_x - tile_size / 2;
-	goal_y = mouse_y - tile_size / 2;
+	goal_x = global.mouse_pos_x - tile_size / 2;
+	goal_y = global.mouse_pos_y - tile_size / 2;
 	selection_box_h = 36;
 	selection_box_w = 36;
 	
@@ -141,8 +139,8 @@ if (cursor_mode == curs_mode.drag_to_move) {
 
 if (cursor_mode == curs_mode.on_tileset) {
 	
-	goal_x = mouse_x - tile_size / 2;
-	goal_y = mouse_y - tile_size / 2;
+	goal_x = global.mouse_pos_x - tile_size / 2;
+	goal_y = global.mouse_pos_y - tile_size / 2;
 	selection_box_h = 4;
 	selection_box_w = 4;
 	
@@ -150,7 +148,7 @@ if (cursor_mode == curs_mode.on_tileset) {
 	var _pos_x = obj_gameController.tileset_x + 32;
 	var _pos_y = 64 + 40 * _selected - (40 * obj_gameController.tiles_per_page * obj_gameController.tile_page)
 	
-	if (_selected != noone && point_in_rectangle(mouse_x, mouse_y, global.view_width - 96, 64, global.view_width, global.view_height - 64)) {
+	if (_selected != noone && point_in_rectangle(global.mouse_pos_x, global.mouse_pos_y, global.view_width - 96, 64, global.view_width, global.view_height - 64)) {
 		
 		goal_x = _pos_x;
 		goal_y = _pos_y;
@@ -177,7 +175,7 @@ if (obj_gameController.moving_with_mouse) {
 	cursor_mode = curs_mode.drag_to_move;
 }
 	
-if (obj_gameController.current_tool == tool.marker_tool	&& mouse_x >= global.window_width - 96) {
+if (obj_gameController.current_tool == tool.marker_tool	&& global.mouse_pos_x >= global.window_width - 96) {
 	cursor_mode = curs_mode.on_tileset;
 }
 

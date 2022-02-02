@@ -1,21 +1,26 @@
-#region setting up
+ #region setting up
 //getting mouse coordinates on grid
-global.xx = clamp(floor((mouse_x + global.cam_pos_x) / tile_size), 0, global.grid_width - 1);
-global.yy = clamp(floor((mouse_y + global.cam_pos_y) / tile_size), 0, global.grid_height - 1);
-real_xx = floor((mouse_x + global.cam_pos_x) / tile_size);
-real_yy = floor((mouse_y + global.cam_pos_y) / tile_size);
+
+	//GLOBAL MOUSE COORDINATES
+	global.mouse_pos_x = device_mouse_x_to_gui(0);
+	global.mouse_pos_y = device_mouse_y_to_gui(0);
+
+global.xx = clamp(floor((global.mouse_pos_x + global.cam_pos_x) / tile_size), 0, global.grid_width - 1);
+global.yy = clamp(floor((global.mouse_pos_y + global.cam_pos_y) / tile_size), 0, global.grid_height - 1);
+real_xx = floor((global.mouse_pos_x + global.cam_pos_x) / tile_size);
+real_yy = floor((global.mouse_pos_y + global.cam_pos_y) / tile_size);
 
 //view and window sizes
-#macro view_half_w = (global.view_width / 2)
-#macro view_half_h = (global.view_height / 2)
+global.view_width = obj_camera.view_width;
+global.view_height = obj_camera.view_height;
+global.grid_view_width = global.grid_width * tile_size;
+global.grid_view_height = global.grid_height * tile_size;
 
 global.window_width = window_get_width();
 global.window_height = window_get_height();
-#macro window_half_width  (global.window_width / 2)
-#macro window_half_height  (global.window_height / 2)
 
 
-//getting key input for special keys
+	#region getting key input for special keys
 kUp = keyboard_check(vk_up);
 kDown = keyboard_check(vk_down);
 kLeft = keyboard_check(vk_left);
@@ -37,6 +42,7 @@ kLetterC = keyboard_check(ord("C"));
 kLetterM = keyboard_check(ord("M"))
 kLetterH = keyboard_check(ord("H"));
 kLetterS = keyboard_check(ord("S"));
+kLetterSPressed = keyboard_check_pressed(ord("S"));
 kLetterL = keyboard_check(ord("L"));
 //mouse input
 mLeft = mouse_check_button(mb_left);
@@ -51,56 +57,6 @@ mWheelUp = mouse_wheel_up();
 mWheelDown = mouse_wheel_down();
 #endregion
 
-
-#region grid resize
-//auto grid resize
-//the grid will automatically resize if you place a block in a range of 3 blocks on an edge
-if (placed_tile) {
-	if (global.xx >= global.grid_width - 3) { //adding on the right side
-		global.grid_width += global.xx - global.grid_width + 4;
-	}
-	
-	if (global.yy >= global.grid_height - 3) { //adding on the bottom side
-		global.grid_height += global.yy - global.grid_height + 4;
-	}
-	
-	if (global.xx <= 2) { //adding on the left side
-		var _amount = 3 - global.xx;
-		//adjusting camera
-		global.cam_pos_x += tile_size * _amount;
-		global.xx += _amount;
-		
-		global.grid_width += _amount;
-		ds_grid_resize(global.tile_grid, global.grid_width, global.grid_height);
-		shift_grid_x(global.tile_grid, _amount);
-		set_up_grid();
-	}
-	
-	if (global.yy <= 2) { //adding on the left side
-		var _amount = 3 - global.yy;
-		//adjusting camera
-		global.cam_pos_y += tile_size * _amount;
-		global.yy += _amount;
-		
-		global.grid_height += _amount;
-		ds_grid_resize(global.tile_grid, global.grid_width, global.grid_height);
-		shift_grid_y(global.tile_grid, _amount);
-		set_up_grid();
-	}
-}
-
-//clamping the grid sizes
-clamp(global.grid_width, min_grid_width, max_grid_width);
-clamp(global.grid_height, min_grid_height, max_grid_height);
-
-//resizing the grid if grid dimensions change
-if (old_grid_width != global.grid_width || old_grid_height != global.grid_height) {
-	old_grid_width = global.grid_width;
-	old_grid_height = global.grid_height;
-	
-	ds_grid_resize(global.tile_grid, global.grid_width, global.grid_height);
-	set_up_grid();
-}
 #endregion
 
 
@@ -131,15 +87,15 @@ if (current_menu == menu_state.nothing) {
 		moving_with_mouse = true;
 	
 		if (mLeftPressed || mMiddlePressed) {
-			start_mouse_x = mouse_x;
-			start_mouse_y = mouse_y;
+			start_mouse_x = global.mouse_pos_x;
+			start_mouse_y = global.mouse_pos_y;
 			start_cam_x = global.cam_pos_x;
 			start_cam_y = global.cam_pos_y;
 		}
 	
 		if (mLeft || mMiddle) {
-			var _xshift = mouse_x - start_mouse_x;
-			var _yshift = mouse_y - start_mouse_y;
+			var _xshift = global.mouse_pos_x - start_mouse_x;
+			var _yshift = global.mouse_pos_y - start_mouse_y;
 		
 			global.cam_pos_x = start_cam_x - _xshift;
 			global.cam_pos_y = start_cam_y - _yshift;
@@ -152,8 +108,8 @@ if (current_menu == menu_state.nothing) {
 }
 
 
-global.cam_pos_x = clamp(global.cam_pos_x, 0 - global.view_width / 2, global.grid_width * tile_size - global.view_width / 2);
-global.cam_pos_y = clamp(global.cam_pos_y, 0 - global.view_height / 2, global.grid_height * tile_size - global.view_height / 2);
+global.cam_pos_x = clamp(global.cam_pos_x, 0 - global.view_width / 2, global.grid_width * tile_size - global.view_width / 2 - tile_size);
+global.cam_pos_y = clamp(global.cam_pos_y, 0 - global.view_height / 2, global.grid_height * tile_size - global.view_height / 2 - tile_size);
 
 #endregion
 
@@ -167,14 +123,13 @@ if (obj_cursor.cursor_mode == curs_mode.on_grid) {
 	switch (current_tool) {
 		
 		case tool.pen: {
-			if (mLeft) add_tiles();
-			if (mRight) add_tiles();
+			if (mLeft || mRight) add_tiles();
 			
 			if (mLeftReleased) {
-			add_tiles();
-			global.roomCount = old_roomCount + 1;
-			old_roomCount = global.roomCount;
-			placed_tile = false;
+				add_tiles();
+				global.roomCount = old_roomCount + 1;
+				old_roomCount = global.roomCount;
+				placed_tile = false;
 			}
 			
 			if (!mLeft && !mRight) placed_tile = false;
@@ -186,7 +141,7 @@ if (obj_cursor.cursor_mode == curs_mode.on_grid) {
 		case tool.eyedropper: {
 			
 			if (mLeftPressed) {
-				get_pixel_color(mouse_x, mouse_y);
+				get_pixel_color(global.mouse_pos_x, global.mouse_pos_y);
 				current_tool = tool.pen;
 				add_text_message("copied color", 1.5, c_lime);
 				
@@ -365,15 +320,31 @@ if (placed_tile || deleted_tile) {
 	color_button.activate();
 	igmenu_button.activate();
 	
+	resize_neg_up_button.activate();
+	resize_pos_up_button.activate();
+	resize_neg_left_button.activate();
+	resize_pos_left_button.activate();
+	resize_neg_down_button.activate();
+	resize_pos_down_button.activate();
+	resize_neg_right_button.activate();
+	resize_pos_right_button.activate();
+	
 }
 	
 //quick tool swap
 //swaps between the latest tool and the color picker
-if (kAltPressed) old_tool = current_tool;
+if (kAltPressed) {
+	old_tool = current_tool;
+	on_old_tool = false;
+}
 if (kAlt && !adding_connection) current_tool = tool.eyedropper;
-if (kAltReleased) current_tool = old_tool;
+if (!kAlt && !on_old_tool) {
+	current_tool = old_tool;
+	on_old_tool = true;
+}
 
 
+#region keybinds
 //keybinds to quickly switch between tools
 if (kLetterP) current_tool = tool.pen;
 if (kLetterB) current_tool = tool.color_brush;
@@ -391,6 +362,7 @@ if (kEscPressed) {
 	}
 	else if (current_menu == menu_state.ig_menu) close_menu = true;
 	else if (current_menu == menu_state.color_menu) color_declined();
+	else if (current_menu == menu_state.save_menu) save_confirmed();
 }
 
 //keybind to accept color
@@ -398,8 +370,19 @@ if (kEnterPressed && current_menu == menu_state.color_menu) color_confirmed();
 
 //keybind to quickly save/load or get to color menu
 if (kCtrl && current_menu != menu_state.color_menu) {
-	if (kLetterS) save_room();
+	
+	if (kLetterSPressed && current_menu != menu_state.save_menu) {
+		
+		if (global.map_dir == "") {
+			save_menu();
+			in_menu = true;
+			canBuild = false;
+		} else {
+			save_map(global.map_dir);
+		}
+	}
 	else if (kLetterL) load_room();
+	
 	//only open color menu, if we are tile creation
 	else if (kLetterC && current_menu == menu_state.nothing) {
 		canBuild = false;
@@ -407,6 +390,7 @@ if (kCtrl && current_menu != menu_state.color_menu) {
 		open_color_menu();
 	}
 }
+#endregion
 
 #endregion
 
@@ -451,7 +435,7 @@ if (!color_button.active && current_menu == menu_state.nothing) {
 	//button middle coords
 	var _pointX = color_button.x + (sprite_get_width(color_button.sprite_index) / 2);
 	var _pointY = color_button.y + (sprite_get_height(color_button.sprite_index) / 2);
-	var m_distance = point_distance(_pointX, _pointY, mouse_x, mouse_y);
+	var m_distance = point_distance(_pointX, _pointY, global.mouse_pos_x, global.mouse_pos_y);
 	color_button.goal_alpha = clamp((0.0035157 * power(m_distance,2) + 10) / 100, 0, 1);
 	
 } else if (current_menu == menu_state.nothing) {
@@ -466,7 +450,7 @@ if (!igmenu_button.active && current_menu == menu_state.nothing) {
 	//button middle coords
 	var _pointX = igmenu_button.x + (sprite_get_width(igmenu_button.sprite_index) / 2);
 	var _pointY = igmenu_button.y + (sprite_get_height(igmenu_button.sprite_index) / 2);
-	var m_distance = point_distance(_pointX, _pointY, mouse_x, mouse_y);
+	var m_distance = point_distance(_pointX, _pointY, global.mouse_pos_x, global.mouse_pos_y);
 	igmenu_button.goal_alpha = clamp((0.0135157 * power(m_distance,2) + 10) / 100, 0, 1);
 	
 } else if (current_menu == menu_state.nothing) {
@@ -476,7 +460,7 @@ if (!igmenu_button.active && current_menu == menu_state.nothing) {
 }
 
 #region door color buttons
-if ((current_tool == tool.door_tool) || (old_tool == tool.door_tool && kAlt)) {
+if ((current_tool == tool.door_tool) || (old_tool == tool.door_tool && kAlt)) && (current_menu != menu_state.color_menu) {
 	blue_door_button.enable();
 	blue_door_button.activate();
 	blue_door_button.goal_alpha = 1;
@@ -492,9 +476,13 @@ if ((current_tool == tool.door_tool) || (old_tool == tool.door_tool && kAlt)) {
 	
 } else {
 	blue_door_button.disable();
+	blue_door_button.deactivate();
 	red_door_button.disable();
+	red_door_button.deactivate();
 	green_door_button.disable();
+	green_door_button.deactivate();
 	yellow_door_button.disable();
+	yellow_door_button.deactivate();
 	
 }
 
@@ -508,6 +496,13 @@ red_door_button.image_index = 1;
 green_door_button.image_index = 2;
 yellow_door_button.image_index = 3;
 #endregion
+
+//updating button positions to accommodate
+color_button.setpos(tile_size / 2, global.view_height - tile_size / 2 - sprite_get_height(spr_color_button));
+discord_button.setpos(global.view_width - 80, global.view_height - 80);
+settings_button.goal_x = global.view_width - 80 - 72 * 2;
+save_button.goal_x = global.view_width - 80 - 72;
+load_button.goal_x = global.view_width - 80
 
 
 #endregion
@@ -524,6 +519,7 @@ if (mLeftPressed) {
 	
 		switch (_selected_button) {
 			
+			//color menu
 			case color_button: {
 			
 				open_color_menu();
@@ -545,7 +541,8 @@ if (mLeftPressed) {
 				color_confirmed();
 				
 				break; }
-				
+			
+			//menu
 			case igmenu_button: {
 			
 				open_menu();
@@ -574,7 +571,7 @@ if (mLeftPressed) {
 				break; }
 			case save_button: {
 				
-				save_room();
+				save_menu();
 				
 				break; }
 			case load_button: {
@@ -582,13 +579,143 @@ if (mLeftPressed) {
 				load_room();
 				
 				break; }
-			case tooltip_button: {
-				show_tooltips = !show_tooltips;
-				break; }
 			case discord_button: {
 				url_open("https://discord.gg/n6ZCB3JkNb");
 				break; }
+			
+			//settings
+			case settings_button: {
+				open_settings_menu();
+				break; }
+			case settings_confirm_button: {
+				settings_confirmed();
+				break; }
+			case settings_decline_button: {
+				settings_declined();
+				break; }
+			case settings_toggle_tooltips: {
+				setting_show_tooltips = !setting_show_tooltips;
+				break; }
+			case settings_toggle_grid: {
+				setting_show_grid = !setting_show_grid;
+				break; }
+			case settings_toggle_cursor: {
+				setting_show_cursor = !setting_show_cursor;
+				break; }
+			
+			//save menu
+			case save_confirm_button: {
+				save_confirmed();
+				break;}
+			case save_mf_button: {
+				save_mf_exporting();
+				break; }
+			case save_png_button: {
+				save_png_exporting();
+				break; }
+			case save_xml_button: {
+				save_xml_exporting();
+				break; }
+			
+			//resize ///TO DO: CHECK IF IT WILL BE BIGGER THAN MAX AND DONT MOVE CAM AND SEND MESSAGE
+			case resize_neg_up_button: {
+				in_menu = false;
+				canBuild = true;
 				
+				if (global.grid_height != max_grid_height) {
+					global.grid_height ++;
+					ds_grid_resize(global.tile_grid, global.grid_width, global.grid_height);
+					shift_grid_y_pos(global.tile_grid);
+					set_up_grid();
+				} else add_text_message("map cannot be bigger than " + string(max_grid_width) + " x " + string(max_grid_height) + "!", 1.5, c_yellow);
+				
+				break; }
+			case resize_pos_up_button: {
+				in_menu = false;
+				canBuild = true;
+				
+				if (global.grid_height != min_grid_height) {
+					shift_grid_y_neg(global.tile_grid);
+					global.grid_height --;
+					ds_grid_resize(global.tile_grid, global.grid_width, global.grid_height);
+					set_up_grid();
+				} else add_text_message("map cannot be smaller than " + string(min_grid_width) + " x " + string(min_grid_height) + "!", 1.5, c_yellow);
+				
+				break; }
+			case resize_neg_left_button: {
+				in_menu = false;
+				canBuild = true;
+			
+				if (global.grid_width != max_grid_width) {
+					global.grid_width ++;
+					ds_grid_resize(global.tile_grid, global.grid_width, global.grid_height);
+					shift_grid_x_pos(global.tile_grid);
+					set_up_grid();
+				} else add_text_message("map cannot be bigger than " + string(max_grid_width) + " x " + string(max_grid_height) + "!", 1.5, c_yellow);
+				
+				break; }
+			case resize_pos_left_button: {
+				in_menu = false;
+				canBuild = true;
+				
+				if (global.grid_width != min_grid_width) {
+					shift_grid_x_neg(global.tile_grid);
+					global.grid_width --;
+					ds_grid_resize(global.tile_grid, global.grid_width, global.grid_height);
+					set_up_grid();
+				} else add_text_message("map cannot be smaller than " + string(min_grid_width) + " x " + string(min_grid_height) + "!", 1.5, c_yellow);
+				
+				break; }
+			case resize_neg_down_button: {
+				
+				in_menu = false;
+				canBuild = true;
+				
+				if (global.grid_height != max_grid_height) {
+					global.grid_height ++;
+				
+					global.cam_pos_y += tile_size;
+				} else add_text_message("map cannot be bigger than " + string(max_grid_width) + " x " + string(max_grid_height) + "!", 1.5, c_yellow);
+				
+				break; }
+			case resize_pos_down_button: {
+				
+				in_menu = false;
+				canBuild = true;
+				
+				if (global.grid_height != min_grid_height) {
+					global.grid_height --;
+				
+					global.cam_pos_y -= tile_size;
+				} else add_text_message("map cannot be smaller than " + string(min_grid_width) + " x " + string(min_grid_height) + "!", 1.5, c_yellow);
+				
+				break; }
+			case resize_neg_right_button: {
+				
+				in_menu = false;
+				canBuild = true;
+				
+				if (global.grid_width != max_grid_width) {
+					global.grid_width ++;
+				
+					global.cam_pos_x += tile_size;
+				} else add_text_message("map cannot be bigger than " + string(max_grid_width) + " x " + string(max_grid_height) + "!", 1.5, c_yellow);
+				
+				break; }
+			case resize_pos_right_button: {
+				
+				in_menu = false;
+				canBuild = true;
+				
+				if (global.grid_width != min_grid_width) {
+					global.grid_width --;
+				
+					global.cam_pos_x -= tile_size;
+				} else add_text_message("map cannot be smaller than " + string(min_grid_width) + " x " + string(min_grid_height) + "!", 1.5, c_yellow);
+				
+				break; }
+			
+			//doors
 			case blue_door_button: {
 				in_menu = false;
 				canBuild = true;
@@ -621,6 +748,22 @@ if (mLeftPressed) {
 #endregion
 
 
+#region grid resize
+//clamping the grid sizes
+global.grid_width = clamp(global.grid_width, min_grid_width, max_grid_width);
+global.grid_height = clamp(global.grid_height, min_grid_height, max_grid_height);
+
+//resizing the grid if grid dimensions change
+if (old_grid_width != global.grid_width || old_grid_height != global.grid_height) {
+	old_grid_width = global.grid_width;
+	old_grid_height = global.grid_height;
+	
+	ds_grid_resize(global.tile_grid, global.grid_width, global.grid_height);
+	set_up_grid();
+}
+#endregion
+
+
 #region debug
 
 if (kF12) debug_on = !debug_on;
@@ -629,4 +772,3 @@ if (debug_on) {
 }
 
 #endregion
-

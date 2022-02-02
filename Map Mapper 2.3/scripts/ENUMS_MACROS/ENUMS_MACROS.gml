@@ -1,11 +1,13 @@
 enum ID {
-	empty = 0,
-	filled = 1
+	empty,
+	filled
 }
 
 enum menu_state {
 	nothing,
 	color_menu,
+	settings_menu,
+	save_menu,
 	ig_menu
 }
 
@@ -27,14 +29,6 @@ enum hatch {
 	empty,
 	filled
 }
-	
-enum dir {
-	left,
-	right,
-	up,
-	down,
-	none
-}
 
 enum text {
 	messg,
@@ -46,7 +40,6 @@ enum text {
 
 #macro tile_size 32 
 #macro border_margin 64
-#macro extension ".mf"
 
-#macro default_markers "https://cdn.discordapp.com/attachments/800903643824914453/843241137228480512/mm_basic_markers.png"
-#macro default_tile_amount 20
+#macro default_markers "https://images-ext-1.discordapp.net/external/pTxKeUe6jUnxEb2WTKUAM6l1DsYmRz2LQG6qlG9wv2I/https/media.discordapp.net/attachments/473935669144846357/885118483560562688/mm_basic_markers_extended.png"
+#macro default_tile_amount 30

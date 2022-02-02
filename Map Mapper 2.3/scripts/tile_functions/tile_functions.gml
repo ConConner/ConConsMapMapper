@@ -3,63 +3,64 @@ function add_tiles() {
 	var yy = global.yy;
 	
 	var tile = ds_grid_get(global.tile_grid, xx, yy);
+	if (is_struct(tile)) {
 	
-	//setting _up variables for the rooms next to the existing one
-	if (xx != 0) var tile_left = ds_grid_get(global.tile_grid, xx - 1, yy);
-	if (xx != global.grid_width - 1) var tile_right = ds_grid_get(global.tile_grid, xx + 1, yy);
-	if (yy != 0) var tile_up = ds_grid_get(global.tile_grid, xx, yy - 1);
-	if (yy != global.grid_height - 1) var tile_down = ds_grid_get(global.tile_grid, xx, yy + 1);
+		//setting _up variables for the rooms next to the existing one
+		if (xx != 0) var tile_left = ds_grid_get(global.tile_grid, xx - 1, yy);
+		if (xx != global.grid_width - 1) var tile_right = ds_grid_get(global.tile_grid, xx + 1, yy);
+		if (yy != 0) var tile_up = ds_grid_get(global.tile_grid, xx, yy - 1);
+		if (yy != global.grid_height - 1) var tile_down = ds_grid_get(global.tile_grid, xx, yy + 1);
 
-	if (canBuild) {
+		if (canBuild) {
 
-		//editing rooms
-		if (tile.main = ID.filled) {
-			global.roomCount = tile.rm_nmb;
-		}
+			//editing rooms
+			if (mLeft && tile.main = ID.filled) {
+				global.roomCount = tile.rm_nmb;
+			}
 	
-		//adding tiles
-		if (mLeft && tile.main = ID.empty) {
+			//adding tiles
+			if (mLeft && tile.main = ID.empty) {
 		
-			tile.main = ID.filled;
-			tile.rm_nmb = global.roomCount;
-			tile.col = global.selected_color;
+				tile.main = ID.filled;
+				tile.rm_nmb = global.roomCount;
+				tile.col = global.selected_color;
 						
-			//autotiling
-			tile.subimg = autotile(xx,yy);
+				//autotiling
+				tile.subimg = autotile(xx,yy);
 			
-			if (xx != 0) tile_left.subimg = autotile(xx - 1,yy);
-			if (xx != global.grid_width - 1) tile_right.subimg = autotile(xx + 1,yy);
-			if (yy != 0) tile_up.subimg = autotile(xx,yy - 1);
-			if (yy != global.grid_height - 1) tile_down.subimg = autotile(xx,yy + 1);
+				if (xx != 0) tile_left.subimg = autotile(xx - 1,yy);
+				if (xx != global.grid_width - 1) tile_right.subimg = autotile(xx + 1,yy);
+				if (yy != 0) tile_up.subimg = autotile(xx,yy - 1);
+				if (yy != global.grid_height - 1) tile_down.subimg = autotile(xx,yy + 1);
 	
-			placed_tile = true;
-		}
+				placed_tile = true;
+			}
 
 
-		//removing with mouse
+			//removing with mouse
 	
-		if (mRight && tile.main = ID.filled) {
+			if (mRight && tile.main = ID.filled) {
 		
-			clear_cell(tile);
+				clear_cell(tile);
 	
-			if (xx != 0) tile_left.subimg = autotile(xx - 1,yy);
-			if (xx != global.grid_width - 1) tile_right.subimg = autotile(xx + 1,yy);
-			if (yy != 0) tile_up.subimg = autotile(xx,yy - 1);
-			if (yy != global.grid_height - 1) tile_down.subimg = autotile(xx,yy + 1);
+				if (xx != 0) tile_left.subimg = autotile(xx - 1,yy);
+				if (xx != global.grid_width - 1) tile_right.subimg = autotile(xx + 1,yy);
+				if (yy != 0) tile_up.subimg = autotile(xx,yy - 1);
+				if (yy != global.grid_height - 1) tile_down.subimg = autotile(xx,yy + 1);
 	
-			global.roomCount ++;
-			deleted_tile = true;
+				deleted_tile = true;
+			}
 		}
+	
+		//setting the new tile
+		ds_grid_set(global.tile_grid, xx, yy, new tile_info(tile.main, tile.rm_nmb, tile.col, tile.subimg, tile.mrk, tile.door));
+	
+		if (xx != 0) ds_grid_set(global.tile_grid, xx - 1, yy, new tile_info(tile_left.main, tile_left.rm_nmb, tile_left.col, tile_left.subimg, tile_left.mrk, tile_left.door));
+		if (xx != global.grid_width - 1) ds_grid_set(global.tile_grid, xx + 1, yy, new tile_info(tile_right.main, tile_right.rm_nmb, tile_right.col, tile_right.subimg, tile_right.mrk, tile_right.door));
+		if (yy != 0) ds_grid_set(global.tile_grid, xx, yy - 1, new tile_info(tile_up.main, tile_up.rm_nmb, tile_up.col, tile_up.subimg, tile_up.mrk, tile_up.door));
+		if (yy != global.grid_height - 1) ds_grid_set(global.tile_grid, xx, yy + 1, new tile_info(tile_down.main, tile_down.rm_nmb, tile_down.col, tile_down.subimg, tile_down.mrk, tile_down.door));
+	
 	}
-	
-	//setting the new tile
-	ds_grid_set(global.tile_grid, xx, yy, new tile_info(tile.main, tile.rm_nmb, tile.col, tile.subimg, tile.mrk, tile.door));
-	
-	if (xx != 0) ds_grid_set(global.tile_grid, xx - 1, yy, new tile_info(tile_left.main, tile_left.rm_nmb, tile_left.col, tile_left.subimg, tile_left.mrk, tile_left.door));
-	if (xx != global.grid_width - 1) ds_grid_set(global.tile_grid, xx + 1, yy, new tile_info(tile_right.main, tile_right.rm_nmb, tile_right.col, tile_right.subimg, tile_right.mrk, tile_right.door));
-	if (yy != 0) ds_grid_set(global.tile_grid, xx, yy - 1, new tile_info(tile_up.main, tile_up.rm_nmb, tile_up.col, tile_up.subimg, tile_up.mrk, tile_up.door));
-	if (yy != global.grid_height - 1) ds_grid_set(global.tile_grid, xx, yy + 1, new tile_info(tile_down.main, tile_down.rm_nmb, tile_down.col, tile_down.subimg, tile_down.mrk, tile_down.door));
-	
 }
 	
 function autotile(xx, yy) {
@@ -143,5 +144,44 @@ function replace_same_color(_col, _col2) {
 			
 		}
 	}
+	
+}
+	
+	
+//Markers
+function reload_markers() {
+	checking_sprite = sprite_add(marker_url, 1, false, false, 0, 0);
+}
+
+function draw_marker_set(_x, _y) {
+	
+	for (var i = 0; i < tile_amount; i++) {
+		
+		if (selected_marker == i) {
+			draw_nine_slice(spr_edge_nineslice, _x - 2, _y + 40 * i - (40 * tiles_per_page * tile_page) - 2, _x + 34, _y + 40 * i - (40 * tiles_per_page * tile_page) + 34);
+		}
+		
+		draw_sprite(marker_sprite, i, _x, _y + 40 * i - (40 * tiles_per_page * tile_page))
+		
+	}
+	
+}
+
+function get_selected_marker(_x, _y) {
+	
+	var _return = noone;
+	
+	for (var i = 0; i < obj_gameController.tile_amount; i++) {
+		
+		var _x1 = _x
+		var _y1 = _y + 40 * i - (40 * obj_gameController.tiles_per_page * obj_gameController.tile_page)
+		
+		if (point_in_rectangle(global.mouse_pos_x, global.mouse_pos_y, _x1, _y1, _x1 + 32, _y1 + 32)) {
+			_return = i;
+		}
+		
+	}
+	
+	return(_return);
 	
 }

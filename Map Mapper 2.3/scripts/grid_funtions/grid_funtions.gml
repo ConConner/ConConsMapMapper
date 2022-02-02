@@ -20,10 +20,9 @@ function draw_grid(w, h, thickness, inc) { //draws the visual grid_background
 	for (var i = 0; i < h / inc + 1; i ++)	//horizontal lines
 	{
 		
-		var pos_x = max(0 - global.cam_pos_x, 0);
+		var pos_x = -global.cam_pos_x;
 		var pos_y = i * inc - global.cam_pos_y;
 		
-		draw_set_alpha(0.4);
 		draw_line_width(pos_x , pos_y, min(w - global.cam_pos_x, global.view_width), pos_y, thickness);
 
 	}
@@ -33,13 +32,49 @@ function draw_grid(w, h, thickness, inc) { //draws the visual grid_background
 	{
 		
 		var pos_x = i * inc - global.cam_pos_x;
-		var pos_y = max(0 - global.cam_pos_y, 0);
+		var pos_y = - global.cam_pos_y;
 		
-		draw_set_alpha(0.4);
 		draw_line_width(pos_x, pos_y, pos_x, min(h - global.cam_pos_y, global.view_height), thickness);
 	}
 
 
+}
+
+function draw_grid_whole(w, h, thickness, inc) { //draws the visual grid_background all at once (even if not in view)
+	
+	for (var i = 0; i < h / inc + 1; i ++)	//horizontal lines
+	{
+		
+		var pos_x = 0;
+		var pos_y = i * inc;
+		
+		draw_line_width(pos_x , pos_y, w, pos_y, thickness);
+
+	}
+
+
+	for (var i = 0; i < w / inc + 1; i ++)	//vertical lines
+	{
+		
+		var pos_x = i * inc;
+		var pos_y = 0;
+		
+		draw_line_width(pos_x, pos_y, pos_x, h, thickness);
+	}
+
+
+}
+
+function draw_grid_outline(w, h, thickness) { //draws only the outline of the grid
+	
+	var top = - global.cam_pos_y;
+	var left = - global.cam_pos_x;
+	
+	draw_line_width(left, top, left + w, top, thickness);
+	draw_line_width(left, top, left, top + h, thickness);
+	draw_line_width(left + w, top, left + w, top + h, thickness);
+	draw_line_width(left, top + h, left + w, top + h, thickness);
+	
 }
 
 
@@ -53,8 +88,10 @@ function load_grid() { //draws the contents on the grid
 	var min_x = max(0,floor( cam_x / tile_size ) -1);
 	var min_y = max(0,floor( cam_y / tile_size ) -1);
 	var max_x = min(global.grid_width,floor( min_x + ( cam_w / tile_size ) ) +2);
-	var max_y = min(global.grid_height,floor( min_y + ( cam_h / tile_size ) ) +2);
+	var max_y = min(global.grid_height,ceil( min_y + ( cam_h / tile_size ) ) +2);
 	
+	//hammer tile edge buffer
+	var _hammer_tiles = ds_list_create();
 	
 	//looping through the grid and drawing tiles
 	for (var draw_x = min_x; draw_x < max_x; draw_x++) {
@@ -72,13 +109,53 @@ function load_grid() { //draws the contents on the grid
 				if (tile.main == ID.filled) { 
 				
 					//drawing the inside of the tile
-					draw_rectangle_color(pos_x, pos_y, pos_x + tile_size - 1, pos_y + tile_size - 1, col, col, col, col, false);
+					if (tile.subimg < 16) draw_rectangle_color(pos_x, pos_y, pos_x + tile_size - 1, pos_y + tile_size - 1, col, col, col, col, false);
+					else {
+						switch (tile.subimg) { //drawing inside of hammered tiles
+							case (16): {
+								draw_triangle_color(pos_x, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y, col, col, col, false);
+								break; }
+								
+							case (17): {
+								draw_triangle_color(pos_x - 1, pos_y, pos_x - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y + tile_size - 1, col, col, col, false);
+								break; }
+								
+							case (18): {
+								draw_triangle_color(pos_x - 1, pos_y - 1, pos_x - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y - 1, col, col, col, false);
+								break; }
+								
+							case (19): {
+								draw_triangle_color(pos_x, pos_y - 1, pos_x + tile_size - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y - 1, col, col, col, false);
+								break;}
+								
+							case (20): {
+								draw_rectangle_color(pos_x, pos_y + 11, pos_x + tile_size - 1, pos_y + 19, col, col, col, col, false);
+								
+								//drawing edges if no more tunnel tiles
+								var tile_left = ds_grid_get(global.tile_grid, draw_x - 1, draw_y);
+								var tile_right = ds_grid_get(global.tile_grid, draw_x + 1, draw_y);
+								if (tile_left.subimg != 20) draw_sprite(spr_mapTiles, 22, pos_x - 2, pos_y);
+								if (tile_right.subimg != 20) ds_list_add(_hammer_tiles, [22, pos_x + tile_size, pos_y]);
+								
+								break; }
+								
+							case (21): {
+								draw_rectangle_color(pos_x + 11, pos_y, pos_x + 19, pos_y + tile_size - 1, col, col, col, col, false);
+								
+								//drawing edges if no more tunnel tiles
+								var tile_up = ds_grid_get(global.tile_grid, draw_x, draw_y - 1);
+								var tile_down = ds_grid_get(global.tile_grid, draw_x, draw_y + 1);
+								if (tile_up.subimg != 21) draw_sprite(spr_mapTiles, 23, pos_x, pos_y - 2);
+								if (tile_down.subimg != 21) ds_list_add(_hammer_tiles, [23, pos_x, pos_y + tile_size]);
+								
+								break; }
+						}
+					}
 				
 					//drawing outline
 					draw_sprite(spr_mapTiles, tile.subimg, pos_x, pos_y);
-				
-				
 				}
+				
 			
 				#region door drawing
 				if (tile.door[0,0] == hatch.filled) {
@@ -114,9 +191,128 @@ function load_grid() { //draws the contents on the grid
 			}
 		}
 	}
+	//adding missing hammer edges
+	for (var i = 0; i < ds_list_size(_hammer_tiles); i++) {
+		var _hammer_edge = ds_list_find_value(_hammer_tiles, i);
+		draw_sprite(spr_mapTiles, _hammer_edge[0], _hammer_edge[1], _hammer_edge[2]);
+	}
+	
+	ds_list_destroy(_hammer_tiles);
 		
 }
+
+function load_grid_whole() { //draws the contents on the grid all at once (even if not in view)
 	
+	//hammer tile edge buffer
+	var _hammer_tiles = ds_list_create();
+	
+	//looping through the grid and drawing tiles
+	for (var draw_x = 0; draw_x < global.grid_width; draw_x++) {
+	
+		for (var draw_y = 0; draw_y < global.grid_height; draw_y++) {
+			
+			var pos_x = draw_x * tile_size;
+			var pos_y = draw_y * tile_size;
+			
+			var tile = ds_grid_get(global.tile_grid, draw_x, draw_y);
+			if (tile != 0) {
+				var col = tile.col
+			
+				// normal tile drawing
+				if (tile.main == ID.filled) { 
+				
+					//drawing the inside of the tile
+					if (tile.subimg < 16) draw_rectangle_color(pos_x, pos_y, pos_x + tile_size - 1, pos_y + tile_size - 1, col, col, col, col, false);
+					else {
+						switch (tile.subimg) { //drawing inside of hammered tiles
+							case (16): {
+								draw_triangle_color(pos_x, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y, col, col, col, false);
+								break; }
+								
+							case (17): {
+								draw_triangle_color(pos_x - 1, pos_y, pos_x - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y + tile_size - 1, col, col, col, false);
+								break; }
+								
+							case (18): {
+								draw_triangle_color(pos_x - 1, pos_y - 1, pos_x - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y - 1, col, col, col, false);
+								break; }
+								
+							case (19): {
+								draw_triangle_color(pos_x, pos_y - 1, pos_x + tile_size - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y - 1, col, col, col, false);
+								break;}
+								
+							case (20): {
+								draw_rectangle_color(pos_x, pos_y + 11, pos_x + tile_size - 1, pos_y + 19, col, col, col, col, false);
+								
+								//drawing edges if no more tunnel tiles
+								var tile_left = ds_grid_get(global.tile_grid, draw_x - 1, draw_y);
+								var tile_right = ds_grid_get(global.tile_grid, draw_x + 1, draw_y);
+								if (tile_left.subimg != 20) draw_sprite(spr_mapTiles, 22, pos_x - 2, pos_y);
+								if (tile_right.subimg != 20) ds_list_add(_hammer_tiles, [22, pos_x + tile_size, pos_y]);
+								
+								break; }
+								
+							case (21): {
+								draw_rectangle_color(pos_x + 11, pos_y, pos_x + 19, pos_y + tile_size - 1, col, col, col, col, false);
+								
+								//drawing edges if no more tunnel tiles
+								var tile_up = ds_grid_get(global.tile_grid, draw_x, draw_y - 1);
+								var tile_down = ds_grid_get(global.tile_grid, draw_x, draw_y + 1);
+								if (tile_up.subimg != 21) draw_sprite(spr_mapTiles, 23, pos_x, pos_y - 2);
+								if (tile_down.subimg != 21) ds_list_add(_hammer_tiles, [23, pos_x, pos_y + tile_size]);
+								
+								break; }
+						}
+					}
+				
+					//drawing outline
+					draw_sprite(spr_mapTiles, tile.subimg, pos_x, pos_y);
+				}
+				
+			
+				#region door drawing
+				if (tile.door[0,0] == hatch.filled) {
+					draw_sprite_ext(spr_doorTiles, 0, pos_x, pos_y, 1, 1, 0, c_white, 1) //up
+					var _col = tile.door[0,1];
+					draw_rectangle_color(pos_x + 12, pos_y, pos_x + 19, pos_y + 3, _col, _col, _col, _col, false);
+				}
+			
+				if (tile.door[1,0] == hatch.filled) {
+					draw_sprite_ext(spr_doorTiles, 1, pos_x, pos_y, 1, 1, 0, c_white, 1) //right
+					var _col = tile.door[1,1];
+					draw_rectangle_color(pos_x + 28, pos_y + 12, pos_x + 31, pos_y + 19, _col, _col, _col, _col, false);
+				}
+			
+				if (tile.door[2,0] == hatch.filled) {
+					draw_sprite_ext(spr_doorTiles, 2, pos_x, pos_y, 1, 1, 0, c_white, 1) //down
+					var _col = tile.door[2,1];
+					draw_rectangle_color(pos_x + 12, pos_y + 28, pos_x + 19, pos_y + 31, _col, _col, _col, _col, false);
+				}
+			
+				if (tile.door[3,0] == hatch.filled) {
+					draw_sprite_ext(spr_doorTiles, 3, pos_x, pos_y, 1, 1, 0, c_white, 1) //left
+					var _col = tile.door[3,1];
+					draw_rectangle_color(pos_x, pos_y + 12, pos_x + 3, pos_y + 19, _col, _col, _col, _col, false);
+				}
+				#endregion
+			
+				#region marker drawing
+				if (tile.mrk != marker.empty && sprite_exists(marker_sprite)) {
+					draw_sprite(marker_sprite, tile.mrk, pos_x, pos_y);
+				}
+				#endregion
+			}
+		}
+	}
+	//adding missing hammer edges
+	for (var i = 0; i < ds_list_size(_hammer_tiles); i++) {
+		var _hammer_edge = ds_list_find_value(_hammer_tiles, i);
+		draw_sprite(spr_mapTiles, _hammer_edge[0], _hammer_edge[1], _hammer_edge[2]);
+	}
+	
+	ds_list_destroy(_hammer_tiles);	
+}
+
 	
 function clear_cell(cell_struct) { //clears a tile cell on the grid
 	
@@ -130,20 +326,32 @@ function clear_cell(cell_struct) { //clears a tile cell on the grid
 }
 	
 
-function shift_grid_x(grid, amount) { //shifts a grid by amount cells in x direction
+function shift_grid_x_pos(grid) { //shifts a grid cell in x direction
 	var _grid_width = ds_grid_width(grid);
 	var _grid_height = ds_grid_height(grid);
-	ds_grid_set_grid_region(grid, grid, 0, 0, _grid_width - amount, _grid_height, amount, 0);
-	ds_grid_set_region(grid, 0, 0, amount, _grid_height, 0);
+	ds_grid_set_grid_region(grid, grid, 0, 0, _grid_width - 1, _grid_height, 1, 0);
+	ds_grid_set_region(grid, 0, 0, 0, _grid_height, 0);
 }
 
-function shift_grid_y(grid, amount) { //shifts a grid by amount cells in x direction
+function shift_grid_y_pos(grid) { //shifts a grid cell in y direction
 	var _grid_width = ds_grid_width(grid);
 	var _grid_height = ds_grid_height(grid);
-	ds_grid_set_grid_region(grid, grid, 0, 0, _grid_width, _grid_height - amount, 0, amount);
-	ds_grid_set_region(grid, 0, 0, _grid_width, amount, 0);
+	ds_grid_set_grid_region(grid, grid, 0, 0, _grid_width, _grid_height - 1, 0, 1);
+	ds_grid_set_region(grid, 0, 0, _grid_width, 0, 0);
 }
 	
+function shift_grid_x_neg(grid) { //shifts a grid cell in negative x direction
+	var _grid_width = ds_grid_width(grid);
+	var _grid_height = ds_grid_height(grid);
+	ds_grid_set_grid_region(grid, grid, 1, 0, _grid_width, _grid_height, 0, 0);
+}
+
+function shift_grid_y_neg(grid) { //shifts a grid cell in negative y direction
+	var _grid_width = ds_grid_width(grid);
+	var _grid_height = ds_grid_height(grid);
+	ds_grid_set_grid_region(grid, grid, 0, 1, _grid_width, _grid_height, 0, 0);
+}
+
 
 //text messages
 function add_text_message(msg, lifetime, col) { //adds a new text message to the list
@@ -238,4 +446,68 @@ function update_text_message(_x, _y) { //updates the text messages
 	
 	draw_set_halign(fa_left);
 	
+}
+	
+	
+function setup_tool_tips() {
+	
+	pen_tool_tip[0] = "The pen allows you to add and remove";
+	pen_tool_tip[1] = "map tiles.";
+	pen_tool_tip[2] = "";
+	pen_tool_tip[3] = "Left click on an empty tile to add a";
+	pen_tool_tip[4] = "map tile. Right click on an existing";
+	pen_tool_tip[5] = "map tile to remove it and all the";
+	pen_tool_tip[6] = "contents on it.";
+	pen_tool_tip[7] = "Left click and drag off of an exiting";
+	pen_tool_tip[8] = "map tile to edit an already completed";
+	pen_tool_tip[9] = "room.";
+	
+	color_picker_tool_tip[0] = "The color picker selects the color you";
+	color_picker_tool_tip[1] = "are hovering over with the mouse.";
+	color_picker_tool_tip[2] = "";
+	color_picker_tool_tip[3] = "Left click anywhere on the grid to select";
+	color_picker_tool_tip[4] = "the color you are hovering over as your";
+	color_picker_tool_tip[5] = "usable color. The pen tool will be auto";
+	color_picker_tool_tip[6] = "selected after selecting a color.";
+	
+	color_brush_tool_tip[0] = "The color brush allows you to change the";
+	color_brush_tool_tip[1] = "color of an existing room or replace an";
+	color_brush_tool_tip[2] = "existing color with a new one.";
+	color_brush_tool_tip[3] = "";
+	color_brush_tool_tip[4] = "Left click on a room to replace the color";
+	color_brush_tool_tip[5] = "of it with your currently selected color.";
+	color_brush_tool_tip[6] = "Right click on a tile with a color to";
+	color_brush_tool_tip[7] = "replace every tile with the same color with";
+	color_brush_tool_tip[8] = "your currently selected color.";
+	
+	door_tool_tip[0] = "The connection tool can create a connection";
+	door_tool_tip[1] = "between two disconnected rooms. However, it";
+	door_tool_tip[2] = "can also create a connection inside of a room.";
+	door_tool_tip[3] = "";
+	door_tool_tip[4] = "Left click and drag over two tiles to create";
+	door_tool_tip[5] = "a connection between these two tiles. The";
+	door_tool_tip[6] = "connection color will be your currently selected";
+	door_tool_tip[7] = "color. Right click and drag over two tiles to";
+	door_tool_tip[8] = "remove an existing connection between them.";
+	door_tool_tip[9] = "If unsure, the cursor will always show possible";
+	door_tool_tip[10] = "locations for connections.";
+	
+	marker_tool_tip[0] = "The marker tool allows you to place down one";
+	marker_tool_tip[1] = "marker per cell on the grid. It does not have";
+	marker_tool_tip[2] = "to have a map tile below it!";
+	marker_tool_tip[3] = "";
+	marker_tool_tip[4] = "Select a marker in the marker set on the right";
+	marker_tool_tip[5] = "of the screen and place it on any grid cell";
+	marker_tool_tip[6] = "with a left click. A right click will delete";
+	marker_tool_tip[7] = "a marker from a grid cell.";
+	
+	hammer_tool_tip[0] = "The hammer tool allows you to change the";
+	hammer_tool_tip[1] = "appearence of specific map tiles. You can";
+	hammer_tool_tip[2] = "make sloped tiles or tunnel tiles.";
+	hammer_tool_tip[3] = "";
+	hammer_tool_tip[4] = "Left click on a normal tile to change it's";
+	hammer_tool_tip[5] = "appearence. Left click on a changed tile to";
+	hammer_tool_tip[6] = "reverse the process.";
+	
+	selection_tool_tip[0] = "U N F I N I S H E D!";
 }

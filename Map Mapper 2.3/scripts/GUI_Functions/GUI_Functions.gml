@@ -1,28 +1,3 @@
-function circle_menu(total_options,circle_x,circle_y,circle_radius,min_radius,dir_offset) {
-	
-	// Select option from circle menu
-	var option_angle_range = (360/total_options);
-	var dis = point_distance( circle_x , circle_y , mouse_x , mouse_y );
-	if( dis < circle_radius && dis > min_radius )
-	{
-	    var dir = point_direction( circle_x , circle_y , mouse_x , mouse_y ) + dir_offset;
-		if (dir > 360) dir -= 360
-		if (dir < 0) dir += 360
-	    return( floor( dir / option_angle_range ) );
-	}
-	else
-	{
-		if (dis > circle_radius) {
-			return( -1 )
-		}
-		
-		if (dis < min_radius) {
-			return( total_options );
-		}
-	}
-}
-
-
 function draw_nine_slice( spr, _x1, _y1, _x2, _y2) {
 	
 	var _size = sprite_get_width(spr) / 3;
@@ -124,8 +99,71 @@ function remove_button(_button) {
 }
 	
 
-function draw_checkbox(_x, _y, _value) {
+function visualize_buttons() { //draws outlines at every button position
+	
+	for(var i = 0; i < ds_list_size(global.button_list); i++) {
+		
+		var _id = ds_list_find_value(global.button_list, i);
+		if (_id != 0) {
+			
+			draw_rectangle_color(_id.x, _id.y, _id.x + _id.button_width, _id.y + _id.button_height, c_aqua, c_aqua, c_aqua, c_aqua, true);
+			
+		}
+	}
+	
+}
 
-	draw_sprite(spr_checkbox, _value, _x, _y);
 
+function draw_checkbox(_x, _y, _value, txt = "", size = 1, alpha = 1) {
+	
+	var w = sprite_get_width(spr_checkbox) * size;
+	var h = w;
+	var old_halign = draw_get_halign();
+	var old_valign = draw_get_valign();
+	
+	draw_sprite_ext(spr_checkbox, _value, _x, _y, size, size, 0, c_white, alpha);
+	
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_center);
+	draw_text(_x + w + 5, _y + h / 2, txt);
+	draw_set_halign(old_halign);
+	draw_set_valign(old_valign);
+}
+	
+
+function draw_text_button(_x, _y, _w, _h, _txt = "") { //draws a box with a centered text in it
+	
+	var old_halign = draw_get_halign();
+	var old_valign = draw_get_valign();
+	
+	//button outline
+	draw_nine_slice(spr_edge_nineslice, _x, _y, _x + _w, _y + _h);
+	
+	//text
+	var _halfw = _w / 2;
+	var _halfh = _h / 2;
+	draw_set_halign(fa_center);	//centering text
+	draw_set_valign(fa_middle);
+	
+	draw_text(_x + _halfw, _y + _halfh, _txt);
+	
+	draw_set_halign(old_halign);	//resetting aligns
+	draw_set_valign(old_valign);
+}
+	
+
+function resize_window(new_width, new_height) {
+	
+	//capping width and height
+	var invalid = false;
+	if (new_width < 800 || new_width > global.display_width) invalid = true;
+	if (new_width < 800 || new_width > global.display_width) invalid = true;
+	
+	new_width = clamp(new_width, 800, global.display_width);
+	new_height = clamp(new_height, 800, global.display_height);
+	
+	view_width = new_width;
+	view_height = new_height;
+	window_set_size(view_width*window_scale,view_height*window_scale);
+	surface_resize(application_surface,view_width*window_scale,view_height*window_scale);
 }

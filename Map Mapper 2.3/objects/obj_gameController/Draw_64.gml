@@ -1,6 +1,6 @@
 draw_set_color(c_white);
 draw_set_font(fnt_simple_text);
-display_set_gui_size(800,800);
+display_set_gui_size(global.view_width,global.view_height);
 draw_set_halign(fa_left)
 
 
@@ -23,7 +23,7 @@ switch (current_menu) {
 		image_alpha = 1;
 		
 		if (!close_menu) {
-			menu_goal_width = global.view_width - tile_size;
+			menu_goal_width = 800 - tile_size;
 			menu_goal_height = 350;
 		}
 		menu_pos_x = (global.view_width / 2) - (menu_width / 2);
@@ -157,6 +157,212 @@ switch (current_menu) {
 		
 		break; }
 		
+	case menu_state.settings_menu: {
+		
+		//darkening the background
+		draw_set_alpha(background_alpha);
+		draw_set_color(c_black);
+		draw_rectangle(0,0,global.view_width,global.view_height,false);
+		draw_set_color(c_white);
+		
+		//drawing nineslice background
+		draw_set_alpha(1)
+		image_alpha = 1;
+		
+		if (!close_menu) {
+			menu_goal_width = 800 - tile_size;
+			menu_goal_height = 350;
+		}
+		menu_pos_x = (global.view_width / 2) - (menu_width / 2);
+		menu_pos_y = (global.view_height / 2) - (menu_height / 2);
+		
+		background_goal_alpha = 0.6;
+		
+		draw_nine_slice(spr_menu_nineslice, menu_pos_x, menu_pos_y, menu_pos_x + menu_width, menu_pos_y + menu_height);
+		
+		if (menu_width > menu_goal_width - 20 && menu_height > menu_goal_height - 20) { //this happens after the menu background is done
+			
+			menu_drawing_goal_alpha = 1;
+			image_alpha = menu_drawing_alpha;
+			draw_set_alpha(menu_drawing_alpha);
+			
+			var _mouseX = device_mouse_x_to_gui(0);
+			var _mouseY = device_mouse_y_to_gui(0);
+			
+			//contents of the menu
+			draw_set_halign(fa_center);
+			draw_text(menu_pos_x + menu_width / 2, menu_pos_y + 17, "SETTINGS MENU");
+			draw_set_halign(fa_left);
+			
+			//settings checkboxes
+			draw_checkbox(menu_pos_x + 35, menu_pos_y + 55, setting_show_tooltips, "tooltips",, menu_drawing_alpha);
+			draw_checkbox(menu_pos_x + 35, menu_pos_y + 88, setting_show_grid, "map grid",, menu_drawing_alpha);
+			draw_checkbox(menu_pos_x + 35, menu_pos_y + 121, setting_show_cursor, "cursor",, menu_drawing_alpha);
+
+			#region updating buttons
+			settings_toggle_tooltips.goal_x = menu_pos_x + 35;
+			settings_toggle_tooltips.goal_y = menu_pos_y + 55;
+			settings_toggle_tooltips.button_width = 30 + string_width("tooltips");
+			settings_toggle_tooltips.button_height = 23;
+			
+			settings_toggle_grid.goal_x = menu_pos_x + 35;
+			settings_toggle_grid.goal_y = menu_pos_y + 88;
+			settings_toggle_grid.button_width = 30 + string_width("map grid");
+			settings_toggle_grid.button_height = 23;
+			
+			settings_toggle_cursor.goal_x = menu_pos_x + 35;
+			settings_toggle_cursor.goal_y = menu_pos_y + 121;
+			settings_toggle_cursor.button_width = 30 + string_width("cursor");
+			settings_toggle_cursor.button_height = 23;
+			
+			settings_decline_button.goal_x = menu_pos_x + menu_width - 1 - 3.5*tile_size;
+			settings_decline_button.goal_y = menu_pos_y - tile_size / 2;
+			settings_decline_button.goal_alpha = menu_drawing_alpha
+			settings_decline_button.jmp();
+			settings_confirm_button.goal_x = menu_pos_x + menu_width - 2*tile_size;
+			settings_confirm_button.goal_y = menu_pos_y - tile_size / 2;
+			settings_confirm_button.goal_alpha = menu_drawing_alpha
+			settings_confirm_button.jmp();
+			#endregion
+			
+		}
+			
+		if (close_menu) { //closing process
+			menu_drawing_goal_alpha = 0;
+			background_goal_alpha = 0;
+			
+			if (menu_drawing_alpha <= 0.01) { //this happens after the button fadeout
+				menu_goal_width = 32;
+				menu_goal_height = 32;
+				
+				if (menu_width < menu_goal_width + 3 && menu_height < menu_goal_height + 3) { //this happens after the animation finished
+					
+					//going back to main menu
+					close_menu = false;
+					canBuild = false;
+					in_menu = true;
+					
+					//ending menu
+					current_menu = menu_state.ig_menu;
+				}
+			}
+			
+			
+		}
+		
+		break; }
+		
+	case menu_state.save_menu: {
+		
+		//darkening the background
+		draw_set_alpha(background_alpha);
+		draw_set_color(c_black);
+		draw_rectangle(0,0,global.view_width,global.view_height,false);
+		draw_set_color(c_white);
+		
+		//drawing nineslice background
+		draw_set_alpha(1)
+		image_alpha = 1;
+		
+		if (!close_menu) {
+			menu_goal_width = 800 - tile_size;
+			menu_goal_height = 350;
+		}
+		menu_pos_x = (global.view_width / 2) - (menu_width / 2);
+		menu_pos_y = (global.view_height / 2) - (menu_height / 2);
+		
+		background_goal_alpha = 0.6;
+		
+		draw_nine_slice(spr_menu_nineslice, menu_pos_x, menu_pos_y, menu_pos_x + menu_width, menu_pos_y + menu_height);
+		
+		if (menu_width > menu_goal_width - 20 && menu_height > menu_goal_height - 20) { //this happens after the menu background is done
+			
+			menu_drawing_goal_alpha = 1;
+			image_alpha = menu_drawing_alpha;
+			draw_set_alpha(menu_drawing_alpha);
+			
+			var _mouseX = device_mouse_x_to_gui(0);
+			var _mouseY = device_mouse_y_to_gui(0);
+			
+			//contents of the menu
+			draw_set_halign(fa_center);
+			draw_text(menu_pos_x + menu_width / 2, menu_pos_y + 17, "SAVE MENU");
+			draw_set_halign(fa_left);
+			
+			//drawing info box outline
+			var box1_x = menu_pos_x + 35
+			var box2_x = menu_pos_x + menu_width / 2 - 115
+			var box3_x = menu_pos_x + menu_width - 265
+			var box_y = menu_pos_y + 55
+			draw_nine_slice(spr_edge_nineslice, box1_x, box_y, box1_x + 230, box_y + 250);
+			draw_nine_slice(spr_edge_nineslice, box2_x, box_y, box2_x + 230, box_y + 250);
+			draw_nine_slice(spr_edge_nineslice, box3_x, box_y, box3_x + 230, box_y + 250);
+			
+			//drawing button graphics
+			draw_set_font(fnt_simple_text_2x); //different export buttons
+			draw_text_button(menu_pos_x + 40, menu_pos_y + 60, 220, 50, "map file");
+			draw_text_button(menu_pos_x + menu_width / 2 - 110, menu_pos_y + 60, 220, 50, "png");
+			draw_text_button(menu_pos_x + menu_width - 260, menu_pos_y + 60, 220, 50, "SMART");
+			draw_set_font(fnt_simple_text);
+			
+			//drawing info text
+			draw_set_color(c_aqua);
+			draw_text(box1_x + 6, box_y + 60, "info:");
+			draw_text(box2_x + 6, box_y + 60, "info:");
+			draw_text(box3_x + 6, box_y + 60, "info:");
+			draw_set_color(c_ltgrey);
+			draw_text_ext(box1_x + 6, box_y + 85, "exports the map as a file, which can be shared and read back into the program.", 22, 220);
+			draw_text_ext(box2_x + 6, box_y + 85, "exports the map as a transparent image.\ncannot be read back into the program!", 22, 220);
+			draw_text_ext(box3_x + 6, box_y + 85, "exports the map as a SMART compatible file.\n(can not be read back into the program at the moment!)", 22, 220);
+			
+			
+			#region updating buttons
+			save_confirm_button.goal_x = menu_pos_x + menu_width - 2.75*tile_size;
+			save_confirm_button.goal_y = menu_pos_y - tile_size / 2;
+			save_confirm_button.goal_alpha = menu_drawing_alpha
+			save_confirm_button.jmp();
+			
+			save_mf_button.goal_x = box1_x + 5;
+			save_mf_button.goal_y = box_y + 5;
+			save_mf_button.button_width = 220;
+			save_mf_button.button_height = 50;
+			save_png_button.goal_x = box2_x + 5;
+			save_png_button.goal_y = box_y + 5;
+			save_png_button.button_width = 220;
+			save_png_button.button_height = 50;
+			save_xml_button.goal_x = box3_x + 5;
+			save_xml_button.goal_y = box_y + 5;
+			save_xml_button.button_width = 220;
+			save_xml_button.button_height = 50;
+			#endregion
+			
+		}
+			
+		if (close_menu) { //closing process
+			menu_drawing_goal_alpha = 0;
+			background_goal_alpha = 0;
+			
+			if (menu_drawing_alpha <= 0.01) { //this happens after the button fadeout
+				menu_goal_width = 32;
+				menu_goal_height = 32;
+				
+				if (menu_width < menu_goal_width + 3 && menu_height < menu_goal_height + 3) { //this happens after the animation finished
+					
+					//going back to main menu
+					close_menu = false;
+					canBuild = false;
+					in_menu = true;
+					
+					//ending menu
+					current_menu = menu_state.ig_menu;
+				}
+			}
+			
+			
+		}
+		
+		break; }
+		
 	case menu_state.ig_menu: {
 		
 		//darkening the background
@@ -184,42 +390,57 @@ switch (current_menu) {
 			//tool information and more text
 			menu_drawing_goal_alpha = 1;
 			draw_set_alpha(menu_drawing_alpha);
-			draw_set_color(c_ltgrey);
 			
 			if (show_tooltips) {
 				
+				#macro text_offset 160
+				draw_set_color(c_red);
 				draw_text(32, text_offset - 30, "Tool information:");
-				#macro text_offset 258
+				var _text_array = ["You should not see this!!!"];
+				
 				switch (current_tool) {
 				
 					case tool.pen: {
-						draw_text(32, text_offset, "The pen tool is probably going to be your\nmost used tool. It is used to add and remove\nmap-tiles and also to add onto existing tiles.");
-						draw_text(32, text_offset, "\n\n\n\nLeft click and drag to start a new room.\nRight click and drag to remove existing tiles.");
-						draw_text(32, text_offset, "\n\n\n\n\n\nAn existing room can be expanded by\ndragging off of an existing room.");
+						_text_array = pen_tool_tip;
 						break; }
 					case tool.eyedropper: {
-						draw_text(32, text_offset, "The color picker allows you to click on an\nalready existing map-tile to copy the color\nof it as your primary color.");
+						_text_array = color_picker_tool_tip;
 						break; }
 					case tool.color_brush: {
-						draw_text(32, text_offset, "With the color brush you can change the\ncolor of all map tiles of the selected tiles room.");
-						draw_text(32, text_offset, "\n\nIt is also possible to change all map tiles,\nwith the same color, to a new color.");
-						draw_text(32, text_offset, "\n\n\n\n\nLeft click to change the color of the selected room.\nright click to change all tiles with the same color.");
+						_text_array = color_brush_tool_tip;
 						break; }
 					case tool.door_tool: {
-						draw_text(32, text_offset, "With the connection tool you can create\nconnections between or in rooms. The connections\nhave colors as well, just like your tiles.");
-						draw_text(32, text_offset, "\n\n\nThey use the color you have currently selected\nbut you can also quickly swap between four\npresets.");
-						draw_text(32, text_offset, "\n\n\n\n\n\n\nDrag over two tiles to create a connection between\nthem. Dragging with a right click deletes the connection.");
-						draw_text(32, text_offset, "\n\n\n\n\n\n\n\n\nif you are unsure, where you can create a connection,\nthe cursor will show arrows, pointing into possible locations.");
-					}
+						_text_array = door_tool_tip;
+						break; }
+					case tool.marker_tool: {
+						_text_array = marker_tool_tip;
+						break; }
+					case tool.hammer: {
+						_text_array = hammer_tool_tip;
+						break; }
+					case tool.selector: {
+						_text_array = selection_tool_tip;
+						break; }
 				
 				}
 				
+				//generating the text to draw
+				var _len = array_length(_text_array);
+				var _string = "";
+				for (var i = 0; i < _len; i++) {
+					_string = _string + string(_text_array[i]) + "\n";
+				}
+				
+				//drawing generated text
+				draw_set_color(c_ltgrey);
+				draw_text(32, text_offset, _string);
+				
 			}
+			
+			
 			
 			//drawing tooltip section
 			draw_set_color(c_white);
-			draw_checkbox(32, global.window_height - 55, show_tooltips);
-			draw_text(32 + 27, global.window_height - 55, "tooltips");
 			
 		}
 		
@@ -254,17 +475,21 @@ switch (current_menu) {
 		if (current_tool == tool.marker_tool) marker_tool_button.image_index = 1;
 		else marker_tool_button.image_index = 0;
 		
-		selection_tool_button.goal_alpha = 1;
-		selection_tool_button.goal_y = menu_pos_y + menu_height - 98;
-		if (menu_height > menu_goal_height - 2) selection_tool_button.activate();
-		if (current_tool == tool.selector) selection_tool_button.image_index = 1;
-		else selection_tool_button.image_index = 0;
+		//selection_tool_button.goal_alpha = 1;
+		//selection_tool_button.goal_y = menu_pos_y + menu_height - 98;
+		//if (menu_height > menu_goal_height - 2) selection_tool_button.activate();
+		//if (current_tool == tool.selector) selection_tool_button.image_index = 1;
+		//else selection_tool_button.image_index = 0;
 		
 		hammer_tool_button.goal_alpha = 1;
 		hammer_tool_button.goal_y = menu_pos_y + menu_height - 98;
 		if (menu_height > menu_goal_height - 2) hammer_tool_button.activate();
 		if (current_tool == tool.hammer) hammer_tool_button.image_index = 1;
 		else hammer_tool_button.image_index = 0;
+		
+		settings_button.goal_alpha = 1;
+		settings_button.goal_y = menu_pos_y + menu_height - 98;
+		if (menu_height > menu_goal_height - 2) settings_button.activate();
 		
 		save_button.goal_alpha = 1;
 		save_button.goal_y = menu_pos_y + menu_height - 98;
@@ -273,10 +498,6 @@ switch (current_menu) {
 		load_button.goal_alpha = 1;
 		load_button.goal_y = menu_pos_y + menu_height - 98;
 		if (menu_height > menu_goal_height - 2) load_button.activate();
-		
-		tooltip_button.activate();
-		tooltip_button.button_height = 23;
-		tooltip_button.button_width = 105;
 		
 		discord_button.goal_alpha = 1;
 		discord_button.activate();
@@ -297,18 +518,32 @@ switch (current_menu) {
 		}
 		
 		//closing if clicking anywhere else
-		if (mLeftPressed && mouse_y > menu_pos_y + menu_goal_height && button_check() == 0) close_menu = true;
+		if (mLeftPressed && global.mouse_pos_y > menu_pos_y + menu_goal_height && button_check() == 0) close_menu = true;
 		
 		break; }
 		
 	case menu_state.nothing: {
+		
+		//drawing current color
+		var _x = color_button.x;
+		var _y = color_button.y;
+		var _w = color_button.button_width;
+		var _h = color_button.button_height;
+		var _a = color_button.image_alpha;
+		var _col = global.selected_color;
+		
+		draw_set_color(_col);
+		draw_set_alpha(_a);
+		draw_roundrect_ext(_x + 20, _y + 20, _x + _w - 1, _y + _h - 1, 32, 32, false);
+		draw_set_color(c_white);
+		
 		break; }
 		
 }
 
-#region drawing a the tileset
+#region drawing the marker-tileset
 //calculating amount of tiles per page
-space_per_page = global.view_height - 32 - 64;
+space_per_page = global.view_height - 124;
 tiles_per_page = floor(space_per_page / 40);
 max_pages = ceil(tile_amount / tiles_per_page - 1)
 
@@ -342,14 +577,15 @@ draw_set_color(c_white);
 //text
 draw_set_halign(fa_center);
 draw_text(tileset_x + 54, 8, "MARKERS");
-draw_text(tileset_x + 54, global.view_height - 32, "PAGE " + string(tile_page + 1) + "/" + string(max_pages + 1));
+draw_set_halign(fa_left);
+draw_text(tileset_x + 14, global.view_height - 32, "PAGE " + string(tile_page + 1) + "/" + string(max_pages + 1));
+draw_set_halign(fa_center);
 
 #endregion
 
 //button drawing
 button_update();
 update_text_message(global.view_width,global.view_height - 22);
-
 
 //debug
 if (debug_on) {
@@ -360,19 +596,22 @@ if (debug_on) {
 	draw_text(0,0,"DEBUG MODE");
 	draw_set_colour(c_white);
 	
+	//debug button view
+	visualize_buttons();
+	
 	//fps view
 	var _fps = round(fps_real);
 	if (_fps > 100) draw_set_colour(c_lime);
 	else draw_set_colour(c_red);
 	draw_set_halign(fa_right)
-	draw_text(800,0,_fps);
+	draw_text(global.view_width,0,_fps);
 	draw_set_halign(fa_left)
 	draw_set_colour(c_ltgrey);
 	
 	
 	//showing debug vars
-	draw_text(5,17 * 3,"Mouse XX: " + string(global.xx) + ";    X: " + string(mouse_x));
-	draw_text(5,17 * 4,"Mouse YY: " + string(global.yy) + ";    Y: " + string(mouse_y));
+	draw_text(5,17 * 3,"Mouse XX: " + string(global.xx) + ";    X: " + string(global.mouse_pos_x));
+	draw_text(5,17 * 4,"Mouse YY: " + string(global.yy) + ";    Y: " + string(global.mouse_pos_y));
 	draw_text(5,17 * 6,"Camera X: " + string(global.cam_pos_x));
 	draw_text(5,17 * 7,"Camera Y: " + string(global.cam_pos_y));
 	draw_text(5,17 * 9,"Cursor Mode: " + string(obj_cursor.cursor_mode));
@@ -381,12 +620,8 @@ if (debug_on) {
 	draw_text(5,17 * 13,"Menu Y" + string(menu_pos_y));
 	draw_text(5,17 * 14,"Menu width: " + string(menu_width));
 	draw_text(5,17 * 15,"Menu height: " + string(menu_height));
-	draw_text(5,17 * 17,"Selected Col Hue: " + string(selected_color_hue));
-	draw_text(5,17 * 18,"Selected Col Sat: " + string(selected_color_sat));
-	draw_text(5,17 * 19,"Selected Col Val: " + string(selected_color_val));
-	draw_text(5,17 * 21,"Cursor X: " + string(obj_cursor.goal_x));
-	draw_text(5,17 * 22,"Cursor Y: " + string(obj_cursor.goal_y));
-	draw_text(5,17 * 24,"Selected Marker: " + string(selected_marker));
+	draw_text(5,17 * 17,"Cursor X: " + string(obj_cursor.goal_x));
+	draw_text(5,17 * 18,"Cursor Y: " + string(obj_cursor.goal_y));
+	draw_text(5,17 * 20,"Room Counter: " + string(global.roomCount));
 	
 }
-
