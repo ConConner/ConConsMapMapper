@@ -26,11 +26,13 @@ Beta 2.1 (XX.XX.XXXX)
 # grid can be toggled
 # base markers now included in the program
 + the window is now resizeable
++ the grid is now resizeable
 + NEW hammer tool
 + image export as .png
 + SMART .xml export
 + hotkeys
 + DISCORD button
++ current color now gets displayed
 * combined README and CHANGELOG
 * restructured CHANGELOG
 
@@ -56,7 +58,7 @@ Beta 2.0 (23.05.2021)
 
 
 ------------------------------------
-Beta 1.1 (10.01.2020)
+Beta 1.1 (10.01.2021)
 ------------------------------------
 # fixed saving bug which only allowed saving in %localappdata%
 # improved performance [ ~ 700 fps*]

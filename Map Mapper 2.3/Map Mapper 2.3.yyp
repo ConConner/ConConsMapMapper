@@ -20,6 +20,7 @@
     {"id":{"name":"rm_program","path":"rooms/rm_program/rm_program.yy",},"order":0,},
     {"id":{"name":"obj_camera","path":"objects/obj_camera/obj_camera.yy",},"order":1,},
     {"id":{"name":"spr_load","path":"sprites/spr_load/spr_load.yy",},"order":8,},
+    {"id":{"name":"spr_size_edit","path":"sprites/spr_size_edit/spr_size_edit.yy",},"order":2,},
     {"id":{"name":"spr_cursor_edge","path":"sprites/spr_cursor_edge/spr_cursor_edge.yy",},"order":5,},
     {"id":{"name":"spr_discord_button","path":"sprites/spr_discord_button/spr_discord_button.yy",},"order":10,},
     {"id":{"name":"spr_pinpoint","path":"sprites/spr_pinpoint/spr_pinpoint.yy",},"order":0,},

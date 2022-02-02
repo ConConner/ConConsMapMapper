@@ -17,6 +17,60 @@ else {
 }
 draw_set_alpha(1);
 
+#region drawing graphics for grid resize
+//getting vars
+var _x = global.cam_pos_x;
+var _y = global.cam_pos_y;
+var _w = sprite_get_width(spr_size_edit);
+var _h = sprite_get_height(spr_size_edit);
+var _grid_width = global.grid_width * tile_size;
+var _grid_height = global.grid_height * tile_size;
+#macro offset 32
+
+//drawing + and - sprites
+draw_sprite(spr_size_edit, 0, global.window_width / 2 - _w / 2, -_y - tile_size - offset); //up
+draw_sprite(spr_size_edit, 1, global.window_width / 2 + _w / 2, -_y - tile_size - offset);
+
+draw_sprite(spr_size_edit, 0, -_x - tile_size - offset, global.window_height / 2 - _h / 2); //left
+draw_sprite(spr_size_edit, 1, -_x - tile_size - offset, global.window_height / 2 + _h / 2);
+
+draw_sprite(spr_size_edit, 0, global.window_width / 2 - _w / 2, -_y + _grid_height + offset); //down
+draw_sprite(spr_size_edit, 1, global.window_width / 2 + _w / 2, -_y + _grid_height + offset);
+
+draw_sprite(spr_size_edit, 0, -_x + _grid_width + offset, global.window_height / 2 - _h / 2); //right
+draw_sprite(spr_size_edit, 1, -_x + _grid_width + offset, global.window_height / 2 + _h / 2);
+
+#region button pos
+resize_neg_up_button.goal_x = global.window_width / 2 - _w / 2;
+resize_neg_up_button.goal_y = -_y - tile_size - offset;
+resize_neg_up_button.jmp();
+resize_pos_up_button.goal_x = global.window_width / 2 + _w / 2;
+resize_pos_up_button.goal_y = -_y - tile_size - offset;
+resize_pos_up_button.jmp();
+
+resize_neg_left_button.goal_x = -_x - tile_size - offset;
+resize_neg_left_button.goal_y = global.window_height / 2 - _h / 2;
+resize_neg_left_button.jmp();
+resize_pos_left_button.goal_x = -_x - tile_size - offset;
+resize_pos_left_button.goal_y = global.window_height / 2 + _h / 2;
+resize_pos_left_button.jmp();
+
+resize_neg_down_button.goal_x = global.window_width / 2 - _w / 2;
+resize_neg_down_button.goal_y = -_y + _grid_height + offset;
+resize_neg_down_button.jmp();
+resize_pos_down_button.goal_x = global.window_width / 2 + _w / 2;
+resize_pos_down_button.goal_y = -_y + _grid_height + offset;
+resize_pos_down_button.jmp();
+
+resize_neg_right_button.goal_x = -_x + _grid_width + offset;
+resize_neg_right_button.goal_y = global.window_height / 2 - _h / 2;
+resize_neg_right_button.jmp();
+resize_pos_right_button.goal_x = -_x + _grid_width + offset;
+resize_pos_right_button.goal_y = global.window_height / 2 + _h / 2;
+resize_pos_right_button.jmp();
+#endregion
+
+#endregion
 
 function take_screenshot(_file) {
 	

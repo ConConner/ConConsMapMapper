@@ -30,8 +30,6 @@ global.map_dir = "";
 //display vars
 global.display_width = display_get_width();
 global.display_height = display_get_height();
-global.display_half_w = (global.display_width / 2)
-global.display_half_h = (global.display_height / 2)
 
 //window vars
 global.window_width = window_get_width();
@@ -60,19 +58,22 @@ start_cam_y = 0;
 
 #endregion
 
+
+#region declaring other vars
 //user vars
 show_grid = true;
 show_tooltips = true;
+show_cursor = true;
 
 	//settings
 setting_show_grid = show_grid;
 setting_show_tooltips = show_tooltips;
+setting_show_cursor = show_cursor;
 
 //boolean
 canBuild = true;
 placed_tile = false;
 deleted_tile = false;
-deleted_tile_frame = false;
 cam_lock = false;
 click_moved = false;
 moving_with_mouse = false;
@@ -111,6 +112,7 @@ value_selection = 0;
 rgb_code_selection = 0;
 color_decline_button = 0;
 color_confirm_button = 0;
+selection_tool_button = 0;
 save_confirm_button = 0;
 save_mf_button = 0;
 save_png_button = 0;
@@ -119,6 +121,7 @@ settings_confirm_button = 0;
 settings_decline_button = 0;
 settings_toggle_grid = 0;
 settings_toggle_tooltips = 0;
+settings_toggle_cursor = 0;
 
 //menu vars
 current_menu = menu_state.nothing;
@@ -150,7 +153,7 @@ selected_color_hue = color_get_hue(global.selected_color);
 selected_color_sat = color_get_saturation(global.selected_color);
 selected_color_val = color_get_value(global.selected_color);
 selected_rgb_hex = get_hex_rgb(global.selected_color);
-
+#endregion
 
 
 #region setting up the data structures
@@ -183,8 +186,75 @@ ds_grid_set_region(global.text_grid, 0, 0, max_text_amount, 4, 0);
 
 //tooltip setup
 setup_tool_tips();
+	
+//button list
+global.button_list = ds_list_create();
+
+//BUTTONS
+//button struct
+button_create = function(_x, _y, _spr, _menu_level) constructor {
+	
+	//button vars
+	x = _x;
+	y = _y;
+	goal_x = _x;
+	goal_y = _y;
+	goal_alpha = 1;
+	sprite_index = _spr;
+	image_index = 0;
+	image_alpha = 0;
+	button_width = sprite_get_width(sprite_index);
+	button_height = sprite_get_height(sprite_index);
+	menu_level = _menu_level
+	
+	active = true;
+	button_enabled = true;
+	
+	//functions
+	static setpos = function(newx, newy) {
+		x = newx;
+		y = newy;
+		goal_x = newx;
+		goal_y = newy;
+	}
+	static jmp = function() { //sets the button x/y coordinates to the goal position
+		x = goal_x;
+		y = goal_y;
+	}
+	static move = function() {	//moves the button to the goal position by 30% of the distance
+		x = lerp(x, goal_x, 0.3);
+		y = lerp(y, goal_y, 0.3);
+	}
+	static check = function(point_x, point_y) {	//checks if a point is on the button
+		
+		if (point_in_rectangle(point_x, point_y, x, y, x + button_width, y + button_height)) {
+			return(true);
+		} else return(false);
+		
+	}
+	static fade = function() {	//fades current alpha to goal alpha
+		image_alpha = lerp(image_alpha, goal_alpha, 0.3);
+	}
+	static draw = function() {  //draws the button
+		draw_sprite_ext(sprite_index, image_index, x, y, 1, 1, 0, c_white, image_alpha);
+	}
+	static disable = function() {  //shuts off all button processes
+		button_enabled = false;
+	}
+	static enable = function() {  //activates the button process again
+		button_enabled = true;
+	}
+	static activate = function() { //makes the button usable
+		active = true;
+	}
+	static deactivate = function() { //makes the button unuseable
+		active = false;
+	}
+}
+#endregion
 
 
+#region button functions
 //general functions
 //opening the menu
 open_menu = function() {
@@ -213,10 +283,12 @@ open_settings_menu = function() {
 	//settings buttons
 	settings_toggle_tooltips = make_button(0, 0, spr_cursor_selector, menu_state.settings_menu);
 	settings_toggle_grid = make_button(0, 0, spr_cursor_selector, menu_state.settings_menu);
+	settings_toggle_cursor = make_button(0, 0, spr_cursor_selector, menu_state.settings_menu);
 	
 	//set setting variables
 	setting_show_grid = show_grid;
 	setting_show_tooltips = show_tooltips;
+	setting_show_cursor = show_cursor;
 }
 settings_confirmed = function() {
 	close_menu = true;
@@ -230,6 +302,7 @@ settings_confirmed = function() {
 	//applying settings
 	show_grid = setting_show_grid;
 	show_tooltips = setting_show_tooltips;
+	show_cursor = setting_show_cursor;
 	
 	save_settings();
 	add_text_message("saved settings", 1.5, c_lime);
@@ -347,71 +420,6 @@ color_declined = function() {
 	//text message
 	add_text_message("color discarded", 1.5, c_white);
 }
-
-//BUTTONS
-//button struct
-button_create = function(_x, _y, _spr, _menu_level) constructor {
-	
-	//button vars
-	x = _x;
-	y = _y;
-	goal_x = _x;
-	goal_y = _y;
-	goal_alpha = 1;
-	sprite_index = _spr;
-	image_index = 0;
-	image_alpha = 0;
-	button_width = sprite_get_width(sprite_index);
-	button_height = sprite_get_height(sprite_index);
-	menu_level = _menu_level
-	
-	active = true;
-	button_enabled = true;
-	
-	//functions
-	static setpos = function(newx, newy) {
-		x = newx;
-		y = newy;
-		goal_x = newx;
-		goal_y = newy;
-	}
-	static jmp = function() { //sets the button x/y coordinates to the goal position
-		x = goal_x;
-		y = goal_y;
-	}
-	static move = function() {	//moves the button to the goal position by 30% of the distance
-		x = lerp(x, goal_x, 0.3);
-		y = lerp(y, goal_y, 0.3);
-	}
-	static check = function(point_x, point_y) {	//checks if a point is on the button
-		
-		if (point_in_rectangle(point_x, point_y, x, y, x + button_width, y + button_height)) {
-			return(true);
-		} else return(false);
-		
-	}
-	static fade = function() {	//fades current alpha to goal alpha
-		image_alpha = lerp(image_alpha, goal_alpha, 0.3);
-	}
-	static draw = function() {  //draws the button
-		draw_sprite_ext(sprite_index, image_index, x, y, 1, 1, 0, c_white, image_alpha);
-	}
-	static disable = function() {  //shuts off all button processes
-		button_enabled = false;
-	}
-	static enable = function() {  //activates the button process again
-		button_enabled = true;
-	}
-	static activate = function() { //makes the button usable
-		active = true;
-	}
-	static deactivate = function() { //makes the button unuseable
-		active = false;
-	}
-}
-	
-//button list
-global.button_list = ds_list_create();
 #endregion
 
 
@@ -427,7 +435,7 @@ eyedropper_tool_button = make_button(16 + 72 * 1, -10, spr_eyedropper_tool, menu
 color_brush_tool_button = make_button(16 + 72 * 2, -10, spr_color_brush, menu_state.ig_menu);
 door_tool_button = make_button(16 + 72 * 3, -10, spr_door_tool, menu_state.ig_menu);
 marker_tool_button = make_button(16 + 72 * 4, -10, spr_marker_tool, menu_state.ig_menu);
-selection_tool_button = make_button(16 + 72 * 6, -10, spr_selection_tool, menu_state.ig_menu);
+//selection_tool_button = make_button(16 + 72 * 6, -10, spr_selection_tool, menu_state.ig_menu);
 hammer_tool_button = make_button(16 + 72 * 5, -10, spr_hammer_tool, menu_state.ig_menu);
 settings_button = make_button(global.view_width - 80 - 72 * 2, -10, spr_settings, menu_state.ig_menu);
 save_button = make_button(global.view_width - 80 - 72, -10, spr_save, menu_state.ig_menu);
@@ -435,7 +443,39 @@ load_button = make_button(global.view_width - 80, -10, spr_load, menu_state.ig_m
 
 discord_button = make_button(global.view_width - 80, global.view_height - 80, spr_discord_button, menu_state.ig_menu);
 
-//save menu buttons
+#region resize buttons
+resize_neg_up_button = make_button(0, 0, spr_cursor_selector, menu_state.nothing);
+resize_neg_up_button.button_width = 32;
+resize_neg_up_button.button_height = 32;
+
+resize_pos_up_button = make_button(0, 0, spr_cursor_selector, menu_state.nothing);
+resize_pos_up_button.button_width = 32;
+resize_pos_up_button.button_height = 32;
+
+resize_neg_left_button = make_button(0, 0, spr_cursor_selector, menu_state.nothing);
+resize_neg_left_button.button_width = 32;
+resize_neg_left_button.button_height = 32;
+
+resize_pos_left_button = make_button(0, 0, spr_cursor_selector, menu_state.nothing);
+resize_pos_left_button.button_width = 32;
+resize_pos_left_button.button_height = 32;
+
+resize_neg_right_button = make_button(0, 0, spr_cursor_selector, menu_state.nothing);
+resize_neg_right_button.button_width = 32;
+resize_neg_right_button.button_height = 32;
+
+resize_pos_right_button = make_button(0, 0, spr_cursor_selector, menu_state.nothing);
+resize_pos_right_button.button_width = 32;
+resize_pos_right_button.button_height = 32;
+
+resize_neg_down_button = make_button(0, 0, spr_cursor_selector, menu_state.nothing);
+resize_neg_down_button.button_width = 32;
+resize_neg_down_button.button_height = 32;
+
+resize_pos_down_button = make_button(0, 0, spr_cursor_selector, menu_state.nothing);
+resize_pos_down_button.button_width = 32;
+resize_pos_down_button.button_height = 32;
+#endregion
 
 
 //door color buttons

@@ -326,32 +326,30 @@ function clear_cell(cell_struct) { //clears a tile cell on the grid
 }
 	
 
-function shift_grid_x_pos(grid, amount) { //shifts a grid by amount cells in x direction
+function shift_grid_x_pos(grid) { //shifts a grid cell in x direction
 	var _grid_width = ds_grid_width(grid);
 	var _grid_height = ds_grid_height(grid);
-	ds_grid_set_grid_region(grid, grid, 0, 0, _grid_width - amount, _grid_height, amount, 0);
-	ds_grid_set_region(grid, 0, 0, amount, _grid_height, 0);
+	ds_grid_set_grid_region(grid, grid, 0, 0, _grid_width - 1, _grid_height, 1, 0);
+	ds_grid_set_region(grid, 0, 0, 0, _grid_height, 0);
 }
 
-function shift_grid_y_pos(grid, amount) { //shifts a grid by amount cells in x direction
+function shift_grid_y_pos(grid) { //shifts a grid cell in y direction
 	var _grid_width = ds_grid_width(grid);
 	var _grid_height = ds_grid_height(grid);
-	ds_grid_set_grid_region(grid, grid, 0, 0, _grid_width, _grid_height - amount, 0, amount);
-	ds_grid_set_region(grid, 0, 0, _grid_width, amount, 0);
+	ds_grid_set_grid_region(grid, grid, 0, 0, _grid_width, _grid_height - 1, 0, 1);
+	ds_grid_set_region(grid, 0, 0, _grid_width, 0, 0);
 }
 	
-function shift_grid_x_neg(grid, amount) { //shifts a grid by amount cells in negative x direction
+function shift_grid_x_neg(grid) { //shifts a grid cell in negative x direction
 	var _grid_width = ds_grid_width(grid);
 	var _grid_height = ds_grid_height(grid);
-	ds_grid_set_grid_region(grid, grid, amount, 0, _grid_width, _grid_height, 0, 0);
-	ds_grid_set_region(grid, _grid_width - amount, 0, _grid_width, _grid_height, 0);
+	ds_grid_set_grid_region(grid, grid, 1, 0, _grid_width, _grid_height, 0, 0);
 }
 
-function shift_grid_y_neg(grid, amount) { //shifts a grid by amount cells in negative x direction
+function shift_grid_y_neg(grid) { //shifts a grid cell in negative y direction
 	var _grid_width = ds_grid_width(grid);
 	var _grid_height = ds_grid_height(grid);
-	ds_grid_set_grid_region(grid, grid, 0, amount, _grid_width, _grid_height, 0, 0);
-	ds_grid_set_region(grid, 0, _grid_height - amount, _grid_width, _grid_height, 0);
+	ds_grid_set_grid_region(grid, grid, 0, 1, _grid_width, _grid_height, 0, 0);
 }
 
 

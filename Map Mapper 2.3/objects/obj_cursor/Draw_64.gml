@@ -1,7 +1,9 @@
 display_set_gui_size(global.view_width, global.view_height);
-
 draw_set_color(c_white);
 draw_set_alpha(cursor_alpha);
+
+//disabling cursor if wanted
+if (!obj_gameController.show_cursor) return;
 
 //drawing the corners
 //top left

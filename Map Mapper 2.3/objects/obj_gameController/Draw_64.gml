@@ -197,6 +197,7 @@ switch (current_menu) {
 			//settings checkboxes
 			draw_checkbox(menu_pos_x + 35, menu_pos_y + 55, setting_show_tooltips, "tooltips",, menu_drawing_alpha);
 			draw_checkbox(menu_pos_x + 35, menu_pos_y + 88, setting_show_grid, "map grid",, menu_drawing_alpha);
+			draw_checkbox(menu_pos_x + 35, menu_pos_y + 121, setting_show_cursor, "cursor",, menu_drawing_alpha);
 
 			#region updating buttons
 			settings_toggle_tooltips.goal_x = menu_pos_x + 35;
@@ -208,6 +209,11 @@ switch (current_menu) {
 			settings_toggle_grid.goal_y = menu_pos_y + 88;
 			settings_toggle_grid.button_width = 30 + string_width("map grid");
 			settings_toggle_grid.button_height = 23;
+			
+			settings_toggle_cursor.goal_x = menu_pos_x + 35;
+			settings_toggle_cursor.goal_y = menu_pos_y + 121;
+			settings_toggle_cursor.button_width = 30 + string_width("cursor");
+			settings_toggle_cursor.button_height = 23;
 			
 			settings_decline_button.goal_x = menu_pos_x + menu_width - 1 - 3.5*tile_size;
 			settings_decline_button.goal_y = menu_pos_y - tile_size / 2;
@@ -469,11 +475,11 @@ switch (current_menu) {
 		if (current_tool == tool.marker_tool) marker_tool_button.image_index = 1;
 		else marker_tool_button.image_index = 0;
 		
-		selection_tool_button.goal_alpha = 1;
-		selection_tool_button.goal_y = menu_pos_y + menu_height - 98;
-		if (menu_height > menu_goal_height - 2) selection_tool_button.activate();
-		if (current_tool == tool.selector) selection_tool_button.image_index = 1;
-		else selection_tool_button.image_index = 0;
+		//selection_tool_button.goal_alpha = 1;
+		//selection_tool_button.goal_y = menu_pos_y + menu_height - 98;
+		//if (menu_height > menu_goal_height - 2) selection_tool_button.activate();
+		//if (current_tool == tool.selector) selection_tool_button.image_index = 1;
+		//else selection_tool_button.image_index = 0;
 		
 		hammer_tool_button.goal_alpha = 1;
 		hammer_tool_button.goal_y = menu_pos_y + menu_height - 98;
@@ -528,27 +534,7 @@ switch (current_menu) {
 		
 		draw_set_color(_col);
 		draw_set_alpha(_a);
-		//draw_rectangle(_x + _w / 2, _y + _h / 2, _x + _w - 1, _y + _h - (_h * 0.25), false);
-		//draw_rectangle(_x + _w / 2, _y + _h / 2, _x + _w - (_w * 0.25), _y + _h - 1, false);
-		//draw_circle(_x + _w - (_w * 0.25) - 1, _y + _h - (_h * 0.25) - 1, _w * 0.25, false);
-		//draw_primitive_begin(pr_trianglelist)
-		//draw_vertex(_x + 32, _y + 32);
-		//draw_vertex(_x + 63, _y + 32);
-		//draw_vertex(_x + 32, _y + 63);
-		
-		//draw_vertex(_x + 63, _y + 32);
-		//draw_vertex(_x + 32, _y + 63);
-		//draw_vertex(_x + 51, _y + 63);
-		
-		//draw_vertex(_x + 63, _y + 32);
-		//draw_vertex(_x + 32, _y + 63);
-		//draw_vertex(_x + 63, _y + 51);
-		
-		//draw_vertex(_x + 54, _y + 62);
-		//draw_vertex(_x + 62, _y + 54);
-		//draw_vertex(_x + 49, _y + 49);
 		draw_roundrect_ext(_x + 20, _y + 20, _x + _w - 1, _y + _h - 1, 32, 32, false);
-		//draw_primitive_end();
 		draw_set_color(c_white);
 		
 		break; }

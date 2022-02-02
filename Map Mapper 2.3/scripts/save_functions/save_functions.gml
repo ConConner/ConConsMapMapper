@@ -270,6 +270,7 @@ function save_settings() {
 	ini_open("MapMapper.settings");
 	
 	ini_write_real("general", "tooltips", show_tooltips);
+	ini_write_real("general", "cursor", show_cursor);
 	ini_write_real("map_settings", "grid_visibility", show_grid);
 	
 	ini_close();
@@ -282,6 +283,7 @@ function load_settings() {
 	//setting values
 	show_tooltips = ini_read_real("general", "tooltips", show_tooltips);
 	show_grid = ini_read_real("map_settings", "grid_visibility", show_grid);
+	show_cursor = ini_read_real("general", "cursor", show_cursor);
 	
 	ini_close();
 }
