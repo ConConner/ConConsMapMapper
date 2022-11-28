@@ -24,7 +24,7 @@ draw_sprite_ext(spr_cursor_edge, 0, x + current_selection_w, y + current_selecti
 var tile = ds_grid_get(global.tile_grid,global.xx,global.yy);
 
 
-if (cursor_mode == curs_mode.on_grid) {
+if (cursor_mode == curs_mode.on_grid || obj_gameController.adding_connection) {
 	
 	switch (obj_gameController.current_tool) {
 		
@@ -190,7 +190,7 @@ if (_button != 0) {
 				draw_text(_left + 2, _top - 45, "COLOR MENU\n(CTRL+C)");
 				break; }	
 			case obj_gameController.rgb_code_selection: {
-				draw_text(_left - 4, _top - 14, "CLICK TO COPY");
+				draw_text(_left - 4, _top - 14, "CLICK TO EDIT");
 				break; }	
 			case obj_gameController.color_decline_button: {
 				draw_text(_left + 6, _top - 17, "CANCEL");
@@ -249,6 +249,9 @@ if (_button != 0) {
 				
 			case obj_gameController.discord_button: {
 			draw_text(_left, _top - 45, "Join the\ndiscord!");
+			break; }
+			case obj_gameController.github_button: {
+			draw_text(_left, _top - 45, "MapMapper is\nOpen Source!");
 			break; }
 			#endregion
 		

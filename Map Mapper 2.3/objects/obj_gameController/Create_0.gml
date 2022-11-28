@@ -1,6 +1,6 @@
 //mapper information
-#macro current_version "B2.1"
-#macro save_system_version "1.0" //this version is referencing the version of the save system. NOT the mapper version
+#macro current_version "B2.2"
+#macro save_system_version "1.1" //this version is referencing the version of the save system. NOT the mapper version
 
 //declaring globals
 //grid globals
@@ -9,8 +9,8 @@ global.grid_height = 20;		//							   / vertically
 old_grid_width = global.grid_width;
 old_grid_height = global.grid_height;
 
-min_grid_width = 20;
-min_grid_height = 20;
+min_grid_width = 1;
+min_grid_height = 1;
 max_grid_width = 500;
 max_grid_height = 500;
 
@@ -148,11 +148,14 @@ background_goal_alpha = 0;
 
 //color vars
 global.selected_color = make_color_rgb(0,105,170);
+global.connection_color = c_blue;
+global.marker_color = c_white;
 
-selected_color_hue = color_get_hue(global.selected_color);
-selected_color_sat = color_get_saturation(global.selected_color);
-selected_color_val = color_get_value(global.selected_color);
-selected_rgb_hex = get_hex_rgb(global.selected_color);
+old_color = global.selected_color;
+selected_color_hue = 0;
+selected_color_sat = 0;
+selected_color_val = 0;
+selected_rgb_hex = 0;
 #endregion
 
 
@@ -167,7 +170,8 @@ tile_info = function(_main, _rm_nmb, _col, _subimg, _mrk, _door) constructor {
 	col = _col;													//stores the tiles color
 	subimg = _subimg;											//stores the main tile subimage
 	mrk = _mrk;													//stores the subimage for the marker on that tile
-	door = _door												//Doors are set up as [Door One[color ,rot], Door Two[color,rot],....]
+	door = _door												//Doors are set up as: I dont remember, sorry :(
+	mrk_c = c_white;											//Color of the placed marker tile
 	//Door 0 = up; Door 1 = down; Door 2 = down; Door 3 = left;
 	
 	
@@ -382,11 +386,19 @@ open_color_menu = function() {
 	color_confirm_button.image_alpha = 0;
 				
 	//setting the selected color to the current color
-	selected_color_hue = color_get_hue(global.selected_color);
-	selected_color_sat = color_get_saturation(global.selected_color);
-	selected_color_val = color_get_value(global.selected_color);
-	selected_rgb_hex = get_hex_rgb(global.selected_color);
+	if (current_tool == tool.door_tool) set_color_values(global.connection_color);
+	else if (current_tool == tool.marker_tool) set_color_values(global.marker_color);
+	else set_color_values(global.selected_color);
 }
+
+function set_color_values(color, old=true) {	//sets the selected color values from an input color
+	if (old) old_color = color;
+	selected_color_hue = color_get_hue(color)
+	selected_color_sat = color_get_saturation(color);
+	selected_color_val = color_get_value(color);
+	selected_rgb_hex = get_hex_rgb(color);
+}
+
 color_confirmed = function() {
 	
 	close_menu = true;
@@ -398,7 +410,10 @@ color_confirmed = function() {
 	remove_button(color_confirm_button);
 				
 	//setting new colour
-	global.selected_color = make_color_hsv(selected_color_hue, selected_color_sat, selected_color_val);
+	var _color = make_color_hsv(selected_color_hue, selected_color_sat, selected_color_val);
+	if (current_tool == tool.door_tool) global.connection_color = _color;
+	else if (current_tool == tool.marker_tool) global.marker_color = _color;
+	else global.selected_color = _color;
 				
 	//text message
 	add_text_message("applied color", 1.5, c_lime);
@@ -442,6 +457,7 @@ save_button = make_button(global.view_width - 80 - 72, -10, spr_save, menu_state
 load_button = make_button(global.view_width - 80, -10, spr_load, menu_state.ig_menu);
 
 discord_button = make_button(global.view_width - 80, global.view_height - 80, spr_discord_button, menu_state.ig_menu);
+github_button = make_button(global.view_width - 80 - 72, global.view_height - 80, spr_github_button, menu_state.ig_menu);
 
 #region resize buttons
 resize_neg_up_button = make_button(0, 0, spr_cursor_selector, menu_state.nothing);

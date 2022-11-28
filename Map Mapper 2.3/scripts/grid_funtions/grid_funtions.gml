@@ -185,7 +185,7 @@ function load_grid() { //draws the contents on the grid
 			
 				#region marker drawing
 				if (tile.mrk != marker.empty && sprite_exists(marker_sprite)) {
-					draw_sprite(marker_sprite, tile.mrk, pos_x, pos_y);
+					draw_sprite_ext(marker_sprite, tile.mrk, pos_x, pos_y, 1, 1, 0, tile.mrk_c, 1);
 				}
 				#endregion
 			}
@@ -298,7 +298,7 @@ function load_grid_whole() { //draws the contents on the grid all at once (even 
 			
 				#region marker drawing
 				if (tile.mrk != marker.empty && sprite_exists(marker_sprite)) {
-					draw_sprite(marker_sprite, tile.mrk, pos_x, pos_y);
+					draw_sprite_ext(marker_sprite, tile.mrk, pos_x, pos_y, 1, 1, 0, tile.mrk_c, 1);
 				}
 				#endregion
 			}
@@ -509,5 +509,10 @@ function setup_tool_tips() {
 	hammer_tool_tip[5] = "appearence. Left click on a changed tile to";
 	hammer_tool_tip[6] = "reverse the process.";
 	
-	selection_tool_tip[0] = "U N F I N I S H E D!";
+	selection_tool_tip[0] = "The selection tool can select a rectangle of";
+	selection_tool_tip[1] = "map tiles. The selected map tiles can then";
+	selection_tool_tip[2] = "be moved by clicking and dragging on them.";
+	selection_tool_tip[3] = "The selected area can be copied with Ctrl + C";
+	selection_tool_tip[4] = "and pasted at the top left position of the";
+	selection_tool_tip[5] = "cursor with Ctrl + V.";
 }

@@ -126,6 +126,8 @@ if (cursor_mode == curs_mode.off_anything) {
 	selection_box_h = 4;
 	selection_box_w = 4;
 	
+	//stopping connection editing
+	obj_gameController.adding_connection = false;
 }
 
 if (cursor_mode == curs_mode.drag_to_move) {

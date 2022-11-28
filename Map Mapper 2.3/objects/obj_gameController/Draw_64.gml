@@ -84,7 +84,7 @@ switch (current_menu) {
 			
 			
 			//drawing a color preview
-			var old_col = global.selected_color;
+			var old_col = obj_gameController.old_color;
 			var new_col = make_color_hsv(selected_color_hue, selected_color_sat, selected_color_val);
 			draw_nine_slice(spr_edge_nineslice, menu_pos_x + 416, menu_pos_y + 40, menu_pos_x + 486, menu_pos_y + 110);
 			
@@ -501,6 +501,9 @@ switch (current_menu) {
 		
 		discord_button.goal_alpha = 1;
 		discord_button.activate();
+		
+		github_button.goal_alpha = 1;
+		github_button.activate();
 		#endregion
 		
 		if (close_menu) { //closing process
@@ -530,7 +533,11 @@ switch (current_menu) {
 		var _w = color_button.button_width;
 		var _h = color_button.button_height;
 		var _a = color_button.image_alpha;
-		var _col = global.selected_color;
+		var _col;
+		
+		if ((current_tool == tool.door_tool) || (current_tool == tool.eyedropper && old_tool == tool.door_tool)) _col = global.connection_color;
+		else if ((current_tool == tool.marker_tool) || (current_tool == tool.eyedropper && old_tool == tool.marker_tool)) _col = global.marker_color;
+		else _col = global.selected_color;
 		
 		draw_set_color(_col);
 		draw_set_alpha(_a);
@@ -541,7 +548,7 @@ switch (current_menu) {
 		
 }
 
-#region drawing the marker-tileset
+#region drawing the marker tileset
 //calculating amount of tiles per page
 space_per_page = global.view_height - 124;
 tiles_per_page = floor(space_per_page / 40);
@@ -551,6 +558,10 @@ max_pages = ceil(tile_amount / tiles_per_page - 1)
 if (obj_cursor.cursor_mode == curs_mode.on_tileset) {
 	if (mWheelDown) tile_page++;
 	if (mWheelUp) tile_page--;
+}
+if (current_tool == tool.marker_tool) {
+	if (kDownPressed) tile_page++;
+	if (kUpPressed) tile_page--;
 }
 tile_page = clamp(tile_page, 0, max_pages);
 

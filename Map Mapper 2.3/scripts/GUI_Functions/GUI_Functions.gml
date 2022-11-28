@@ -45,6 +45,8 @@ function make_button(_x, _y, _spr, _menu_level) {
 function button_check() {
 	
 	//returns the button ID currently hovered over by the mouse
+	if ((obj_cursor.cursor_mode == curs_mode.on_tileset && obj_gameController.current_menu == menu_state.nothing)
+		|| obj_gameController.adding_connection) return 0;
 	
 	for(var i = 0; i < ds_list_size(global.button_list); i++) {
 		

@@ -113,7 +113,10 @@ function autotile(xx, yy) {
 	
 function get_pixel_color(_x, _y) {
 	
-	global.selected_color = draw_getpixel(_x, _y);
+	var _c = draw_getpixel(_x, _y)
+	if (obj_gameController.old_tool == tool.door_tool && old_tool != current_tool) global.connection_color = _c;
+	else if (obj_gameController.old_tool == tool.marker_tool && old_tool != current_tool) global.marker_color = _c;
+	else global.selected_color = _c;
 	
 }
 	
@@ -161,7 +164,7 @@ function draw_marker_set(_x, _y) {
 			draw_nine_slice(spr_edge_nineslice, _x - 2, _y + 40 * i - (40 * tiles_per_page * tile_page) - 2, _x + 34, _y + 40 * i - (40 * tiles_per_page * tile_page) + 34);
 		}
 		
-		draw_sprite(marker_sprite, i, _x, _y + 40 * i - (40 * tiles_per_page * tile_page))
+		draw_sprite_ext(marker_sprite, i, _x, _y + 40 * i - (40 * tiles_per_page * tile_page), 1, 1, 0, global.marker_color, 1);
 		
 	}
 	
