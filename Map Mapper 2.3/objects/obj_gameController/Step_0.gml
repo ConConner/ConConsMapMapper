@@ -1,4 +1,4 @@
- #region setting up
+#region setting up
 //getting mouse coordinates on grid
 
 	//GLOBAL MOUSE COORDINATES
@@ -20,18 +20,18 @@ global.window_width = window_get_width();
 global.window_height = window_get_height();
 
 
-	#region getting key input for special keys
+#region getting key input for special keys
 kUp = keyboard_check(vk_up);
 kDown = keyboard_check(vk_down);
 kLeft = keyboard_check(vk_left);
+kDownPressed = keyboard_check_pressed(vk_down);
+kUpPressed = keyboard_check_pressed(vk_up);
 kRight = keyboard_check(vk_right);
 kF12 = keyboard_check_pressed(vk_f12);
 kCtrl = keyboard_check(vk_control);
 kShift = keyboard_check(vk_shift);
 kSpace = keyboard_check(vk_space);
-kSpacePressed = keyboard_check_pressed(vk_space);
 kAlt = keyboard_check(vk_alt);
-kAltReleased = keyboard_check_released(vk_alt);
 kAltPressed = keyboard_check_pressed(vk_alt);
 kEscPressed = keyboard_check_pressed(vk_escape);
 kEnterPressed = keyboard_check_pressed(vk_enter);
@@ -64,10 +64,12 @@ mWheelDown = mouse_wheel_down();
 if (current_menu == menu_state.nothing) {
 	//cam controls
 	//keyboard controls
-	if (kLeft) global.cam_pos_x -= border_margin / 2 / 5;
-	if (kRight) global.cam_pos_x += border_margin / 2 / 5;
-	if (kUp) global.cam_pos_y -= border_margin / 2 / 5;
-	if (kDown) global.cam_pos_y += border_margin / 2 / 5;
+	if (current_tool != tool.marker_tool) {
+		if (kLeft) global.cam_pos_x -= border_margin / 2 / 5;
+		if (kRight) global.cam_pos_x += border_margin / 2 / 5;
+		if (kUp) global.cam_pos_y -= border_margin / 2 / 5;
+		if (kDown) global.cam_pos_y += border_margin / 2 / 5;
+	}
 
 	//scroll controls
 	if (obj_cursor.cursor_mode == curs_mode.on_grid) {
@@ -180,7 +182,8 @@ if (obj_cursor.cursor_mode == curs_mode.on_grid) {
 					connection_yy2 = connection_yy;
 				}
 				if ((connection_xx2 > connection_xx || connection_xx2 < connection_xx) && (connection_yy2 > connection_yy || connection_yy2 < connection_yy)) {
-					connection_yy2 = connection_yy 
+					connection_yy2 = connection_yy;
+					connection_xx2 = connection_xx;
 				}
 				if (connection_xx == connection_xx2 && connection_yy == connection_yy2) {
 					click_moved = false;
@@ -200,34 +203,34 @@ if (obj_cursor.cursor_mode == curs_mode.on_grid) {
 						//checking the side
 						if (connection_xx < connection_xx2) { // room1 | room2
 							_tile1.door[1,0] = hatch.filled;
-							_tile1.door[1,1] = global.selected_color;
+							_tile1.door[1,1] = global.connection_color;
 						
 							_tile2.door[3,0] = hatch.filled;
-							_tile2.door[3,1] = global.selected_color;
+							_tile2.door[3,1] = global.connection_color;
 						}
 					
 						if (connection_xx > connection_xx2) { // room2 | room1
 							_tile1.door[3,0] = hatch.filled;
-							_tile1.door[3,1] = global.selected_color;
+							_tile1.door[3,1] = global.connection_color;
 						
 							_tile2.door[1,0] = hatch.filled;
-							_tile2.door[1,1] = global.selected_color;
+							_tile2.door[1,1] = global.connection_color;
 						}
 					
 						if (connection_yy < connection_yy2) { // room1 above room2
 							_tile1.door[2,0] = hatch.filled;
-							_tile1.door[2,1] = global.selected_color;
+							_tile1.door[2,1] = global.connection_color;
 						
 							_tile2.door[0,0] = hatch.filled;
-							_tile2.door[0,1] = global.selected_color;
+							_tile2.door[0,1] = global.connection_color;
 						}
 					
 						if (connection_yy > connection_yy2) { // room2 above room1
 						_tile1.door[0,0] = hatch.filled;
-						_tile1.door[0,1] = global.selected_color;
+						_tile1.door[0,1] = global.connection_color;
 						
 						_tile2.door[2,0] = hatch.filled;
-						_tile2.door[2,1] = global.selected_color;
+						_tile2.door[2,1] = global.connection_color;
 					}
 					}
 				}
@@ -265,7 +268,10 @@ if (obj_cursor.cursor_mode == curs_mode.on_grid) {
 		
 		case tool.marker_tool: {
 			//if (_tile.main == ID.filled) {
-				if (mLeft) _tile.mrk = selected_marker;
+				if (mLeft) {
+					_tile.mrk = selected_marker;
+					_tile.mrk_c	= global.marker_color;
+				}
 				if (mRight) _tile.mrk = marker.empty;
 			//}
 			break; }
@@ -294,6 +300,67 @@ if (obj_cursor.cursor_mode == curs_mode.on_grid) {
 			}
 			
 			break; }
+			
+		case tool.selector: {
+			if (mRightPressed) {
+				sel_x1 = -1;
+				sel_x2 = -1;
+				sel_y1 = -1;
+				sel_y2 = -1;
+				selected = false;
+			}
+			
+			if (!mLeft) break;
+			
+			if (!selected || !(global.xx >= sel_x1 && global.yy >= sel_y1 && global.xx < sel_x2 && global.yy < sel_y2)) { //selection
+				if (mLeftPressed) {
+					selected = false;
+					sel_x1 = global.xx;
+					sel_y1 = global.yy;
+					sel_x2 = global.xx+1;
+					sel_y2 = global.yy+1;
+					sel_start_x = global.xx;
+					sel_start_y = global.yy;
+				}
+				if (click_moved) {
+					if (global.xx >= sel_start_x) {
+						sel_x2 = global.xx + 1;
+						sel_x1 = sel_start_x;
+					}
+					if (global.yy >= sel_start_y) {
+						sel_y2 = global.yy + 1;
+						sel_y1 = sel_start_y;
+					}
+					if (global.xx < sel_start_x) {
+						sel_x1 = global.xx;
+						sel_x2 = sel_start_x + 1;
+					}
+					if (global.yy < sel_start_y) {
+						sel_y1 = global.yy;
+						sel_y2 = sel_start_y + 1;
+					}
+				
+				}
+			} else { //moving of selection
+				if (mLeftPressed) {
+					moving_sel = true;
+					remove_tiles(sel_x1, sel_y1, sel_x2 - sel_x1, sel_y2 - sel_y1);
+					move_x = global.xx;
+					move_y = global.yy;
+					sel_start_x = sel_x1;
+					sel_start_y = sel_y1;
+					sel_start_x2 = sel_x2;
+					sel_start_y2 = sel_y2;
+				}
+				
+				if (click_moved) {
+					sel_x1 = sel_start_x + (global.xx - move_x);
+					sel_y1 = sel_start_y + (global.yy - move_y);
+					sel_x2 = sel_start_x2 + (global.xx - move_x);
+					sel_y2 = sel_start_y2 + (global.yy - move_y);
+				}
+			}
+			break; }
 	}
 }
 
@@ -307,6 +374,22 @@ if (mLeftPressed || mRightPressed) {
 if (mLeft || mRight) {
 	if (click_xx != global.xx) click_moved = true;
 	if (click_yy != global.yy) click_moved = true;
+}
+if (mLeftReleased || mRightReleased) {
+	click_moved = false;
+	
+	if (current_tool == tool.selector && sel_x1 != -1 && !moving_sel) {
+		selected = true;
+		select_tiles(sel_x1, sel_y1, sel_x2 - sel_x1, sel_y2 - sel_y1);
+	}
+	if (moving_sel) {
+		moving_sel = false;
+		place_tiles(sel_x1, sel_y1);
+	}
+}
+
+if (current_tool != tool.selector) {
+	selected = false;
 }
 
 //deactivating buttons
@@ -342,6 +425,11 @@ if (!kAlt && !on_old_tool) {
 	current_tool = old_tool;
 	on_old_tool = true;
 }
+if (!kAlt && on_old_tool) {
+	old_tool = current_tool;
+}
+	
+#endregion
 
 
 #region keybinds
@@ -351,7 +439,7 @@ if (kLetterB) current_tool = tool.color_brush;
 if (kLetterC && !kCtrl) current_tool = tool.door_tool;
 if (kLetterM) current_tool = tool.marker_tool;
 if (kLetterH) current_tool = tool.hammer;
-if (kLetterS && !kCtrl) current_tool = tool.selector;
+//if (kLetterS && !kCtrl) current_tool = tool.selector;
 
 //keybind to quickly toggle menu or discard color
 if (kEscPressed) {
@@ -363,6 +451,7 @@ if (kEscPressed) {
 	else if (current_menu == menu_state.ig_menu) close_menu = true;
 	else if (current_menu == menu_state.color_menu) color_declined();
 	else if (current_menu == menu_state.save_menu) save_confirmed();
+	else if (current_menu == menu_state.settings_menu) settings_declined();
 }
 
 //keybind to accept color
@@ -390,8 +479,6 @@ if (kCtrl && current_menu != menu_state.color_menu) {
 		open_color_menu();
 	}
 }
-#endregion
-
 #endregion
 
 
@@ -500,6 +587,7 @@ yellow_door_button.image_index = 3;
 //updating button positions to accommodate
 color_button.setpos(tile_size / 2, global.view_height - tile_size / 2 - sprite_get_height(spr_color_button));
 discord_button.setpos(global.view_width - 80, global.view_height - 80);
+github_button.setpos(global.view_width - 80 - 72, global.view_height - 80);
 settings_button.goal_x = global.view_width - 80 - 72 * 2;
 save_button.goal_x = global.view_width - 80 - 72;
 load_button.goal_x = global.view_width - 80
@@ -526,9 +614,16 @@ if (mLeftPressed) {
 				break; }
 			case rgb_code_selection: {
 			
-				var _val = string_delete(selected_rgb_hex, 1, 1);
-				clipboard_set_text(_val);
-				add_text_message("Copied #" + string(_val) + " to clipboard", 1.5, c_white);
+				var _val = get_string("", string_delete(selected_rgb_hex, 1, 1));
+				if (string_length(_val) > 6) {
+					add_text_message("Invalid HEX value!", 2, c_yellow);
+					break;
+				}
+				
+				var _dec = hex_to_dec(_val);
+				set_color_values(make_color_rgb(_dec >> 16, (_dec >> 8) & $FF, _dec & $FF));
+				_val = string_delete(selected_rgb_hex, 1, 1);
+				add_text_message("Set #" + string(_val) + " as color", 1.5, c_white);
 			
 				break; }
 			case color_decline_button: {
@@ -563,9 +658,9 @@ if (mLeftPressed) {
 			case marker_tool_button: {
 				current_tool = tool.marker_tool;
 				break; }
-			case selection_tool_button: {
-				current_tool = tool.selector;
-				break; }
+			//case selection_tool_button: {
+				//current_tool = tool.selector;
+				//break; }
 			case hammer_tool_button: {
 				current_tool = tool.hammer;
 				break; }
@@ -581,6 +676,9 @@ if (mLeftPressed) {
 				break; }
 			case discord_button: {
 				url_open("https://discord.gg/n6ZCB3JkNb");
+				break; }
+			case github_button: {
+				url_open("https://github.com/ConConner/ConConsMapMapper")
 				break; }
 			
 			//settings
@@ -719,27 +817,31 @@ if (mLeftPressed) {
 			case blue_door_button: {
 				in_menu = false;
 				canBuild = true;
-				global.selected_color = make_color_rgb(0,0,255);
+				global.connection_color = make_color_rgb(0,0,255);
 				add_text_message("applied color", 1.5, c_lime);
 				break; }
 			case red_door_button: {
 				in_menu = false;
 				canBuild = true;
-				global.selected_color = make_color_rgb(255,0,0);
+				global.connection_color = make_color_rgb(255,0,0);
 				add_text_message("applied color", 1.5, c_lime);
 				break; }
 			case green_door_button: {
 				in_menu = false;
 				canBuild = true;
-				global.selected_color = make_color_rgb(0,255,0);
+				global.connection_color = make_color_rgb(0,255,0);
 				add_text_message("applied color", 1.5, c_lime);
 				break; }
 			case yellow_door_button: {
 				in_menu = false;
 				canBuild = true;
-				global.selected_color = make_color_rgb(255,255,0);
+				global.connection_color = make_color_rgb(255,255,0);
 				add_text_message("applied color", 1.5, c_lime);
 				break; }
+				
+			default: {
+				break;
+			}
 			
 		}
 	}

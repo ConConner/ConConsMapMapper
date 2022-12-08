@@ -41,5 +41,5 @@ enum text {
 #macro tile_size 32 
 #macro border_margin 64
 
-#macro default_markers "https://images-ext-1.discordapp.net/external/pTxKeUe6jUnxEb2WTKUAM6l1DsYmRz2LQG6qlG9wv2I/https/media.discordapp.net/attachments/473935669144846357/885118483560562688/mm_basic_markers_extended.png"
-#macro default_tile_amount 30
+#macro default_markers "https://cdn.discordapp.com/attachments/885112600575238194/1050460064877654096/mm_basic_markers_extended.png"
+#macro default_tile_amount 38

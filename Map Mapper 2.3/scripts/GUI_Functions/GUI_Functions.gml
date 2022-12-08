@@ -28,6 +28,41 @@ function draw_nine_slice( spr, _x1, _y1, _x2, _y2) {
 	//Middle
 	draw_sprite_part_ext(spr, 0, _size, _size, 1, 1, _x1 + _size, _y1 + _size, _w - (_size*2), _h - (_size*2), c_white, image_alpha);
 }
+
+
+function draw_nine_slice_tiled(spr, _x1, _y1, _x2, _y2) {
+	var _size = sprite_get_width(spr) / 3;
+
+	var _w = max(_x2 - _x1, 1);
+	var _h = max(_y2 - _y1, 1);
+	var _coloumns = max(floor(_w / _size) - 1, 1);
+	var _rows = max(floor(_h / _size) - 1, 1);
+	
+	//Corners
+	//top left
+	draw_sprite_part(spr, 0, 0, 0, _size, _size, _x1, _y1);
+	//top right
+	draw_sprite_part(spr, 0, _size * 2, 0, _size, _size, _x1 + _w - _size, _y1);
+	//bottom left
+	draw_sprite_part(spr, 0, 0, _size*2, _size, _size, _x1, _y1 + _h - _size);
+	//bottom right
+	draw_sprite_part(spr, 0, _size * 2, _size * 2, _size, _size, _x1 + _w - _size, _y1 + _h - _size);
+	
+	//Edges
+	for (var i = 1; i < _rows; i++) {
+		//left edge
+		draw_sprite_part(spr, 0, 0, _size, _size, _size, _x1, _y1+(i*_size));
+		//right edge
+		draw_sprite_part(spr, 0, _size * 2, _size, _size, _size, _x1 + (_coloumns * _size), _y1 + (i * _size));
+	}
+	
+	for (var i = 1; i < _coloumns; i++) {
+		//left edge
+		draw_sprite_part(spr, 0, _size, 0, _size, _size, _x1 + (i* _size), _y1);
+		//right edge
+		draw_sprite_part(spr, 0, _size , _size * 2, _size, _size, _x1 + (i * _size), _y1 + (_rows * _size));
+	}
+}
 	
 	
 function make_button(_x, _y, _spr, _menu_level) {
@@ -45,6 +80,8 @@ function make_button(_x, _y, _spr, _menu_level) {
 function button_check() {
 	
 	//returns the button ID currently hovered over by the mouse
+	if ((obj_cursor.cursor_mode == curs_mode.on_tileset && obj_gameController.current_menu == menu_state.nothing)
+		|| obj_gameController.adding_connection) return 0;
 	
 	for(var i = 0; i < ds_list_size(global.button_list); i++) {
 		

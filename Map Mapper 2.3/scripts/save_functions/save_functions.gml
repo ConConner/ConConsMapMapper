@@ -26,13 +26,14 @@ function save_map(file_name) { //saves the map in a file
 		//converting grid into array
 		var _grid_width = global.grid_width;
 		var _grid_height = global.grid_height;
-		_converted_array[global.grid_width,global.grid_height] = -1;
+		_converted_array[global.grid_width,global.grid_height] = 0;
 	
 		for (var i = 0; i < _grid_width; i++) {
 			for (var j = 0; j < _grid_height; j++) {
-			
-				_converted_array[i, j] = ds_grid_get(global.tile_grid, i, j);
-			
+				
+				var _tile = ds_grid_get(global.tile_grid, i, j);
+				if (_tile.main || _tile.mrk != marker.empty) _converted_array[i, j] = ds_grid_get(global.tile_grid, i, j);
+				else _converted_array[i, j] = 0;
 			}
 		}
 	
@@ -71,59 +72,61 @@ function load_map(file_name) { //loads a map from a file; Returns true if succes
 		
 		var _version = file_text_read_string(_file_id); //reading version number
 		file_text_readln(_file_id);
-	
-		if (_version == save_system_version) { //checking if the file is valid
-			
-			var _grid_width = file_text_read_real(_file_id); //reading grid width
-			file_text_readln(_file_id);
-			var _grid_height = file_text_read_real(_file_id); //reading grid height
-			file_text_readln(_file_id);
-			var _marker_url = file_text_read_string(_file_id); //reading marker url
-			file_text_readln(_file_id);
-	
-			var _json_string = file_text_readln(_file_id);
-			file_text_close(_file_id)
 		
-			//converting the JSON string into an array
-			_converted_array = json_parse(_json_string);
-		
-			//updating the grid and writing values
-			if (global.grid_width != _grid_width || global.grid_height != _grid_height) { //resizing the grid if not the same size
-				ds_grid_resize(global.tile_grid, _grid_width, _grid_height);
-				global.grid_width = _grid_width;
-				global.grid_height = _grid_height;
-			}
+		if (_version != save_system_version && _version != "1.0") {	//checking if the file is valid
+			add_text_message("MapMapper is outdated!", 3, c_red);
+			return (false);
+		}
 			
-			var _room_count = 0; //while looping through grid, searching for highest room number
-			for (var i = 0; i < _grid_width; i++) {
-				for (var j = 0; j < _grid_height; j++) {
+		var _grid_width = file_text_read_real(_file_id); //reading grid width
+		file_text_readln(_file_id);
+		var _grid_height = file_text_read_real(_file_id); //reading grid height
+		file_text_readln(_file_id);
+		var _marker_url = file_text_read_string(_file_id); //reading marker url
+		file_text_readln(_file_id);
+	
+		var _json_string = file_text_readln(_file_id);
+		file_text_close(_file_id)
+		
+		//converting the JSON string into an array
+		_converted_array = json_parse(_json_string);
+		
+		//updating the grid and writing values
+		if (global.grid_width != _grid_width || global.grid_height != _grid_height) { //resizing the grid if not the same size
+			ds_grid_resize(global.tile_grid, _grid_width, _grid_height);
+			global.grid_width = _grid_width;
+			global.grid_height = _grid_height;
+		}
+			
+		var _room_count = 0; //while looping through grid, searching for highest room number
+		for (var i = 0; i < _grid_width; i++) {
+			for (var j = 0; j < _grid_height; j++) {
 				
+				if (_converted_array[i, j] != 0) {
+					
+					if (_version == "1.0") _converted_array[i, j].mrk_c = c_white;
+					
 					ds_grid_set(global.tile_grid, i, j, _converted_array[i, j]);
 					_room_count = max(_room_count, _converted_array[i, j].rm_nmb);
-					
 				}
+					
 			}
-			global.roomCount = _room_count;
-			old_roomCount = _room_count;
-			
-			//reloading the markers
-			marker_url = _marker_url
-			reload_markers();
-		
-			//confirmation message
-			add_text_message("map loaded successfully", 3, c_lime);
-			
-			//changing global map directory
-			global.map_dir = file_name;
-			return (true);
-		
-		} 
-		else {
-		
-			add_text_message("The file is outdated!", 3, c_red);
-			return (false);
-		
 		}
+		set_up_grid(); //filling in the empty tiles
+		
+		global.roomCount = _room_count;
+		old_roomCount = _room_count;
+			
+		//reloading the markers
+		marker_url = _marker_url
+		reload_markers();
+		
+		//confirmation message
+		add_text_message("map loaded successfully", 3, c_lime);
+			
+		//changing global map directory
+		global.map_dir = file_name;
+		return (true);
 	}
 	return (false);
 }
@@ -272,6 +275,8 @@ function save_settings() {
 	ini_write_real("general", "tooltips", show_tooltips);
 	ini_write_real("general", "cursor", show_cursor);
 	ini_write_real("map_settings", "grid_visibility", show_grid);
+	ini_write_real("window", "width", global.window_width);
+	ini_write_real("window", "heigth", global.window_height);
 	
 	ini_close();
 }

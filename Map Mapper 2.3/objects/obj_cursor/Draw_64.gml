@@ -2,6 +2,21 @@ display_set_gui_size(global.view_width, global.view_height);
 draw_set_color(c_white);
 draw_set_alpha(cursor_alpha);
 
+//drawing selection nineslice
+var o = obj_gameController;
+if (o.current_menu == menu_state.nothing) {
+	var _x1 = o.sel_x1 * tile_size - global.cam_pos_x;
+	var _y1 = o.sel_y1 * tile_size - global.cam_pos_y;
+	var _x2 = o.sel_x2 * tile_size - global.cam_pos_x;
+	var _y2 = o.sel_y2 * tile_size - global.cam_pos_y;
+			
+	if (o.sel_x1 != -1) {
+		draw_set_alpha(1);
+		draw_nine_slice_tiled(spr_selection_nineslice, _x1, _y1, _x2, _y2);
+		draw_set_alpha(cursor_alpha);
+	}
+}
+
 //disabling cursor if wanted
 if (!obj_gameController.show_cursor) return;
 
@@ -24,7 +39,7 @@ draw_sprite_ext(spr_cursor_edge, 0, x + current_selection_w, y + current_selecti
 var tile = ds_grid_get(global.tile_grid,global.xx,global.yy);
 
 
-if (cursor_mode == curs_mode.on_grid) {
+if (cursor_mode == curs_mode.on_grid || obj_gameController.adding_connection) {
 	
 	switch (obj_gameController.current_tool) {
 		
@@ -151,6 +166,34 @@ if (cursor_mode == curs_mode.on_grid) {
 			} else goal_icon_alpha = 0;
 			
 			break; }
+			
+		case tool.selector: {
+			goal_cursor_alpha = 0;
+			goal_icon_alpha = 1;
+			icon_sprite = spr_cursor_select;
+			
+			var o = obj_gameController;
+			
+			if (o.sel_x1 == -1) { //start selection
+				icon_frame = 0;
+				goal_icon_frame = 0;
+			}
+			else if (!o.selected) { //drag selection
+				icon_frame = 1;
+				goal_icon_frame = 1;
+			}
+			else { // selected
+				if (global.xx >= o.sel_x1 && global.yy >= o.sel_y1 && global.xx < o.sel_x2 && global.yy < o.sel_y2) {
+					icon_frame = 2;
+					goal_icon_frame = 2;
+				}
+				else {
+					icon_frame = 0;
+					goal_icon_frame = 0;
+				}
+			}
+			
+			break; }
 	}
 	
 } else {
@@ -190,7 +233,7 @@ if (_button != 0) {
 				draw_text(_left + 2, _top - 45, "COLOR MENU\n(CTRL+C)");
 				break; }	
 			case obj_gameController.rgb_code_selection: {
-				draw_text(_left - 4, _top - 14, "CLICK TO COPY");
+				draw_text(_left - 4, _top - 14, "CLICK TO EDIT");
 				break; }	
 			case obj_gameController.color_decline_button: {
 				draw_text(_left + 6, _top - 17, "CANCEL");
@@ -232,7 +275,7 @@ if (_button != 0) {
 				draw_text(_left + 2, _top + 69, "marker tool (M)");
 				break; }
 			case obj_gameController.selection_tool_button: {
-				draw_text(_left + 2, _top + 69, "selection tool (S)");
+				draw_text(_left + 2, _top + 69, "selection tool (WIP)");
 				break; }
 			case obj_gameController.hammer_tool_button: {
 				draw_text(_left + 2, _top + 69, "hammer tool (H)");
@@ -250,6 +293,9 @@ if (_button != 0) {
 			case obj_gameController.discord_button: {
 			draw_text(_left, _top - 45, "Join the\ndiscord!");
 			break; }
+			case obj_gameController.github_button: {
+			draw_text(_left, _top - 45, "MapMapper is\nOpen Source!");
+			break; }
 			#endregion
 		
 		}
@@ -259,6 +305,4 @@ if (_button != 0) {
 
 draw_set_alpha(icon_alpha);
 draw_sprite(icon_sprite, icon_frame, x, y);
-
-//resetting alpha
 draw_set_alpha(1);
