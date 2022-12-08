@@ -289,8 +289,6 @@ function load_settings() {
 	show_tooltips = ini_read_real("general", "tooltips", show_tooltips);
 	show_grid = ini_read_real("map_settings", "grid_visibility", show_grid);
 	show_cursor = ini_read_real("general", "cursor", show_cursor);
-	global.window_width = ini_read_real("window", "width", global.window_width);
-	global.window_height = ini_read_real("window", "height", global.window_height);
 	
 	ini_close();
 }

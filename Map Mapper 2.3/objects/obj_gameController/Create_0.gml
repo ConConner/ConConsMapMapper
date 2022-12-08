@@ -87,7 +87,7 @@ old_roomCount = 0;
 click_xx = 0;
 click_yy = 0;
 
-	//marker vars
+//marker vars
 marker_url = default_markers;
 marker_sprite = spr_default_markers;
 checking_sprite = noone;
@@ -99,11 +99,27 @@ max_pages = 0;
 tile_page = 0;
 selected_marker = 0;
 
-	//connection vars
+//connection vars
 connection_xx = 0;
 connection_yy = 0;
 connection_xx2 = 0;
 connection_yy2 = 0;
+
+//selection vars
+selected = false;
+moving_sel = false;
+sel_x1 = -1;
+sel_x2 = -1;
+sel_y1 = -1;
+sel_y2 = -1;
+
+move_x = -1;
+move_y = -1;
+
+sel_start_x = -1;
+sel_start_y = -1;
+sel_start_x2 = -1;
+sel_start_y2 = -1;
 
 //button = 0;
 color_button = 0;
@@ -182,6 +198,9 @@ tile_info = function(_main, _rm_nmb, _col, _subimg, _mrk, _door) constructor {
 global.tile_grid = ds_grid_create(global.grid_width, global.grid_height); 
 ds_grid_set_region(global.tile_grid, 0, 0, global.grid_width, global.grid_height, 0);
 set_up_grid()
+
+//select grid
+global.selection_grid = ds_grid_create(1,1);
 
 //text grid
 #macro max_text_amount 7
@@ -450,7 +469,7 @@ eyedropper_tool_button = make_button(16 + 72 * 1, -10, spr_eyedropper_tool, menu
 color_brush_tool_button = make_button(16 + 72 * 2, -10, spr_color_brush, menu_state.ig_menu);
 door_tool_button = make_button(16 + 72 * 3, -10, spr_door_tool, menu_state.ig_menu);
 marker_tool_button = make_button(16 + 72 * 4, -10, spr_marker_tool, menu_state.ig_menu);
-//selection_tool_button = make_button(16 + 72 * 6, -10, spr_selection_tool, menu_state.ig_menu);
+selection_tool_button = make_button(16 + 72 * 6, -10, spr_selection_tool, menu_state.ig_menu);
 hammer_tool_button = make_button(16 + 72 * 5, -10, spr_hammer_tool, menu_state.ig_menu);
 settings_button = make_button(global.view_width - 80 - 72 * 2, -10, spr_settings, menu_state.ig_menu);
 save_button = make_button(global.view_width - 80 - 72, -10, spr_save, menu_state.ig_menu);

@@ -134,8 +134,8 @@ function load_grid() { //draws the contents on the grid
 								//drawing edges if no more tunnel tiles
 								var tile_left = ds_grid_get(global.tile_grid, draw_x - 1, draw_y);
 								var tile_right = ds_grid_get(global.tile_grid, draw_x + 1, draw_y);
-								if (tile_left.subimg != 20) draw_sprite(spr_mapTiles, 22, pos_x - 2, pos_y);
-								if (tile_right.subimg != 20) ds_list_add(_hammer_tiles, [22, pos_x + tile_size, pos_y]);
+								if (tile_left != undefined && tile_left.subimg != 20) draw_sprite(spr_mapTiles, 22, pos_x - 2, pos_y);
+								if (tile_right != undefined && tile_right.subimg != 20) ds_list_add(_hammer_tiles, [22, pos_x + tile_size, pos_y]);
 								
 								break; }
 								
@@ -145,8 +145,8 @@ function load_grid() { //draws the contents on the grid
 								//drawing edges if no more tunnel tiles
 								var tile_up = ds_grid_get(global.tile_grid, draw_x, draw_y - 1);
 								var tile_down = ds_grid_get(global.tile_grid, draw_x, draw_y + 1);
-								if (tile_up.subimg != 21) draw_sprite(spr_mapTiles, 23, pos_x, pos_y - 2);
-								if (tile_down.subimg != 21) ds_list_add(_hammer_tiles, [23, pos_x, pos_y + tile_size]);
+								if (tile_up != undefined && tile_up.subimg != 21) draw_sprite(spr_mapTiles, 23, pos_x, pos_y - 2);
+								if (tile_down != undefined && tile_down.subimg != 21) ds_list_add(_hammer_tiles, [23, pos_x, pos_y + tile_size]);
 								
 								break; }
 						}
@@ -247,8 +247,8 @@ function load_grid_whole() { //draws the contents on the grid all at once (even 
 								//drawing edges if no more tunnel tiles
 								var tile_left = ds_grid_get(global.tile_grid, draw_x - 1, draw_y);
 								var tile_right = ds_grid_get(global.tile_grid, draw_x + 1, draw_y);
-								if (tile_left.subimg != 20) draw_sprite(spr_mapTiles, 22, pos_x - 2, pos_y);
-								if (tile_right.subimg != 20) ds_list_add(_hammer_tiles, [22, pos_x + tile_size, pos_y]);
+								if (tile_left != undefined && tile_left.subimg != 20) draw_sprite(spr_mapTiles, 22, pos_x - 2, pos_y);
+								if (tile_right != undefined && tile_right.subimg != 20) ds_list_add(_hammer_tiles, [22, pos_x + tile_size, pos_y]);
 								
 								break; }
 								
@@ -258,8 +258,8 @@ function load_grid_whole() { //draws the contents on the grid all at once (even 
 								//drawing edges if no more tunnel tiles
 								var tile_up = ds_grid_get(global.tile_grid, draw_x, draw_y - 1);
 								var tile_down = ds_grid_get(global.tile_grid, draw_x, draw_y + 1);
-								if (tile_up.subimg != 21) draw_sprite(spr_mapTiles, 23, pos_x, pos_y - 2);
-								if (tile_down.subimg != 21) ds_list_add(_hammer_tiles, [23, pos_x, pos_y + tile_size]);
+								if (tile_up != undefined && tile_up.subimg != 21) draw_sprite(spr_mapTiles, 23, pos_x, pos_y - 2);
+								if (tile_down != undefined && tile_down.subimg != 21) ds_list_add(_hammer_tiles, [23, pos_x, pos_y + tile_size]);
 								
 								break; }
 						}
@@ -352,6 +352,33 @@ function shift_grid_y_neg(grid) { //shifts a grid cell in negative y direction
 	ds_grid_set_grid_region(grid, grid, 0, 1, _grid_width, _grid_height, 0, 0);
 }
 
+
+//Selection functions
+function select_tiles(_x, _y, w, h) {
+	ds_grid_resize(global.selection_grid, w, h);
+	for (var i = 0; i < w; i++) {
+		for (var j = 0; j < h; j++) {
+			ds_grid_set(global.selection_grid, i, j, ds_grid_get(global.tile_grid, _x + i, _y + j));
+		}
+	}
+}
+	
+function remove_tiles(_x, _y, w, h) {
+	for (var i = 0; i < w; i++) {
+		for (var j = 0; j < h; j++) {
+			ds_grid_set(global.tile_grid, _x + i, _x + j, 0);
+		}
+	}
+	set_up_grid();
+}
+	
+function place_tiles(_x, _y) {
+	for (var i = 0; i < ds_grid_width(global.selection_grid); i++) {
+		for (var j = 0; j < ds_grid_height(global.selection_grid); j++) {
+			ds_grid_set(global.tile_grid, _x + i, _y + j, ds_grid_get(global.selection_grid, i, j));
+		}
+	}
+}
 
 //text messages
 function add_text_message(msg, lifetime, col) { //adds a new text message to the list
@@ -510,9 +537,11 @@ function setup_tool_tips() {
 	hammer_tool_tip[6] = "reverse the process.";
 	
 	selection_tool_tip[0] = "The selection tool can select a rectangle of";
-	selection_tool_tip[1] = "map tiles. The selected map tiles can then";
-	selection_tool_tip[2] = "be moved by clicking and dragging on them.";
-	selection_tool_tip[3] = "The selected area can be copied with Ctrl + C";
-	selection_tool_tip[4] = "and pasted at the top left position of the";
-	selection_tool_tip[5] = "cursor with Ctrl + V.";
+	selection_tool_tip[1] = "map tiles.";
+	selection_tool_tip[2] = "";
+	selection_tool_tip[3] = "The selected map tiles can then";
+	selection_tool_tip[4] = "be moved by clicking and dragging on them.";
+	selection_tool_tip[5] = "The selected area can be copied with Ctrl + C";
+	selection_tool_tip[6] = "and pasted at the top left position of the";
+	selection_tool_tip[7] = "cursor with Ctrl + V.";
 }

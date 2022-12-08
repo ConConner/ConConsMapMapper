@@ -1,7 +1,7 @@
 ---GENERAL INFORMATION---
 ConCon's Map Mapper B 2.2
 
-LAST UPDATED 03.02.2022
+LAST UPDATED 08.12.2022
 	    (DD.MM.YYYY)
 
 
@@ -15,18 +15,26 @@ Official Discord server: https://discord.gg/n6ZCB3JkNb
 
 This project is open source, find the code here: https://github.com/ConConner/ConConsMapMapper
 
-Thanks to every Contributor!
+Thanks to every contributor!
 
 
 
 ------------CHANGELOG---------------
 ------------------------------------
-Beta 2.2 (XX.XX.XXXX)
+Beta 2.2 (08.12.2022)
 ------------------------------------
+# resize buttons will no longer activate through marker set
+# size of .mf files decreased
 # minimum map size is now 1x1 instead of 20x20
 # marker pages can now be changed with arrow keys
-# resize buttons will no longer activate through marker set
-
+# connections can no longer be made to empty tiles
++ seperated colors for connection and marker tools
++ markers can be colored
++ 8 new standard markers
++ color can be chosen through hex input
++ GITHUB button
+(The select tool is visible in the tool bar. It is not
+working currently and cannot be selected!)
 
 
 ------------------------------------

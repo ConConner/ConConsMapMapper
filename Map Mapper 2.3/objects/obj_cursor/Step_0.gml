@@ -113,6 +113,11 @@ if (cursor_mode == curs_mode.on_grid) {
 			}
 			
 			break; }
+			
+		case tool.selector: {
+			goal_x = global.mouse_pos_x - tile_size / 2;
+			goal_y = global.mouse_pos_y - tile_size / 2;
+			break; }
 	}
 	
 }

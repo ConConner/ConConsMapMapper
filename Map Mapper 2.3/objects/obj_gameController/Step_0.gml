@@ -300,6 +300,67 @@ if (obj_cursor.cursor_mode == curs_mode.on_grid) {
 			}
 			
 			break; }
+			
+		case tool.selector: {
+			if (mRightPressed) {
+				sel_x1 = -1;
+				sel_x2 = -1;
+				sel_y1 = -1;
+				sel_y2 = -1;
+				selected = false;
+			}
+			
+			if (!mLeft) break;
+			
+			if (!selected || !(global.xx >= sel_x1 && global.yy >= sel_y1 && global.xx < sel_x2 && global.yy < sel_y2)) { //selection
+				if (mLeftPressed) {
+					selected = false;
+					sel_x1 = global.xx;
+					sel_y1 = global.yy;
+					sel_x2 = global.xx+1;
+					sel_y2 = global.yy+1;
+					sel_start_x = global.xx;
+					sel_start_y = global.yy;
+				}
+				if (click_moved) {
+					if (global.xx >= sel_start_x) {
+						sel_x2 = global.xx + 1;
+						sel_x1 = sel_start_x;
+					}
+					if (global.yy >= sel_start_y) {
+						sel_y2 = global.yy + 1;
+						sel_y1 = sel_start_y;
+					}
+					if (global.xx < sel_start_x) {
+						sel_x1 = global.xx;
+						sel_x2 = sel_start_x + 1;
+					}
+					if (global.yy < sel_start_y) {
+						sel_y1 = global.yy;
+						sel_y2 = sel_start_y + 1;
+					}
+				
+				}
+			} else { //moving of selection
+				if (mLeftPressed) {
+					moving_sel = true;
+					remove_tiles(sel_x1, sel_y1, sel_x2 - sel_x1, sel_y2 - sel_y1);
+					move_x = global.xx;
+					move_y = global.yy;
+					sel_start_x = sel_x1;
+					sel_start_y = sel_y1;
+					sel_start_x2 = sel_x2;
+					sel_start_y2 = sel_y2;
+				}
+				
+				if (click_moved) {
+					sel_x1 = sel_start_x + (global.xx - move_x);
+					sel_y1 = sel_start_y + (global.yy - move_y);
+					sel_x2 = sel_start_x2 + (global.xx - move_x);
+					sel_y2 = sel_start_y2 + (global.yy - move_y);
+				}
+			}
+			break; }
 	}
 }
 
@@ -313,6 +374,22 @@ if (mLeftPressed || mRightPressed) {
 if (mLeft || mRight) {
 	if (click_xx != global.xx) click_moved = true;
 	if (click_yy != global.yy) click_moved = true;
+}
+if (mLeftReleased || mRightReleased) {
+	click_moved = false;
+	
+	if (current_tool == tool.selector && sel_x1 != -1 && !moving_sel) {
+		selected = true;
+		select_tiles(sel_x1, sel_y1, sel_x2 - sel_x1, sel_y2 - sel_y1);
+	}
+	if (moving_sel) {
+		moving_sel = false;
+		place_tiles(sel_x1, sel_y1);
+	}
+}
+
+if (current_tool != tool.selector) {
+	selected = false;
 }
 
 //deactivating buttons
@@ -362,7 +439,7 @@ if (kLetterB) current_tool = tool.color_brush;
 if (kLetterC && !kCtrl) current_tool = tool.door_tool;
 if (kLetterM) current_tool = tool.marker_tool;
 if (kLetterH) current_tool = tool.hammer;
-if (kLetterS && !kCtrl) current_tool = tool.selector;
+//if (kLetterS && !kCtrl) current_tool = tool.selector;
 
 //keybind to quickly toggle menu or discard color
 if (kEscPressed) {
@@ -581,9 +658,9 @@ if (mLeftPressed) {
 			case marker_tool_button: {
 				current_tool = tool.marker_tool;
 				break; }
-			case selection_tool_button: {
-				current_tool = tool.selector;
-				break; }
+			//case selection_tool_button: {
+				//current_tool = tool.selector;
+				//break; }
 			case hammer_tool_button: {
 				current_tool = tool.hammer;
 				break; }
@@ -761,6 +838,10 @@ if (mLeftPressed) {
 				global.connection_color = make_color_rgb(255,255,0);
 				add_text_message("applied color", 1.5, c_lime);
 				break; }
+				
+			default: {
+				break;
+			}
 			
 		}
 	}

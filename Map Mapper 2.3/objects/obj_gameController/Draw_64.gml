@@ -475,11 +475,11 @@ switch (current_menu) {
 		if (current_tool == tool.marker_tool) marker_tool_button.image_index = 1;
 		else marker_tool_button.image_index = 0;
 		
-		//selection_tool_button.goal_alpha = 1;
-		//selection_tool_button.goal_y = menu_pos_y + menu_height - 98;
-		//if (menu_height > menu_goal_height - 2) selection_tool_button.activate();
-		//if (current_tool == tool.selector) selection_tool_button.image_index = 1;
-		//else selection_tool_button.image_index = 0;
+		selection_tool_button.goal_alpha = 1;
+		selection_tool_button.goal_y = menu_pos_y + menu_height - 98;
+		if (menu_height > menu_goal_height - 2) selection_tool_button.activate();
+		if (current_tool == tool.selector) selection_tool_button.image_index = 1;
+		else selection_tool_button.image_index = 0;
 		
 		hammer_tool_button.goal_alpha = 1;
 		hammer_tool_button.goal_y = menu_pos_y + menu_height - 98;
