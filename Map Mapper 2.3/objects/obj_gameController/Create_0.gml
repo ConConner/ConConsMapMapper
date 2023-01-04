@@ -178,7 +178,7 @@ selected_rgb_hex = 0;
 #region setting up the data structures
 
 //creating the tile_info
-tile_info = function(_main, _rm_nmb, _col, _subimg, _mrk, _door) constructor {
+tile_info = function(_main, _rm_nmb, _col, _subimg, _mrk, _door, _mrk_c, _mrk_a, _border_c) constructor {
 	
 	//different tile layers
 	main = _main;												//stores if a tile is set or not
@@ -186,10 +186,11 @@ tile_info = function(_main, _rm_nmb, _col, _subimg, _mrk, _door) constructor {
 	col = _col;													//stores the tiles color
 	subimg = _subimg;											//stores the main tile subimage
 	mrk = _mrk;													//stores the subimage for the marker on that tile
-	door = _door												//Doors are set up as: I dont remember, sorry :(
-	mrk_c = c_white;											//Color of the placed marker tile
+	door = _door												//Doors are set up as: [set or not, color]
+	mrk_c = _mrk_c;											//Color of the placed marker tile
+	mrk_a = _mrk_a;													//Alpha of the placed marker tile
+	border_c = _border_c;											//Color of the tile border
 	//Door 0 = up; Door 1 = down; Door 2 = down; Door 3 = left;
-	
 	
 }
 

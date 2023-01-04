@@ -90,7 +90,7 @@ function take_screenshot(_file) {
 		}	
 	
 		draw_set_alpha(1);
-		load_grid_whole();
+		load_grid(0, 0, global.grid_width * tile_size, global.grid_height * tile_size, true); //Draw everything
 	
 		//saving screenshot
 		surface_save(temp_surf, _file);
@@ -106,7 +106,7 @@ function take_screenshot(_file) {
 
 
 draw_set_color(c_white);
-load_grid();
+load_grid(global.cam_pos_x, global.cam_pos_y, global.grid_view_width, global.grid_view_height);
 
 //end
 draw_set_alpha(1);

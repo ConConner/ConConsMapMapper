@@ -267,13 +267,12 @@ if (obj_cursor.cursor_mode == curs_mode.on_grid) {
 			break; }
 		
 		case tool.marker_tool: {
-			//if (_tile.main == ID.filled) {
-				if (mLeft) {
-					_tile.mrk = selected_marker;
-					_tile.mrk_c	= global.marker_color;
-				}
-				if (mRight) _tile.mrk = marker.empty;
-			//}
+			if (mLeft) {
+				_tile.mrk = selected_marker;
+				_tile.mrk_c	= global.marker_color;
+				_tile.mrk_a = 1;
+			}
+			if (mRight) _tile.mrk = marker.empty;
 			break; }
 			
 		case tool.hammer: {

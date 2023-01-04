@@ -1,7 +1,7 @@
 ---GENERAL INFORMATION---
 ConCon's Map Mapper B 2.2
 
-LAST UPDATED 08.12.2022
+LAST UPDATED XX.XX.2023
 	    (DD.MM.YYYY)
 
 
@@ -21,6 +21,13 @@ Thanks to every contributor!
 
 ------------CHANGELOG---------------
 ------------------------------------
+Beta 2.3 (XX.XX.2023)
+------------------------------------
+# color hex input now works with lower case letters
+# corners get drawn now
+
+
+------------------------------------
 Beta 2.2 (08.12.2022)
 ------------------------------------
 # resize buttons will no longer activate through marker set
@@ -35,6 +42,7 @@ Beta 2.2 (08.12.2022)
 + GITHUB button
 (The select tool is visible in the tool bar. It is not
 working currently and cannot be selected!)
+
 
 
 ------------------------------------

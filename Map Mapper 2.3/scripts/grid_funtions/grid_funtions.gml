@@ -6,7 +6,7 @@ function set_up_grid() { //this loops through the tile grid and refills every 0 
 			
 			if (ds_grid_get(global.tile_grid, i, j) == 0) {
 				
-				ds_grid_set(global.tile_grid, i, j, new tile_info(ID.empty,0,0,0,marker.empty,[[hatch.empty, 0],[hatch.empty, 90],[hatch.empty, 180],[hatch.empty, 270]]));
+				ds_grid_set(global.tile_grid, i, j, new tile_info(ID.empty,0,0,0,marker.empty,[[hatch.empty, 0],[hatch.empty, 0],[hatch.empty, 0],[hatch.empty, 0]], c_white, 1, c_white));
 				
 			}
 			
@@ -78,13 +78,16 @@ function draw_grid_outline(w, h, thickness) { //draws only the outline of the gr
 }
 
 
-function load_grid() { //draws the contents on the grid
+function load_grid(cam_x, cam_y, cam_w, cam_h, whole = false) { //draws all the contents in the selected area 
 	
-	//getting camera position
-	var cam_x = global.cam_pos_x;
-	var cam_y = global.cam_pos_y;
-	var cam_w = global.view_width;
-	var cam_h = global.view_height;
+	//camera offset
+	var offset_x = global.cam_pos_x;
+	var offset_y = global.cam_pos_y;
+	if (whole) { //remove offset
+		offset_x = 0;
+		offset_y = 0;
+	}
+	
 	var min_x = max(0,floor( cam_x / tile_size ) -1);
 	var min_y = max(0,floor( cam_y / tile_size ) -1);
 	var max_x = min(global.grid_width,floor( min_x + ( cam_w / tile_size ) ) +2);
@@ -98,19 +101,19 @@ function load_grid() { //draws the contents on the grid
 	
 		for (var draw_y = min_y; draw_y < max_y; draw_y++) {
 			
-			var pos_x = draw_x * tile_size - global.cam_pos_x;
-			var pos_y = draw_y * tile_size - global.cam_pos_y;
+			var pos_x = draw_x * tile_size - offset_x;
+			var pos_y = draw_y * tile_size - offset_y;
 			
 			var tile = ds_grid_get(global.tile_grid, draw_x, draw_y);
 			if (tile != 0) {
 				var col = tile.col
 			
-				// normal tile drawing
+				#region tile drawing
 				if (tile.main == ID.filled) { 
 				
 					//drawing the inside of the tile
-					if (tile.subimg < 16) draw_rectangle_color(pos_x, pos_y, pos_x + tile_size - 1, pos_y + tile_size - 1, col, col, col, col, false);
-					else {
+					draw_rectangle_color(pos_x, pos_y, pos_x + tile_size - 1, pos_y + tile_size - 1, col, col, col, col, false);
+					{
 						switch (tile.subimg) { //drawing inside of hammered tiles
 							case (16): {
 								draw_triangle_color(pos_x, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y, col, col, col, false);
@@ -153,10 +156,20 @@ function load_grid() { //draws the contents on the grid
 					}
 				
 					//drawing outline
-					draw_sprite(spr_mapTiles, tile.subimg, pos_x, pos_y);
+					draw_set_color(tile.border_c);
+					
+					if (tile.subimg & 8 != 0) draw_rectangle(pos_x + tile_size - 2, pos_y, pos_x + tile_size - 1, pos_y + tile_size - 1, false); //right border
+					if (tile.subimg & 4 != 0) draw_rectangle(pos_x, pos_y, pos_x + 1, pos_y + tile_size - 1, false); //left border
+					if (tile.subimg & 2 != 0) draw_rectangle(pos_x, pos_y + tile_size - 2, pos_x + tile_size - 1, pos_y + tile_size - 1, false); //bottom border
+					if (tile.subimg & 1 != 0) draw_rectangle(pos_x, pos_y, pos_x + tile_size - 1, pos_y + 1, false); //top border
+					
+					if (tile.subimg & 128 != 0) draw_rectangle(pos_x + tile_size - 2, pos_y, pos_x + tile_size - 1, pos_y + 1, false); //Top Right corner
+					if (tile.subimg & 64 != 0) draw_rectangle(pos_x, pos_y, pos_x + 1, pos_y + 1, false); //Top Left corner
+					if (tile.subimg & 32 != 0) draw_rectangle(pos_x + tile_size - 2, pos_y + tile_size - 2, pos_x + tile_size - 1, pos_y + tile_size - 1, false); //Bottom Right corner
+					if (tile.subimg & 16 != 0) draw_rectangle(pos_x, pos_y + tile_size - 2, pos_x + 1, pos_y + tile_size - 1, false); //Botton Left corner
 				}
+				#endregion
 				
-			
 				#region door drawing
 				if (tile.door[0,0] == hatch.filled) {
 					draw_sprite_ext(spr_doorTiles, 0, pos_x, pos_y, 1, 1, 0, c_white, 1) //up
@@ -185,7 +198,7 @@ function load_grid() { //draws the contents on the grid
 			
 				#region marker drawing
 				if (tile.mrk != marker.empty && sprite_exists(marker_sprite)) {
-					draw_sprite_ext(marker_sprite, tile.mrk, pos_x, pos_y, 1, 1, 0, tile.mrk_c, 1);
+					draw_sprite_ext(marker_sprite, tile.mrk, pos_x, pos_y, 1, 1, 0, tile.mrk_c, tile.mrk_a);
 				}
 				#endregion
 			}
@@ -201,127 +214,18 @@ function load_grid() { //draws the contents on the grid
 		
 }
 
-function load_grid_whole() { //draws the contents on the grid all at once (even if not in view)
-	
-	//hammer tile edge buffer
-	var _hammer_tiles = ds_list_create();
-	
-	//looping through the grid and drawing tiles
-	for (var draw_x = 0; draw_x < global.grid_width; draw_x++) {
-	
-		for (var draw_y = 0; draw_y < global.grid_height; draw_y++) {
-			
-			var pos_x = draw_x * tile_size;
-			var pos_y = draw_y * tile_size;
-			
-			var tile = ds_grid_get(global.tile_grid, draw_x, draw_y);
-			if (tile != 0) {
-				var col = tile.col
-			
-				// normal tile drawing
-				if (tile.main == ID.filled) { 
-				
-					//drawing the inside of the tile
-					if (tile.subimg < 16) draw_rectangle_color(pos_x, pos_y, pos_x + tile_size - 1, pos_y + tile_size - 1, col, col, col, col, false);
-					else {
-						switch (tile.subimg) { //drawing inside of hammered tiles
-							case (16): {
-								draw_triangle_color(pos_x, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y, col, col, col, false);
-								break; }
-								
-							case (17): {
-								draw_triangle_color(pos_x - 1, pos_y, pos_x - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y + tile_size - 1, col, col, col, false);
-								break; }
-								
-							case (18): {
-								draw_triangle_color(pos_x - 1, pos_y - 1, pos_x - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y - 1, col, col, col, false);
-								break; }
-								
-							case (19): {
-								draw_triangle_color(pos_x, pos_y - 1, pos_x + tile_size - 1, pos_y + tile_size - 1, pos_x + tile_size - 1, pos_y - 1, col, col, col, false);
-								break;}
-								
-							case (20): {
-								draw_rectangle_color(pos_x, pos_y + 11, pos_x + tile_size - 1, pos_y + 19, col, col, col, col, false);
-								
-								//drawing edges if no more tunnel tiles
-								var tile_left = ds_grid_get(global.tile_grid, draw_x - 1, draw_y);
-								var tile_right = ds_grid_get(global.tile_grid, draw_x + 1, draw_y);
-								if (tile_left != undefined && tile_left.subimg != 20) draw_sprite(spr_mapTiles, 22, pos_x - 2, pos_y);
-								if (tile_right != undefined && tile_right.subimg != 20) ds_list_add(_hammer_tiles, [22, pos_x + tile_size, pos_y]);
-								
-								break; }
-								
-							case (21): {
-								draw_rectangle_color(pos_x + 11, pos_y, pos_x + 19, pos_y + tile_size - 1, col, col, col, col, false);
-								
-								//drawing edges if no more tunnel tiles
-								var tile_up = ds_grid_get(global.tile_grid, draw_x, draw_y - 1);
-								var tile_down = ds_grid_get(global.tile_grid, draw_x, draw_y + 1);
-								if (tile_up != undefined && tile_up.subimg != 21) draw_sprite(spr_mapTiles, 23, pos_x, pos_y - 2);
-								if (tile_down != undefined && tile_down.subimg != 21) ds_list_add(_hammer_tiles, [23, pos_x, pos_y + tile_size]);
-								
-								break; }
-						}
-					}
-				
-					//drawing outline
-					draw_sprite(spr_mapTiles, tile.subimg, pos_x, pos_y);
-				}
-				
-			
-				#region door drawing
-				if (tile.door[0,0] == hatch.filled) {
-					draw_sprite_ext(spr_doorTiles, 0, pos_x, pos_y, 1, 1, 0, c_white, 1) //up
-					var _col = tile.door[0,1];
-					draw_rectangle_color(pos_x + 12, pos_y, pos_x + 19, pos_y + 3, _col, _col, _col, _col, false);
-				}
-			
-				if (tile.door[1,0] == hatch.filled) {
-					draw_sprite_ext(spr_doorTiles, 1, pos_x, pos_y, 1, 1, 0, c_white, 1) //right
-					var _col = tile.door[1,1];
-					draw_rectangle_color(pos_x + 28, pos_y + 12, pos_x + 31, pos_y + 19, _col, _col, _col, _col, false);
-				}
-			
-				if (tile.door[2,0] == hatch.filled) {
-					draw_sprite_ext(spr_doorTiles, 2, pos_x, pos_y, 1, 1, 0, c_white, 1) //down
-					var _col = tile.door[2,1];
-					draw_rectangle_color(pos_x + 12, pos_y + 28, pos_x + 19, pos_y + 31, _col, _col, _col, _col, false);
-				}
-			
-				if (tile.door[3,0] == hatch.filled) {
-					draw_sprite_ext(spr_doorTiles, 3, pos_x, pos_y, 1, 1, 0, c_white, 1) //left
-					var _col = tile.door[3,1];
-					draw_rectangle_color(pos_x, pos_y + 12, pos_x + 3, pos_y + 19, _col, _col, _col, _col, false);
-				}
-				#endregion
-			
-				#region marker drawing
-				if (tile.mrk != marker.empty && sprite_exists(marker_sprite)) {
-					draw_sprite_ext(marker_sprite, tile.mrk, pos_x, pos_y, 1, 1, 0, tile.mrk_c, 1);
-				}
-				#endregion
-			}
-		}
-	}
-	//adding missing hammer edges
-	for (var i = 0; i < ds_list_size(_hammer_tiles); i++) {
-		var _hammer_edge = ds_list_find_value(_hammer_tiles, i);
-		draw_sprite(spr_mapTiles, _hammer_edge[0], _hammer_edge[1], _hammer_edge[2]);
-	}
-	
-	ds_list_destroy(_hammer_tiles);	
-}
 
-	
 function clear_cell(cell_struct) { //clears a tile cell on the grid
 	
-		cell_struct.main = ID.empty;
-		cell_struct.rm_nmb = 0;
-		cell_struct.col = 0;
-		cell_struct.subimg = 0;
-		cell_struct.mrk = marker.empty;
-		cell_struct.door = [[hatch.empty, 0],[hatch.empty, 90],[hatch.empty, 180],[hatch.empty, 270]]
+	cell_struct.main = ID.empty;
+	cell_struct.rm_nmb = 0;
+	cell_struct.col = 0;
+	cell_struct.subimg = 0;
+	cell_struct.mrk = marker.empty;
+	cell_struct.mrk_c = c_white;
+	cell_struct.mrk_a = 1;
+	cell_struct.door = [[hatch.empty, 0],[hatch.empty, 90],[hatch.empty, 180],[hatch.empty, 270]]
+	cell_struct.border_c = c_white;
 	
 }
 	
@@ -380,6 +284,7 @@ function place_tiles(_x, _y) {
 	}
 }
 
+
 //text messages
 function add_text_message(msg, lifetime, col) { //adds a new text message to the list
 	
@@ -396,7 +301,6 @@ function add_text_message(msg, lifetime, col) { //adds a new text message to the
 	ds_grid_set(global.text_grid, 0, text.col, col);
 	
 }
-
 
 function grid_shift_x_up(grid) { //shifting the messages up
 	
@@ -434,7 +338,6 @@ function grid_shift_x_up(grid) { //shifting the messages up
 	}
 	
 }
-	
 	
 function update_text_message(_x, _y) { //updates the text messages
 	
@@ -474,7 +377,6 @@ function update_text_message(_x, _y) { //updates the text messages
 	draw_set_halign(fa_left);
 	
 }
-	
 	
 function setup_tool_tips() {
 	
