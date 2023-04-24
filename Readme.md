@@ -1,3 +1,5 @@
+[![Discord](https://img.shields.io/discord/675716572156788776?color=%2347a6ff&label=Dev.%20Discord&logo=Discord&logoColor=%23FFFFFF&style=flat-square)](https://discord.gg/YT6M2rAqqS) [![](https://img.shields.io/badge/Community-Metroid%20Construction-eb7f00?style=flat-square)](https://metroidconstruction.com/)
+
 # ConCon's Map Mapper
 ConCon's Map Mapper is a tool, used to design and layout your game in an intuitive way!
 The tool is easy to learn and easy to master. With ConCon's Map Mapper you can always make fast changes
@@ -33,8 +35,3 @@ The Hammer Tool allows you to change the shape of tiles, to either create Sloped
 Currently broken
 
 You can Save and Load your current Rooms, by clicking on the save and load icons in the menu.
-
-
-## Official MapMapper Discord
-
-https://discord.gg/n6ZCB3JkNb
